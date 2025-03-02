@@ -121,6 +121,27 @@ def high_correlation_features(df, dataset_types, target_variable, output_folder,
                 plt.savefig(os.path.join(output_folder, filename))
                 plt.close()
 
+def analyze_target_variable(df, dataset_types, target_variable, output_folder):
+    # Check if the target variable is numeric
+    print("- Trying to plot target value.")
+    if dataset_types[target_variable] in ['integer', 'float']:
+        # Detect outliers using the IQR method
+        q1 = df[target_variable].quantile(0.25)
+        q3 = df[target_variable].quantile(0.75)
+        iqr = q3 - q1
+        outliers = df[(df[target_variable] < q1 - 1.5 * iqr) | (df[target_variable] > q3 + 1.5 * iqr)]
+        has_outliers = not outliers.empty
+        print(f"    * Outliers detected: {has_outliers}")
+
+        # Plotting the distribution and highlighting outliers
+        plt.figure(figsize=(8, 6))
+        sns.boxplot(x=df[target_variable])
+        plt.title(f'Distribution of {target_variable} with Outliers')
+        plt.grid(True)
+        filename = f'boxplot_{target_variable}_outliers.png'
+        plt.savefig(os.path.join(output_folder, filename))
+        plt.close()
+
 
 def generate_visualizations(dataset_path, target_variable, output_folder, index_col = None):
     # Trying to load the dataset, if it does not work exist the process.
@@ -133,6 +154,8 @@ def generate_visualizations(dataset_path, target_variable, output_folder, index_
     # Understanding the types of columns in the data in order to create better visualizations.
     dataset_types = get_column_types(df)
 
+    # Plotting Numerical values
+    analyze_target_variable(df, dataset_types, target_variable, output_folder)
     correlation_heatmap_visualize(df, dataset_types, target_variable, output_folder)
     high_correlation_features(df, dataset_types, target_variable, output_folder)
     
