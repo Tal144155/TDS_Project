@@ -76,7 +76,8 @@ def get_column_types(df):
 
 
 def correlation_heatmap_visualize(df, dataset_types, target_variable, output_folder):
-    # Visualize heatmap correlation between numerical features and the target
+    # Visualize heatmap correlation between numerical features and the target value.
+    # Might not be a good visualization, depends on the number of features that are numerical.
     numerical_columns = [col for col, col_type in dataset_types.items() if col_type in ['integer', 'float']]
     if target_variable in numerical_columns:
         correlation_matrix = df[numerical_columns].corr()
@@ -85,7 +86,27 @@ def correlation_heatmap_visualize(df, dataset_types, target_variable, output_fol
         plt.title('Correlation Matrix (Numerical Features)')
         plt.savefig(os.path.join(output_folder, 'correlation_matrix.png'))
         plt.close()
-    
+
+def high_correlation_features(df, dataset_types, target_variable, output_folder, correlation_threshold = 0.5):
+    # Create scatter plots for highly correlated features
+    numerical_columns = [col for col, col_type in dataset_types.items() if col_type in ['integer', 'float']]
+    correlations = df[numerical_columns].corr()
+
+    # Iterate over all possible pairs of features
+    for i, feature1 in enumerate(numerical_columns):
+        for feature2 in numerical_columns[i + 1:]:
+            corr_value = correlations.loc[feature1, feature2]
+            if abs(corr_value) > correlation_threshold:
+                plt.figure(figsize=(6, 4))
+                sns.scatterplot(x=df[feature1], y=df[feature2])
+                plt.xlabel(feature1)
+                plt.ylabel(feature2)
+                plt.title(f'Correlation: {corr_value:.2f} | {feature1} vs {feature2}')
+                
+                # Save the plot with a descriptive filename
+                filename = f'scatter_{feature1}_vs_{feature2}.png'
+                plt.savefig(os.path.join(output_folder, filename))
+                plt.close()
 
 def generate_visualizations(dataset_path, index_col, target_variable, output_folder = 'visualizations'):
     # Trying to load the dataset, if it does not work exist the process.
@@ -99,6 +120,7 @@ def generate_visualizations(dataset_path, index_col, target_variable, output_fol
     dataset_types = get_column_types(df)
 
     correlation_heatmap_visualize(df, dataset_types, target_variable, output_folder)
+    high_correlation_features(df, dataset_types, target_variable, output_folder)
     
     print("""
     =========================================
