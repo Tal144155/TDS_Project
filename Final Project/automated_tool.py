@@ -1,13 +1,11 @@
 import os
 import pandas as pd
-from pandas import CategoricalDtype
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import LabelEncoder
 from sklearn.feature_selection import SelectKBest, f_regression
 import numpy as np
-import re
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -17,7 +15,7 @@ def column_to_date(df):
     """This function recognize columns that are in the forma of date."""
     date_pattern = r'^(\d{4}-\d{2}-\d{2})|^(\d{2}/\d{2}/\d{4})|^(\d{4}/\d{2}/\d{2})'
     for column in df.columns:
-        if df[column].dtype == 'object':
+        if df[column].dtype == 'object' and df[column].apply(lambda x: isinstance(x, str)).all():
             if df[column].str.match(date_pattern).any():
                 try:
                     df[column] = pd.to_datetime(df[column], errors='coerce')
@@ -25,14 +23,14 @@ def column_to_date(df):
                 except Exception as e:
                     print(f"Warning: Could not parse column {column} as datetime. {str(e)}")
 
-def read_data(dataset_path):
+def read_data(dataset_path, index_col):
     """This function checks that the dataset exists in the given path, and read the data using pandas.
     If the data does not exists in the path, print a message to the user and exit."""
     print("- Loading the dataset.")
     if not os.path.exists(dataset_path):
         print(f"Error: The file '{dataset_path}' does not exist. Please check the path and try again.")
         return None
-    df = pd.read_csv(dataset_path)
+    df = pd.read_csv(dataset_path, index_col = index_col)
     column_to_date(df)
     return df
 
@@ -77,18 +75,43 @@ def get_column_types(df):
     return column_types
 
 
-def generate_visualizations(dataset_path: str, target_variable: str, output_folder: str = 'visualizations'):
+def correlation_visualize(df, dataset_types, target_variable, output_folder):
+    # Visualize heatmap correlation between numerical features and the target
+    numerical_columns = [col for col, col_type in dataset_types.items() if col_type in ['integer', 'float']]
+    if target_variable in numerical_columns:
+        correlation_matrix = df[numerical_columns].corr()
+        plt.figure(figsize=(10, 8))
+        sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f')
+        plt.title('Correlation Matrix (Numerical Features)')
+        plt.savefig(os.path.join(output_folder, 'correlation_matrix.png'))
+        plt.close()
+
+    # # Create scatter plots for highly correlated features
+    # if target_variable in df.columns and df[target_variable].dtype in [np.float64, np.int64]:
+    #     correlations = df.corr()[target_variable].sort_values(ascending=False)
+    #     high_corr_features = correlations[1:6].index  # Select top 5 correlated features
+    #     for feature in high_corr_features:
+    #         plt.figure(figsize=(6, 4))
+    #         sns.scatterplot(x=df[feature], y=df[target_variable])
+    #         plt.xlabel(feature)
+    #         plt.ylabel(target_variable)
+    #         plt.title(f'{feature} vs {target_variable}')
+    #         plt.savefig(os.path.join(output_folder, f'scatter_{feature}.png'))
+    #         plt.close()
+    
+
+def generate_visualizations(dataset_path, index_col, target_variable, output_folder = 'visualizations'):
     # Trying to load the dataset, if it does not work exist the process.
-    df = read_data(dataset_path)
+    df = read_data(dataset_path, index_col)
     if df is None:
         return
     # Create output directory if it doesn't exist.
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
-    
+    # Understanding the types of columns in the data in order to create better visualizations.
     dataset_types = get_column_types(df)
 
-    print(dataset_types)
+    correlation_visualize(df, dataset_types, target_variable, output_folder)
     
     print("""
     =========================================
@@ -110,14 +133,16 @@ def main():
     
     dataset_path = "Final Project/Datasets_Testing/AB_NYC_2019.csv"
     # input("Please enter the path to your Dataset: ")
-    target_value = "hello"
+    index_col = "id"
+    # input("Please enter the index column: ")
+    target_value = "price"
     # input("Please enter the name of your target value: ")
     print("""
     =========================================
                Beginning the process
     =========================================
     """)
-    generate_visualizations(dataset_path, target_value, "output")
+    generate_visualizations(dataset_path, index_col, target_value, "output")
 
     
 
