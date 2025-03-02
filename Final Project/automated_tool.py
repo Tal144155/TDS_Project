@@ -89,7 +89,7 @@ def correlation_heatmap_visualize(df, dataset_types, target_variable, output_fol
         plt.savefig(os.path.join(output_folder, 'correlation_matrix.png'))
         plt.close()
 
-def high_correlation_features(df, dataset_types, target_variable, output_folder, correlation_threshold = 0.5):
+def high_correlation_features(df, dataset_types, target_variable, output_folder, correlation_threshold=0.5):
     # Create scatter plots for highly correlated features
     numerical_columns = [col for col, col_type in dataset_types.items() if col_type in ['integer', 'float']]
     correlations = df[numerical_columns].corr()
@@ -99,16 +99,22 @@ def high_correlation_features(df, dataset_types, target_variable, output_folder,
         for feature2 in numerical_columns[i + 1:]:
             corr_value = correlations.loc[feature1, feature2]
             if abs(corr_value) > correlation_threshold:
-                plt.figure(figsize=(6, 4))
-                sns.scatterplot(x=df[feature1], y=df[feature2])
+                plt.figure(figsize=(8, 6))
+                
+                # Scatter plot with regression line
+                sns.regplot(x=df[feature1], y=df[feature2], scatter_kws={'alpha': 0.6, 's': 50}, line_kws={'color': 'red'})
+                
                 plt.xlabel(feature1)
                 plt.ylabel(feature2)
                 plt.title(f'Correlation: {corr_value:.2f} | {feature1} vs {feature2}')
-                
+                plt.legend()
+                plt.grid(True)
+
                 # Save the plot with a descriptive filename
                 filename = f'scatter_{feature1}_vs_{feature2}.png'
                 plt.savefig(os.path.join(output_folder, filename))
                 plt.close()
+
 
 def generate_visualizations(dataset_path, index_col, target_variable, output_folder = 'visualizations'):
     # Trying to load the dataset, if it does not work exist the process.
