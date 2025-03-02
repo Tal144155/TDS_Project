@@ -30,7 +30,10 @@ def read_data(dataset_path, index_col):
     if not os.path.exists(dataset_path):
         print(f"Error: The file '{dataset_path}' does not exist. Please check the path and try again.")
         return None
-    df = pd.read_csv(dataset_path, index_col = index_col)
+    if index_col:
+        df = pd.read_csv(dataset_path, index_col = index_col)
+    else:
+        df = pd.read_csv(dataset_path)
     column_to_date(df)
     return df
 
@@ -116,7 +119,7 @@ def high_correlation_features(df, dataset_types, target_variable, output_folder,
                 plt.close()
 
 
-def generate_visualizations(dataset_path, index_col, target_variable, output_folder = 'visualizations'):
+def generate_visualizations(dataset_path, target_variable, output_folder, index_col = None):
     # Trying to load the dataset, if it does not work exist the process.
     df = read_data(dataset_path, index_col)
     if df is None:
@@ -148,18 +151,18 @@ def main():
     =========================================
     """)
     
-    dataset_path = "Final Project/Datasets_Testing/AB_NYC_2019.csv"
+    dataset_path = "Final Project/Datasets_Testing/dataset_movies.csv"
     # input("Please enter the path to your Dataset: ")
     index_col = "id"
     # input("Please enter the index column: ")
-    target_value = "price"
+    target_value = "revenue"
     # input("Please enter the name of your target value: ")
     print("""
     =========================================
                Beginning the process
     =========================================
     """)
-    generate_visualizations(dataset_path, index_col, target_value, "output")
+    generate_visualizations(dataset_path, target_value, "output")
 
     
 
