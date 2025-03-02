@@ -81,8 +81,10 @@ def correlation_heatmap_visualize(df, dataset_types, target_variable, output_fol
     numerical_columns = [col for col, col_type in dataset_types.items() if col_type in ['integer', 'float']]
     if target_variable in numerical_columns:
         correlation_matrix = df[numerical_columns].corr()
-        plt.figure(figsize=(10, 8))
+        plt.figure(figsize=(12, 10))
         sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f')
+        plt.xticks(rotation=45, ha='right')
+        plt.tight_layout()
         plt.title('Correlation Matrix (Numerical Features)')
         plt.savefig(os.path.join(output_folder, 'correlation_matrix.png'))
         plt.close()
