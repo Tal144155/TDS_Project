@@ -14,7 +14,6 @@ warnings.filterwarnings('ignore')
 
 
 def column_to_date(df):
-    # Check for potential date columns using regex
     date_pattern = r'^(\d{4}-\d{2}-\d{2})|^(\d{2}/\d{2}/\d{4})|^(\d{4}/\d{2}/\d{2})'
     for column in df.columns:
         if df[column].dtype == 'object':
@@ -36,13 +35,13 @@ def read_data(dataset_path):
     column_to_date(df)
     return df
 
-def is_potentially_categorical(column, threshold=0.02):
+def is_potentially_categorical(column, threshold=0.01):
     """This function determines if an integer column is categorical or numeric. 
     If we have very little unique integer values, the column is probably categorical"""
     unique_values = column.nunique()
     total_values = len(column)
     # check if the percentage of unique values in the column is smaller then the threshold.
-    if unique_values / total_values < threshold:
+    if unique_values / total_values < threshold and unique_values < 20:
         return True
     return False
 
