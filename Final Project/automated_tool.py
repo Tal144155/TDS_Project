@@ -14,6 +14,7 @@ warnings.filterwarnings('ignore')
 
 
 def column_to_date(df):
+    """This function recognize columns that are in the forma of date."""
     date_pattern = r'^(\d{4}-\d{2}-\d{2})|^(\d{2}/\d{2}/\d{4})|^(\d{4}/\d{2}/\d{2})'
     for column in df.columns:
         if df[column].dtype == 'object':
@@ -46,13 +47,11 @@ def is_potentially_categorical(column, threshold=0.01):
     return False
 
 def get_column_types(df):
-    """This function determines the type of each column in our dataset,
-    in order to do smart visualization later"""
+    """This function determines the type of each column in our dataset, in order to do smart visualization later.
+    Types we recognize: integer, categorical int, float, boolean, string, categorical string, date, object, other."""
     column_types = {}
     for column in df.columns:
-        if isinstance(df[column].dtype, pd.CategoricalDtype):
-            column_types[column] = 'categorical'
-        elif pd.api.types.is_integer_dtype(df[column]):
+        if pd.api.types.is_integer_dtype(df[column]):
             if is_potentially_categorical(df[column]):
                 column_types[column] = 'categorical_int'
             else:
@@ -62,7 +61,11 @@ def get_column_types(df):
         elif pd.api.types.is_bool_dtype(df[column]):
             column_types[column] = 'boolean'
         elif pd.api.types.is_string_dtype(df[column]):
-            column_types[column] = 'string'
+            if is_potentially_categorical(df[column]):
+                column_types[column] = 'categorical_string'
+                df[column] = df[column].astype('category')
+            else:
+                column_types[column] = 'string'
         elif pd.api.types.is_datetime64_any_dtype(df[column]):
             column_types[column] = 'datetime'
         elif pd.api.types.is_timedelta64_dtype(df[column]):
@@ -92,8 +95,6 @@ def generate_visualizations(dataset_path: str, target_variable: str, output_fold
           Process ended. Results saved.
     =========================================
     """)
-
-
 
 
 def main():
