@@ -15,7 +15,7 @@ def column_to_date(df):
     """This function recognize columns that are in the forma of date."""
     date_pattern = r'^(\d{4}-\d{2}-\d{2})|^(\d{2}/\d{2}/\d{4})|^(\d{4}/\d{2}/\d{2})'
     for column in df.columns:
-        if df[column].dtype == 'object' and df[column].apply(lambda x: isinstance(x, str)).all():
+        if df[column].dtype == 'object':
             if df[column].str.match(date_pattern).any():
                 try:
                     df[column] = pd.to_datetime(df[column], errors='coerce')
@@ -75,7 +75,7 @@ def get_column_types(df):
     return column_types
 
 
-def correlation_visualize(df, dataset_types, target_variable, output_folder):
+def correlation_heatmap_visualize(df, dataset_types, target_variable, output_folder):
     # Visualize heatmap correlation between numerical features and the target
     numerical_columns = [col for col, col_type in dataset_types.items() if col_type in ['integer', 'float']]
     if target_variable in numerical_columns:
@@ -85,19 +85,6 @@ def correlation_visualize(df, dataset_types, target_variable, output_folder):
         plt.title('Correlation Matrix (Numerical Features)')
         plt.savefig(os.path.join(output_folder, 'correlation_matrix.png'))
         plt.close()
-
-    # # Create scatter plots for highly correlated features
-    # if target_variable in df.columns and df[target_variable].dtype in [np.float64, np.int64]:
-    #     correlations = df.corr()[target_variable].sort_values(ascending=False)
-    #     high_corr_features = correlations[1:6].index  # Select top 5 correlated features
-    #     for feature in high_corr_features:
-    #         plt.figure(figsize=(6, 4))
-    #         sns.scatterplot(x=df[feature], y=df[target_variable])
-    #         plt.xlabel(feature)
-    #         plt.ylabel(target_variable)
-    #         plt.title(f'{feature} vs {target_variable}')
-    #         plt.savefig(os.path.join(output_folder, f'scatter_{feature}.png'))
-    #         plt.close()
     
 
 def generate_visualizations(dataset_path, index_col, target_variable, output_folder = 'visualizations'):
@@ -111,7 +98,7 @@ def generate_visualizations(dataset_path, index_col, target_variable, output_fol
     # Understanding the types of columns in the data in order to create better visualizations.
     dataset_types = get_column_types(df)
 
-    correlation_visualize(df, dataset_types, target_variable, output_folder)
+    correlation_heatmap_visualize(df, dataset_types, target_variable, output_folder)
     
     print("""
     =========================================
