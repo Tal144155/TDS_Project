@@ -50,6 +50,7 @@ def is_potentially_categorical(column, threshold=0.01):
 def get_column_types(df):
     """This function determines the type of each column in our dataset, in order to do smart visualization later.
     Types we recognize: integer, categorical int, float, boolean, string, categorical string, date, object, other."""
+    print("- Finding features types in the dataset.")
     column_types = {}
     for column in df.columns:
         if pd.api.types.is_integer_dtype(df[column]):
@@ -81,6 +82,7 @@ def get_column_types(df):
 def correlation_heatmap_visualize(df, dataset_types, target_variable, output_folder):
     # Visualize heatmap correlation between numerical features and the target value.
     # Might not be a good visualization, depends on the number of features that are numerical.
+    print("- Trying to plot heatmap.")
     numerical_columns = [col for col, col_type in dataset_types.items() if col_type in ['integer', 'float']]
     if target_variable in numerical_columns:
         correlation_matrix = df[numerical_columns].corr()
@@ -94,6 +96,7 @@ def correlation_heatmap_visualize(df, dataset_types, target_variable, output_fol
 
 def high_correlation_features(df, dataset_types, target_variable, output_folder, correlation_threshold=0.5):
     # Create scatter plots for highly correlated features
+    print("- Trying to plot high correlated features.")
     numerical_columns = [col for col, col_type in dataset_types.items() if col_type in ['integer', 'float']]
     correlations = df[numerical_columns].corr()
 
