@@ -113,7 +113,10 @@ def categorical_effects(df, categorical_columns, numerical_columns, target_varia
             if len(groups) > 1:
                 f_stat, p_value = f_oneway(*groups)
                 if p_value < p_value_threshold:
-                    temp_relations.append({'attributes': [cat_feature, target_variable],'relation_type': 'categorical_effect','details': {'p_value': p_value}})
+                    temp_relations.append(
+                        {'attributes': [cat_feature, target_variable],
+                         'relation_type': 'categorical_effect',
+                         'details': {'p_value': p_value}})
     temp_relations.sort(key=lambda x: x['details']['p_value'])
     relations.extend(temp_relations[:TOP_N_RELATIONS])
 
@@ -125,10 +128,46 @@ def chi_squared_relationship(df, categorical_columns, relations, p_value_thresho
             contingency_table = pd.crosstab(df[feature1], df[feature2])
             chi2, p, _, _ = chi2_contingency(contingency_table)
             if p < p_value_threshold:
-                temp_relations.append({'attributes': [feature1, feature2],'relation_type': 'chi_squared','details': {'p_value': p}})
+                temp_relations.append(
+                    {'attributes': [feature1, feature2],
+                     'relation_type': 'chi_squared',
+                     'details': {'p_value': p}})
     temp_relations.sort(key=lambda x: x['details']['p_value'])
     relations.extend(temp_relations[:TOP_N_RELATIONS])
 
+
+# Function to check for numerical feature trends over time
+def date_numerical_relationship(df, date_columns, numerical_columns, target_variable, relations, p_value_threshold=0.01):
+    temp_relations = []
+    for date_col in date_columns:
+        if target_variable in numerical_columns:
+            df['time_ordinal'] = pd.to_datetime(df[date_col]).map(pd.Timestamp.toordinal)
+            corr_value = df['time_ordinal'].corr(df[target_variable])
+            if abs(corr_value) > p_value_threshold:
+                temp_relations.append(
+                    {'attributes': [date_col, target_variable],
+                     'relation_type': 'date_numerical_trend',
+                     'details': {'correlation_value': corr_value}}
+                )
+    temp_relations.sort(key=lambda x: abs(x['details']['correlation_value']), reverse=True)
+    relations.extend(temp_relations[:TOP_N_RELATIONS])
+
+# Function to check for categorical feature distribution over date features
+def date_categorical_relationship(df, date_columns, categorical_columns, relations, p_value_threshold=0.01):
+    temp_relations = []
+    for date_col in date_columns:
+        df['date_period'] = pd.to_datetime(df[date_col]).dt.to_period('M')
+        for cat_feature in categorical_columns:
+            contingency_table = pd.crosstab(df['date_period'], df[cat_feature])
+            chi2, p, _, _ = chi2_contingency(contingency_table)
+            if p < p_value_threshold:
+                temp_relations.append(
+                    {'attributes': [date_col, cat_feature],
+                     'relation_type': 'date_categorical_distribution',
+                     'details': {'p_value': p}}
+                )
+    temp_relations.sort(key=lambda x: x['details']['p_value'])
+    relations.extend(temp_relations[:TOP_N_RELATIONS])
 
 
 def find_relations(df, target_variable, dataset_types):
