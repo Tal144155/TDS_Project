@@ -131,14 +131,25 @@ def analyze_target_variable(df, dataset_types, target_variable, output_folder):
         iqr = q3 - q1
         outliers = df[(df[target_variable] < q1 - 1.5 * iqr) | (df[target_variable] > q3 + 1.5 * iqr)]
         has_outliers = not outliers.empty
-        print(f"    * Outliers detected: {has_outliers}")
 
-        # Plotting the distribution and highlighting outliers
-        plt.figure(figsize=(8, 6))
-        sns.boxplot(x=df[target_variable])
-        plt.title(f'Distribution of {target_variable} with Outliers')
+        if has_outliers:
+            print(f"    * Outliers detected: {has_outliers}")
+            # Plotting the distribution and highlighting outliers
+            plt.figure(figsize=(10, 6))
+            sns.boxplot(x=df[target_variable])
+            plt.title(f'Distribution of {target_variable} with Outliers')
+            plt.grid(True)
+            filename = f'boxplot_{target_variable}_outliers.png'
+            plt.savefig(os.path.join(output_folder, filename))
+            plt.close()
+        
+        plt.figure(figsize=(10, 6))
+        sns.histplot(df[target_variable], bins=50, kde=True, color='blue') 
+        plt.title(f'{target_variable} Distribution')
+        plt.xlabel(target_variable)
+        plt.ylabel('Frequency')
         plt.grid(True)
-        filename = f'boxplot_{target_variable}_outliers.png'
+        filename = f'histogram_{target_variable}.png'
         plt.savefig(os.path.join(output_folder, filename))
         plt.close()
 
