@@ -137,20 +137,28 @@ def chi_squared_relationship(df, categorical_columns, relations, p_value_thresho
 
 
 # Function to check for numerical feature trends over time
-def date_numerical_relationship(df, date_columns, numerical_columns, target_variable, relations, p_value_threshold=0.01):
+def date_numerical_relationship(df, date_columns, numerical_columns, relations, correlation_threshold=0.5):
     temp_relations = []
     for date_col in date_columns:
-        if target_variable in numerical_columns:
-            df['time_ordinal'] = pd.to_datetime(df[date_col]).map(pd.Timestamp.toordinal)
-            corr_value = df['time_ordinal'].corr(df[target_variable])
-            if abs(corr_value) > p_value_threshold:
-                temp_relations.append(
-                    {'attributes': [date_col, target_variable],
-                     'relation_type': 'date_numerical_trend',
-                     'details': {'correlation_value': corr_value}}
-                )
+        # Safely convert to datetime and drop NaT values
+        valid_dates = pd.to_datetime(df[date_col], errors='coerce').dropna()
+        if valid_dates.empty:
+            continue
+        df['time_ordinal'] = valid_dates.map(pd.Timestamp.toordinal)
+        for num_feature in numerical_columns:
+            # Only use rows where the date is valid
+            valid_data = df.loc[valid_dates.index, num_feature].dropna()
+            if not valid_data.empty:
+                corr_value = df.loc[valid_data.index, 'time_ordinal'].corr(valid_data)
+                if abs(corr_value) > correlation_threshold:
+                    temp_relations.append(
+                        {'attributes': [date_col, num_feature],
+                         'relation_type': 'date_numerical_trend',
+                         'details': {'correlation_value': corr_value}}
+                    )
     temp_relations.sort(key=lambda x: abs(x['details']['correlation_value']), reverse=True)
     relations.extend(temp_relations[:TOP_N_RELATIONS])
+
 
 # Function to check for categorical feature distribution over date features
 def date_categorical_relationship(df, date_columns, categorical_columns, relations, p_value_threshold=0.01):
@@ -186,7 +194,13 @@ def find_relations(df, target_variable, dataset_types):
 
     chi_squared_relationship(df, categorical_columns, relations)
 
+    date_numerical_relationship(df, datetime_columns, numerical_columns, relations)
+
+    date_categorical_relationship(df, datetime_columns, categorical_columns, relations)
+
+
     print(relations)
+    print(len(relations))
 
     return relations
 
