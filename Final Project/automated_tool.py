@@ -164,6 +164,7 @@ def generate_visualizations(dataset_path, target_variable, output_folder, index_
         os.makedirs(output_folder)
     # Understanding the types of columns in the data in order to create better visualizations.
     dataset_types = get_column_types(df)
+    print(dataset_types)
 
     # Plotting Numerical values
     analyze_target_variable(df, dataset_types, target_variable, output_folder)
