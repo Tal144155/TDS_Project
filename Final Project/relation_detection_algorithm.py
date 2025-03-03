@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.feature_selection import SelectKBest, f_regression
+from scipy.stats import chi2_contingency, f_oneway
+
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -102,6 +104,16 @@ def correlation_target_value(df, numerical_columns, target_variable, relations, 
                         'details': {'correlation_value': corr_value}
                     })
 
+def categorical_effects(df, categorical_columns, numerical_columns, target_variable, relations, p_value_threshold=0.05):
+    if target_variable in numerical_columns:
+        for cat_feature in categorical_columns:
+            groups = [df[df[cat_feature] == cat][target_variable].dropna() for cat in df[cat_feature].unique()]
+            if len(groups) > 1:
+                f_stat, p_value = f_oneway(*groups)
+                if p_value < p_value_threshold:
+                    relations.append({'attributes': [cat_feature, target_variable],'relation_type': 'categorical_effect','details': {'p_value': p_value}})
+
+
 
 def find_relations(df, target_variable, dataset_types):
     relations = []
@@ -115,40 +127,9 @@ def find_relations(df, target_variable, dataset_types):
     # Get the relations with the target value
     correlation_target_value(df, numerical_columns, target_variable, relations)
 
+    categorical_effects(df, categorical_columns, numerical_columns, target_variable, relations)
+
     print(relations)
-    # # 3. Categorical Effects on Target
-    # if target_variable in numerical_columns and categorical_columns:
-    #     for cat_feature in categorical_columns:
-    #         mean_values = df.groupby(cat_feature)[target_variable].mean().to_dict()
-    #         relations.append({
-    #             'attributes': [cat_feature, target_variable],
-    #             'relation_type': 'categorical_effect',
-    #             'details': {'mean_values': mean_values}
-    #         })
-
-    # # 4. Date-based Relations
-    # if datetime_columns:
-    #     for date_feature in datetime_columns:
-    #         relations.append({
-    #             'attributes': [date_feature],
-    #             'relation_type': 'datetime_relation',
-    #             'details': {'reason': 'datetime feature for temporal analysis'}
-    #         })
-
-    # # 5. Feature Importance (Using Random Forest)
-    # if target_variable in numerical_columns:
-    #     X = df[numerical_columns].drop(columns=[target_variable])
-    #     y = df[target_variable]
-    #     model = RandomForestRegressor(random_state=42)
-    #     model.fit(X, y)
-    #     importances = model.feature_importances_
-    #     for feature, importance in zip(X.columns, importances):
-    #         if importance > 0.05:  # Example threshold for significance
-    #             relations.append({
-    #                 'attributes': [feature, target_variable],
-    #                 'relation_type': 'feature_importance',
-    #                 'details': {'importance_value': importance}
-    #             })
 
     return relations
 
