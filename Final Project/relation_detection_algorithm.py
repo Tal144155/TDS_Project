@@ -9,6 +9,7 @@ from scipy.stats import chi2_contingency, f_oneway
 import warnings
 warnings.filterwarnings('ignore')
 
+TOP_N_RELATIONS = 10
 
 def column_to_date(df):
     """This function recognize columns that are in the forma of date."""
@@ -104,14 +105,29 @@ def correlation_target_value(df, numerical_columns, target_variable, relations, 
                         'details': {'correlation_value': corr_value}
                     })
 
-def categorical_effects(df, categorical_columns, numerical_columns, target_variable, relations, p_value_threshold=0.05):
+def categorical_effects(df, categorical_columns, numerical_columns, target_variable, relations, p_value_threshold=0.01):
+    temp_relations = []
     if target_variable in numerical_columns:
         for cat_feature in categorical_columns:
             groups = [df[df[cat_feature] == cat][target_variable].dropna() for cat in df[cat_feature].unique()]
             if len(groups) > 1:
                 f_stat, p_value = f_oneway(*groups)
                 if p_value < p_value_threshold:
-                    relations.append({'attributes': [cat_feature, target_variable],'relation_type': 'categorical_effect','details': {'p_value': p_value}})
+                    temp_relations.append({'attributes': [cat_feature, target_variable],'relation_type': 'categorical_effect','details': {'p_value': p_value}})
+    temp_relations.sort(key=lambda x: x['details']['p_value'])
+    relations.extend(temp_relations[:TOP_N_RELATIONS])
+
+
+def chi_squared_relationship(df, categorical_columns, relations, p_value_threshold=0.01):
+    temp_relations = []
+    for i, feature1 in enumerate(categorical_columns):
+        for feature2 in categorical_columns[i + 1:]:
+            contingency_table = pd.crosstab(df[feature1], df[feature2])
+            chi2, p, _, _ = chi2_contingency(contingency_table)
+            if p < p_value_threshold:
+                temp_relations.append({'attributes': [feature1, feature2],'relation_type': 'chi_squared','details': {'p_value': p}})
+    temp_relations.sort(key=lambda x: x['details']['p_value'])
+    relations.extend(temp_relations[:TOP_N_RELATIONS])
 
 
 
@@ -129,6 +145,8 @@ def find_relations(df, target_variable, dataset_types):
 
     categorical_effects(df, categorical_columns, numerical_columns, target_variable, relations)
 
+    chi_squared_relationship(df, categorical_columns, relations)
+
     print(relations)
 
     return relations
@@ -136,13 +154,13 @@ def find_relations(df, target_variable, dataset_types):
 
 
 def main():
-    dataset_path = "Final Project/Datasets_Testing/dataset_movies.csv"
+    dataset_path = "Final Project/Datasets_Testing/AB_NYC_2019.csv"
     # input("Please enter the path to your Dataset: ")
     index_col = "id"
     # input("Please enter the index column: ")
-    target_value = "revenue"
+    target_value = "price"
     # input("Please enter the name of your target value: ")
-    df = read_data(dataset_path)
+    df = read_data(dataset_path, index_col)
     if df is None:
         return
     # Understanding the types of columns in the data in order to create better visualizations.
