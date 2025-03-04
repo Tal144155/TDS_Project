@@ -7,6 +7,8 @@ from sklearn.metrics import mutual_info_score
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import silhouette_score
+from scipy import stats
+
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -288,6 +290,39 @@ def cluster_feature_relations(df, numerical_columns, relations, max_clusters=10,
                 }
             })
 
+
+def target_variable_analysis(df, target_variable, relations, z_score_threshold=3.0):
+    target_data = df[target_variable]
+    z_scores = np.abs((target_data - target_data.mean()) / target_data.std())
+    outliers = target_data[z_scores > z_score_threshold]
+    
+    outlier_ratio = len(outliers) / len(target_data)
+    
+    distribution_types = ['norm', 'lognorm', 'expon', 'gamma', 'beta']
+    best_fit = None
+    best_p_value = 0
+    
+    for dist_name in distribution_types:
+        dist = getattr(stats, dist_name)
+        params = dist.fit(target_data)
+        ks_stat, p_value = stats.kstest(target_data, dist_name, args=params)
+        
+        if p_value > best_p_value:
+            best_fit = dist_name
+            best_p_value = p_value
+    
+    relations.append({
+        'attributes': [target_variable],
+        'relation_type': 'target_analysis',
+        'details': {
+            'outlier_ratio': outlier_ratio,
+            'outlier_count': len(outliers),
+            'distribution_type': best_fit,
+            'distribution_p_value': best_p_value
+        }
+    })
+
+
 def find_relations(df, target_variable, dataset_types):
     relations = []
     numerical_columns = [col for col, col_type in dataset_types.items() if col_type in ['integer', 'float']]
@@ -325,8 +360,9 @@ def find_relations(df, target_variable, dataset_types):
     # Get clusters relations
     cluster_feature_relations(df, numerical_columns, relations)
     
-    print(relations)
-    print(len(relations))
+    # Get the distribution of the target variable
+    target_variable_analysis(df, target_variable, relations)
+
     return relations
 
 
