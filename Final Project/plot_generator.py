@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 PLOTS_DIR = "plots"
 os.makedirs(PLOTS_DIR, exist_ok=True)
@@ -55,21 +56,51 @@ def plot_date_categorical_distribution(df, date_col, cat_feature, p_value):
     save_plot(fig, f'date_categorical_distribution_{date_col}_{cat_feature}')
 
 def plot_non_linear(df, feature1, feature2, mutual_info):
-    fig, ax = plt.subplots()
-    sns.scatterplot(x=df[feature1], y=df[feature2], ax=ax)
-    ax.set_title(f'Non-Linear Relationship: {feature1} vs {feature2} (MI: {mutual_info:.2f})')
+    fig, axs = plt.subplots(1, 2, figsize=(12, 5))
+    sns.scatterplot(x=df[feature1], y=df[feature2], ax=axs[0])
+    axs[0].set_title('Scatter Plot')
+    sns.kdeplot(
+        x=df[feature1], 
+        y=df[feature2], 
+        cmap="YlGnBu", 
+        shade=True, 
+        ax=axs[1]
+    )
+    axs[1].set_title(f'Density Plot (MI: {mutual_info:.2f})')
+    plt.tight_layout()
     save_plot(fig, f'non_linear_{feature1}_{feature2}')
 
-def plot_feature_importance(df, feature, target, importance_value):
-    fig, ax = plt.subplots()
-    sns.barplot(x=[feature], y=[importance_value], ax=ax)
-    ax.set_title(f'Feature Importance: {feature} for {target} (Importance: {importance_value:.2f})')
-    save_plot(fig, f'feature_importance_{feature}_{target}')
+def plot_feature_importance(df, features, target_variable):
+    importances = features  # Assuming this is already calculated
+    
+    fig, axs = plt.subplots(1, 2, figsize=(15, 6))
+    
+    # Bar plot of importances
+    sns.barplot(x=list(importances.keys()), y=list(importances.values()), ax=axs[0])
+    axs[0].set_title(f'Feature Importances for {target_variable}')
+    axs[0].set_xticklabels(axs[0].get_xticklabels(), rotation=45)
+    
+    # Cumulative importance
+    cumulative_importance = np.cumsum(sorted(importances.values(), reverse=True))
+    axs[1].plot(range(1, len(cumulative_importance) + 1), cumulative_importance)
+    axs[1].set_title('Cumulative Feature Importance')
+    axs[1].set_xlabel('Number of Features')
+    axs[1].set_ylabel('Cumulative Importance')
+    
+    plt.tight_layout()
+    save_plot(fig, f'feature_importance_{target_variable}')
 
-def plot_outlier_pattern(df, feature1, feature2, outlier_count):
-    fig, ax = plt.subplots()
-    sns.scatterplot(x=df[feature1], y=df[feature2], ax=ax)
-    ax.set_title(f'Outlier Pattern: {feature1} vs {feature2} (Outliers: {outlier_count})')
+def plot_outlier_pattern(df, feature1, feature2):
+    fig, axs = plt.subplots(1, 2, figsize=(15, 6))
+    sns.scatterplot(x=feature1, y=feature2, data=df, ax=axs[0])
+    axs[0].set_title('Full Data Scatter')
+    z_scores_1 = np.abs((df[feature1] - df[feature1].mean()) / df[feature1].std())
+    z_scores_2 = np.abs((df[feature2] - df[feature2].mean()) / df[feature2].std())
+    outliers = df[(z_scores_1 > 3) | (z_scores_2 > 3)]
+    sns.scatterplot(x=feature1, y=feature2, data=df, ax=axs[1], alpha=0.3)
+    sns.scatterplot(x=feature1, y=feature2, data=outliers, color='red', ax=axs[1])
+    axs[1].set_title('Outliers Highlighted')
+    plt.tight_layout()
     save_plot(fig, f'outlier_pattern_{feature1}_{feature2}')
 
 def plot_cluster_group(df, selected_features, cluster_id):
