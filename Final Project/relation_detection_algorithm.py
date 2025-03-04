@@ -2,8 +2,8 @@ import os
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.feature_selection import SelectKBest, f_regression
 from scipy.stats import chi2_contingency, f_oneway
+from sklearn.metrics import mutual_info_score
 
 
 import warnings
@@ -35,6 +35,7 @@ def read_data(dataset_path, index_col = None):
     else:
         df = pd.read_csv(dataset_path)
     column_to_date(df)
+    df.dropna(inplace=True)
     return df
 
 def is_potentially_categorical(column, threshold=0.01):
@@ -177,12 +178,51 @@ def date_categorical_relationship(df, date_columns, categorical_columns, relatio
     temp_relations.sort(key=lambda x: x['details']['p_value'])
     relations.extend(temp_relations[:TOP_N_RELATIONS])
 
+def non_linear_relationships(df, numerical_columns, relations, threshold=0.5):    
+    for col1 in numerical_columns:
+        for col2 in numerical_columns:
+            if col1 != col2:
+                mi = mutual_info_score(
+                    pd.qcut(df[col1], 10, duplicates='drop', labels=False), 
+                    pd.qcut(df[col2], 10, duplicates='drop', labels=False)
+                )
+                if mi > threshold:
+                    relations.append({
+                        'attributes': [col1, col2],
+                        'relation_type': 'non_linear',
+                        'details': {'mutual_information': mi}
+                    })
+
+def feature_importance_relations(df, numerical_columns, target_variable, relations, top_n=5):
+    if target_variable in numerical_columns:
+        X = df[numerical_columns].drop(columns=[target_variable])
+        y = df[target_variable]
+        
+        model = RandomForestRegressor(random_state=42)
+        model.fit(X, y)
+        importances = model.feature_importances_
+        
+        feature_importances = sorted(
+            zip(X.columns, importances), 
+            key=lambda x: x[1], 
+            reverse=True
+        )
+        for feature, importance in feature_importances[:top_n]:
+            relations.append({
+                'attributes': [feature, target_variable],
+                'relation_type': 'feature_importance',
+                'details': {
+                    'importance_value': importance,
+                    'relative_rank': feature_importances.index((feature, importance)) + 1
+                }
+            })
 
 def find_relations(df, target_variable, dataset_types):
     relations = []
     numerical_columns = [col for col, col_type in dataset_types.items() if col_type in ['integer', 'float']]
     categorical_columns = [col for col, col_type in dataset_types.items() if col_type in ['categorical_int', 'categorical_string']]
     datetime_columns = [col for col, col_type in dataset_types.items() if col_type == 'datetime']
+    categorical_int_columns = [col for col, col_type in dataset_types.items() if col_type == 'categorical_int']
 
     # Get the relations with high correlation
     correlation_relations(df, numerical_columns, target_variable, relations)
@@ -190,30 +230,38 @@ def find_relations(df, target_variable, dataset_types):
     # Get the relations with the target value
     correlation_target_value(df, numerical_columns, target_variable, relations)
 
+    # Get the relations with categorical features
     categorical_effects(df, categorical_columns, numerical_columns, target_variable, relations)
 
+    # Get categorical relations using chi-square test
     chi_squared_relationship(df, categorical_columns, relations)
 
+    # Get relation between date attribute and numerical attributes
     date_numerical_relationship(df, datetime_columns, numerical_columns, relations)
 
+    # Get relations between date attribute and categorical attributes
     date_categorical_relationship(df, datetime_columns, categorical_columns, relations)
 
+    # Get non-linear relations between attributes
+    non_linear_relationships(df, numerical_columns, relations)
+
+    # Get attributes importance using random forest
+    feature_importance_relations(df, numerical_columns + categorical_int_columns, target_variable, relations)
 
     print(relations)
     print(len(relations))
-
     return relations
 
 
 
 def main():
-    dataset_path = "Final Project/Datasets_Testing/AB_NYC_2019.csv"
+    dataset_path = "Final Project/Datasets_Testing/dataset_movies.csv"
     # input("Please enter the path to your Dataset: ")
     index_col = "id"
     # input("Please enter the index column: ")
-    target_value = "price"
+    target_value = "revenue"
     # input("Please enter the name of your target value: ")
-    df = read_data(dataset_path, index_col)
+    df = read_data(dataset_path)
     if df is None:
         return
     # Understanding the types of columns in the data in order to create better visualizations.
