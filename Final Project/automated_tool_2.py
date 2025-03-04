@@ -1,6 +1,10 @@
 import pandas as pd
 import numpy as np
+import pickle
+import os.path
 from automated_tool import get_column_types
+
+# ratings_pd = pd.DataFrame({'bar_chart':[0,0],'line_chart':[0,0],'scatter_plot':[0,0]}, index=['0','1'])
 
 
 visualization_types = {
@@ -68,6 +72,30 @@ visualization_types = {
         "min_data_points": 5,
         "required_metrics": ["open", "high", "low", "close"],
         "typical_fields": ["date", "open", "high", "low", "close", "volume"]
+    },
+    "multiple_boxplots": {
+        "description": "Displays multiple boxplots for comparing distributions across different categories or features.",
+        "use_cases": ["distribution comparison", "outlier detection", "feature comparison"],
+        "data_types": ["numerical", "categorical"],
+        "dimensions": ['all'],
+        "min_data_points": 10,
+        "min_features": 2
+    },
+    "multiple_violin_plots": {
+        "description": "Shows density distributions for multiple features or categories with violin shapes.",
+        "use_cases": ["distribution comparison", "density visualization", "feature comparison"],
+        "data_types": ["numerical", "categorical"],
+        "dimensions": ['all'],
+        "min_data_points": 20,
+        "min_features": 2
+    },
+    "covariance_heatmap": {
+        "description": "Visualizes the covariance matrix between multiple numerical features.",
+        "use_cases": ["correlation analysis", "feature relationships", "multivariate analysis"],
+        "data_types": ["numerical"],
+        "dimensions": ['all'],
+        "min_data_points": 10,
+        "min_features": 2
     }
 }
 
@@ -138,6 +166,9 @@ def recommend(data, analysis_goal=None):
         
         # Check data dimensions
         if data_analysis["columns"] in viz_info["dimensions"]:
+            score += 3
+            explanation.append(f"Data dimensions ({data_analysis['columns']}) match visualization requirements")
+        elif 'all' in viz_info["dimensions"] and data_analysis["columns"] >= viz_info["min_features"]:
             score += 2
             explanation.append(f"Data dimensions ({data_analysis['columns']}) match visualization requirements")
         else:
@@ -226,7 +257,41 @@ def generate_code_example(data, viz_type):
         
     return code
 
+
+def save_ratings(ratings, file_name):
+    with open(file_name+'.pkl', 'wb') as f:
+        pickle.dump(ratings, f)
+
+def load_ratings(file_name):
+    file = file_name+'.pkl'
+    if os.path.isfile(file):
+        with open( file, 'rb') as f:
+            ratings = pickle.load(f)
+    else:
+        ratings = pd.DataFrame({})
+        for vis_type in visualization_types:
+            if vis_type not in ratings.columns:
+                ratings[vis_type] = np.nan
+
+    
+    return ratings
+
+
+
+
 if __name__ == "__main__":
+    # Get the currec=nt user ratings
+    rating_string = "Please rate this visualization between 1 (Least helpfull) and 5 (Most helpfull).\n"
+
+    ratings = load_ratings('user_ratings')
+    print(f'\n{ratings}\n')
+    user_id = input("Please enter a user id:\n")
+
+    if not user_id in ratings.index:
+        ratings.loc[user_id] = np.nan
+        save_ratings(ratings, 'user_ratings')
+
+
     # Sample dataset
     data = pd.DataFrame({
         'date': pd.date_range(start='2023-01-01', periods=12, freq='M'),
@@ -236,15 +301,31 @@ if __name__ == "__main__":
     })
 
     # Get recommendations
-    recommendations = recommend(data[['category']])
+    recommendations = recommend(data[['category','value']])
 
     # Print recommendations
     print("Recommended visualizations:")
-    for i, rec in enumerate(recommendations[:]):
+    for i, rec in enumerate(recommendations[:3]):
+        user_rating = 0
+        if pd.notna(ratings.loc[user_id, rec['type']]):
+            user_rating = ratings.loc[user_id, rec['type']]
+
         print(f"\n{i+1}. {rec['type'].replace('_', ' ').title()}")
         print(f"   Description: {rec['description']}")
-        print(f"   Score: {rec['score']}")
+        print(f"   Score: {rec['score']/2 + user_rating}")
         print(f"   Rationale:")
         for exp in rec['explanation']:
             print(f"   - {exp}")
+        
+        new_rating = int(input(rating_string))
+        if user_rating:
+            ratings.loc[user_id, rec['type']] = user_rating * 0.8 + new_rating* 0.2
+        else:
+            ratings.loc[user_id, rec['type']] = new_rating
+            
+        save_ratings(ratings, 'user_ratings')    
+
+
+
+    print(f'\n {ratings} \n')
 
