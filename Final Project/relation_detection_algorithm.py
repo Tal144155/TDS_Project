@@ -4,7 +4,9 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from scipy.stats import chi2_contingency, f_oneway
 from sklearn.metrics import mutual_info_score
-
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import silhouette_score
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -217,6 +219,75 @@ def feature_importance_relations(df, numerical_columns, target_variable, relatio
                 }
             })
 
+def outlier_relationships(df, numerical_columns, relations, z_score_threshold=3.0, min_outlier_ratio=0.01, max_outlier_ratio=0.05, correlation_diff_threshold=0.3):
+    for col in numerical_columns:
+        z_scores = np.abs((df[col] - df[col].mean()) / df[col].std())
+        outliers = df[z_scores > z_score_threshold]
+        
+        outlier_ratio = len(outliers) / len(df)
+        
+        if min_outlier_ratio < outlier_ratio < max_outlier_ratio:
+            for other_col in numerical_columns:
+                if col != other_col:
+                    outlier_correlation = outliers[col].corr(outliers[other_col])
+                    normal_correlation = df[col].corr(df[other_col])
+                    
+                    if outlier_correlation is not None and normal_correlation is not None:
+                        if abs(outlier_correlation - normal_correlation) > correlation_diff_threshold:
+                            relations.append({
+                                'attributes': [col, other_col],
+                                'relation_type': 'outlier_pattern',
+                                'details': {
+                                    'outlier_correlation': outlier_correlation,
+                                    'normal_correlation': normal_correlation,
+                                    'outlier_count': len(outliers)
+                                }
+                            })
+
+
+def cluster_feature_relations(df, numerical_columns, relations, max_clusters=10, feature_importance_threshold=0.1):
+    if len(numerical_columns) < 3:
+        return
+    
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(df[numerical_columns])
+    
+    best_n_clusters = 2
+    best_score = -1
+    
+    for n_clusters in range(2, max_clusters + 1):
+        kmeans = KMeans(n_clusters=n_clusters, random_state=42)
+        labels = kmeans.fit_predict(scaled_data)
+        score = silhouette_score(scaled_data, labels)
+        
+        if score > best_score:
+            best_score = score
+            best_n_clusters = n_clusters
+    
+    kmeans = KMeans(n_clusters=best_n_clusters, random_state=42)
+    kmeans.fit(scaled_data)
+    
+    cluster_centers = kmeans.cluster_centers_
+    
+    for cluster_idx in range(best_n_clusters):
+        center = cluster_centers[cluster_idx]
+        feature_importance = np.abs(center)
+        
+        selected_indices = np.where(feature_importance > feature_importance_threshold)[0]
+        selected_features = [numerical_columns[i] for i in selected_indices]
+        
+        if len(selected_features) >= 2:
+            relations.append({
+                'attributes': selected_features,
+                'relation_type': 'cluster_group',
+                'details': {
+                    'cluster_id': cluster_idx,
+                    'importance_scores': {
+                        numerical_columns[i]: feature_importance[i] for i in selected_indices
+                    }
+                }
+            })
+
 def find_relations(df, target_variable, dataset_types):
     relations = []
     numerical_columns = [col for col, col_type in dataset_types.items() if col_type in ['integer', 'float']]
@@ -248,6 +319,12 @@ def find_relations(df, target_variable, dataset_types):
     # Get attributes importance using random forest
     feature_importance_relations(df, numerical_columns + categorical_int_columns, target_variable, relations)
 
+    # Get outliers relations
+    outlier_relationships(df, numerical_columns, relations)
+
+    # Get clusters relations
+    cluster_feature_relations(df, numerical_columns, relations)
+    
     print(relations)
     print(len(relations))
     return relations
@@ -255,13 +332,13 @@ def find_relations(df, target_variable, dataset_types):
 
 
 def main():
-    dataset_path = "Final Project/Datasets_Testing/dataset_movies.csv"
+    dataset_path = "Final Project/Datasets_Testing/AB_NYC_2019.csv"
     # input("Please enter the path to your Dataset: ")
     index_col = "id"
     # input("Please enter the index column: ")
-    target_value = "revenue"
+    target_value = "price"
     # input("Please enter the name of your target value: ")
-    df = read_data(dataset_path)
+    df = read_data(dataset_path, index_col)
     if df is None:
         return
     # Understanding the types of columns in the data in order to create better visualizations.
