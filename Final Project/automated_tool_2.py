@@ -291,7 +291,6 @@ def combine_pred(pred1, pred2, w1 = 0.5, w2 = 0.5):
     return w1 * pred1 + w2 * pred2
 
 if __name__ == "__main__":
-    # Get the current user ratings
     ratings = load_ratings('user_ratings')
     print(f'\n{ratings}\n')
     user_id = input("Please enter a user id:\n")
@@ -299,52 +298,56 @@ if __name__ == "__main__":
     if not user_id in ratings.index:
         ratings.loc[user_id] = np.nan
         save_ratings(ratings, 'user_ratings')
+    while True:
+        # Get the current user ratings
+        ratings = load_ratings('user_ratings')
 
-    combined_user_vis_pred = combine_pred(CFCB(ratings), CFUB(ratings), 0.5, 0.5)
-    
 
-
-    # Sample dataset
-    data = pd.DataFrame({
-        'date': pd.date_range(start='2023-01-01', periods=12, freq='M'),
-        'category': ['A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C'],
-        'value': [10, 15, 7, 12, 18, 9, 14, 20, 11, 16, 22, 13],
-        'count': [100, 150, 70, 120, 180, 90, 140, 200, 110, 160, 220, 130]
-    })
-
-    # Get recommendations
-    algo_rec = recommend(data[['category','value']])
-    algo_rec_df = pd.DataFrame({})
-    for i, rec in enumerate(algo_rec):
-        algo_rec_df.loc[0, rec['type']] = rec['score']
-
-    user_index = ratings.index.get_loc(user_id)
-    recommendations = combine_pred(combined_user_vis_pred[user_index], algo_rec_df.to_numpy(), 0.7, 0.3)[0]
-    
-    # Print top 3 recommendations sorted by score
-    print("Recommended visualizations:")
-    for i in (np.argsort(recommendations)[-3:][::-1]):
-        rec = algo_rec[i]
-        user_rating = 0
-        if pd.notna(ratings.loc[user_id, rec['type']]):
-            user_rating = ratings.loc[user_id, rec['type']]
-
-        print(f"\n{i+1}. {rec['type'].replace('_', ' ').title()}")
-        print(f"   Description: {rec['description']}")
-        print(f"   Score: {recommendations[i]}")
-        print(f"   Rationale:")
-        for exp in rec['explanation']:
-            print(f"   - {exp}")
+        combined_user_vis_pred = combine_pred(CFCB(ratings), CFUB(ratings), 0.5, 0.5)
         
-        new_rating = int(input(rating_string))
-        if user_rating:
-            ratings.loc[user_id, rec['type']] = user_rating * 0.8 + new_rating* 0.2
-        else:
-            ratings.loc[user_id, rec['type']] = new_rating
-
-        save_ratings(ratings, 'user_ratings')    
 
 
+        # Sample dataset
+        data = pd.DataFrame({
+            'date': pd.date_range(start='2023-01-01', periods=12, freq='M'),
+            'category': ['A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C'],
+            'value': [10, 15, 7, 12, 18, 9, 14, 20, 11, 16, 22, 13],
+            'count': [100, 150, 70, 120, 180, 90, 140, 200, 110, 160, 220, 130]
+        })
 
-    print(f'\n {ratings} \n')
+        # Get recommendations
+        algo_rec = recommend(data[['category','value']])
+        algo_rec_df = pd.DataFrame({})
+        for i, rec in enumerate(algo_rec):
+            algo_rec_df.loc[0, rec['type']] = rec['score']
+
+        user_index = ratings.index.get_loc(user_id)
+        recommendations = combine_pred(combined_user_vis_pred[user_index], algo_rec_df.to_numpy(), 0.7, 0.3)[0]
+        
+        # Print the top recommendations sorted by score
+        print("Recommended visualizations:")
+        for i in (np.argsort(recommendations)[-1:][::-1]):
+            rec = algo_rec[i]
+            user_rating = 0
+            if pd.notna(ratings.loc[user_id, rec['type']]):
+                user_rating = ratings.loc[user_id, rec['type']]
+
+            print(f"\n{i+1}. {rec['type'].replace('_', ' ').title()}")
+            print(f"   Description: {rec['description']}")
+            print(f"   Score: {recommendations[i]}")
+            print(f"   Rationale:")
+            for exp in rec['explanation']:
+                print(f"   - {exp}")
+            
+            new_rating = int(input(rating_string))
+            if user_rating:
+                ratings.loc[user_id, rec['type']] = user_rating * 0.8 + new_rating* 0.2
+            else:
+                ratings.loc[user_id, rec['type']] = new_rating
+
+            save_ratings(ratings, 'user_ratings')    
+
+
+
+        print(f'\n {ratings} \n')
 
