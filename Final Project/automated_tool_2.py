@@ -540,7 +540,7 @@ if __name__ == "__main__":
     data = pd.DataFrame({
         'date': pd.date_range(start='2023-01-01', periods=12, freq='M'),
         'category': ['A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C'],
-        'value': [10, 15, 7, 12, 18, 9, 14, 20, 11, 16, 22, 13],
+        'value': [8, 15, 7, 12, 18, 9, 14, 20, 11, 16, 22, 13],
         'count': [100, 150, 70, 120, 180, 90, 140, 200, 110, 160, 220, 130]
     })
     target_value = 'value'
@@ -559,7 +559,6 @@ if __name__ == "__main__":
     dataset_types = get_column_types(data)
     algo_rec = find_relations(data, target_value, dataset_types)
     algo_rec = get_relation_scores(algo_rec)
-    algo_rec_df = get_top_relations(algo_rec)
     while True:
         if not algo_rec:
             print("Those are all the meaningfull relations we've found.\n We hope you found this helpfull! (:)")
@@ -568,15 +567,16 @@ if __name__ == "__main__":
         # ratings = load_ratings('user_ratings_rel', RELATION_TYPES)
         combined_user_vis_pred = combine_pred(CFCB(ratings), CFUB(ratings), 0.5, 0.5)
 
-       
+        # Make a df for the reccomendation system
+        algo_rec_df = get_top_relations(algo_rec)
+
 
         user_index = ratings.index.get_loc(user_id)
         recommendations = combine_pred(combined_user_vis_pred[user_index], algo_rec_df.to_numpy()[0], 0.7, 0.3)
         
         # Print the top recommendations sorted by score
         print("Recommended visualizations:")
-        index = recommendations.argmax()
-        
+        index = int(algo_rec_df.iloc[1,recommendations.argmax()])
         rec = algo_rec.pop(index)
         user_rating = 0
         if pd.notna(ratings.loc[user_id, rec['relation_type']]):
