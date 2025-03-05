@@ -2,12 +2,10 @@ import pandas as pd
 import numpy as np
 import pickle
 import os.path
-import matplotlib.pyplot as plt
 from sklearn.metrics.pairwise import pairwise_distances
 from relation_detection_algorithm import get_column_types
 from relation_detection_algorithm import find_relations
 
-# ratings_pd = pd.DataFrame({'bar_chart':[0,0],'line_chart':[0,0],'scatter_plot':[0,0]}, index=['0','1'])
 RATING_STRING = "Please rate this visualization between 1 (Least helpful) and 5 (Most helpful).\n"
 
 RELATION_TYPES = {
