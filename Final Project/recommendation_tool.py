@@ -123,39 +123,6 @@ RELATION_TYPES = {
     }
 }
 
-def analyze_data(data):
-    """
-    Analyze the provided dataframe to determine its characteristics.
-    """
-    data_analysis = {
-        "columns": data.shape[1],
-        "rows": len(data),
-        "column_types": {},
-        "categorical_columns": [],
-        "numerical_columns": [],
-        "datetime_columns": [],
-        "unique_values": {}
-    }
-    
-    for col in data.columns:
-        # Check data type
-        if pd.api.types.is_numeric_dtype(data[col]):
-            data_analysis["column_types"][col] = "numerical"
-            data_analysis["numerical_columns"].append(col)
-        elif pd.api.types.is_datetime64_any_dtype(data[col]):
-            data_analysis["column_types"][col] = "datetime"
-            data_analysis["datetime_columns"].append(col)
-        else:
-            data_analysis["column_types"][col] = "categorical"
-            data_analysis["categorical_columns"].append(col)
-        
-        # Count unique values for each column
-        data_analysis["unique_values"][col] = data[col].nunique()
-        
-        
-            
-    return data_analysis
-
 
 
 # Save the user ratings to a pickle file for keeping the progress and assessing our model
@@ -175,7 +142,6 @@ def load_ratings(file_name, rec_types):
             if type not in ratings.columns:
                 ratings[type] = np.nan
 
-    
     return ratings
 
 
@@ -346,7 +312,7 @@ if __name__ == "__main__":
     target_value = 'value'
     # Load user ratings from the pickle file
     ratings = load_ratings('user_ratings_rel', RELATION_TYPES)
-    print(f'\n{ratings}\n')
+
     user_id = input("Please enter a user id:\n")
 
     # If this is a new user, add the user to the dataframe.
@@ -361,7 +327,7 @@ if __name__ == "__main__":
     algo_rec = get_relation_scores(algo_rec)
     while True:
         if not algo_rec:
-            print("Those are all the meaningful relations we've found.\n We hope you found this helpful! (:)")
+            print("Those are all the meaningful relations we've found.\n We hope you found this helpful! (:")
             break
         # Get the current user ratings
         # ratings = load_ratings('user_ratings_rel', RELATION_TYPES)
