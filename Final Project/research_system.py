@@ -95,7 +95,7 @@ def submit_feedback():
         save_results()
         messagebox.showinfo("Process Complete", "Thank you! The process is complete.")
         app.quit()
-        
+
 # Function to start the testing process
 def start_process():
     global start_time, user_id, ratings, plot_index, algo_rec
@@ -131,7 +131,8 @@ def generate_plot():
         user_index = ratings.index.get_loc(user_id)
         recommendations = combine_pred(combined_user_vis_pred[user_index], algo_rec_df.to_numpy()[0], 0.7, 0.3)
         index = int(algo_rec_df.iloc[1,recommendations.argmax()])
-        algo_rec.pop(index)
+        chosen_plot = algo_rec.pop(index)
+        # need here to use methods from the plot_generator to plot the relation, and then return the info of the plot (probably name, location, so we can show it)
     else:
         features = random.sample(data.columns.tolist(), 2)
         plot_name = f'random_{features[0]}_{features[1]}_{plot_index+1}'
