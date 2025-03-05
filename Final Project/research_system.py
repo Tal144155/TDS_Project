@@ -93,7 +93,7 @@ def submit_feedback():
 
     save_ratings(ratings, 'user_ratings_rel') 
     plot_index += 1
-    if algo_rec and plot_index < 1:
+    if algo_rec:
         show_next_plot()
     else:
         save_results()
@@ -122,21 +122,6 @@ def start_process():
     algo_rec = find_relations(df, target_value, dataset_types)
     algo_rec = get_relation_scores(algo_rec)
     show_next_plot()
-
-# Mapping of relation types to plot functions
-plot_function_mapping = {
-    'high_correlation': plot_high_correlation,
-    'target_correlation': plot_target_correlation,
-    'categorical_effect': plot_categorical_effect,
-    'chi_squared': plot_chi_squared,
-    'date_numerical_trend': plot_date_numerical_trend,
-    'date_categorical_distribution': plot_date_categorical_distribution,
-    'non_linear': plot_non_linear,
-    'feature_importance': plot_feature_importance,
-    'outlier_pattern': plot_outlier_pattern,
-    'cluster_group': plot_cluster_group,
-    'target_analysis': plot_target_analysis
-}
 
 # Function to generate a new plot dynamically
 def generate_plot():
@@ -202,13 +187,29 @@ def display_plot(image_path):
     if not os.path.exists(image_path):
         messagebox.showerror("Error", f"Image not found: {image_path}")
         return
-    
-    image = Image.open(image_path)
-    image = image.resize((600, 400), Image.Resampling.LANCZOS)  # Use LANCZOS instead of ANTIALIAS
-    photo = ImageTk.PhotoImage(image)
 
-    plot_canvas.config(image=photo)
-    plot_canvas.image = photo  # Keep a reference to avoid garbage collection
+    try:
+        # Open the image
+        image = Image.open(image_path)
+
+        # Define the maximum size
+        max_width, max_height = 600, 400
+
+        # Maintain aspect ratio using thumbnail
+        image.thumbnail((max_width, max_height), Image.Resampling.LANCZOS)
+
+        # Convert to PhotoImage for tkinter
+        photo = ImageTk.PhotoImage(image)
+
+        # Update the plot_canvas
+        plot_canvas.config(image=photo)
+        plot_canvas.image = photo  # Keep a reference to avoid garbage collection
+
+        print(f"Displayed image: {image_path}")
+
+    except Exception as e:
+        print(f"Failed to load image: {e}")
+        messagebox.showerror("Error", f"Failed to load image: {e}")
 
 
 # Function to display the next plot
@@ -227,6 +228,7 @@ def save_results():
         for plot in plot_data:
             f.write(f"Plot Name: {plot['name']}\n")
             f.write(f"Type: {'System' if plot['is_system'] else 'Random'}\n")
+            f.write(f"Name in Dir: {plot['plot_save_name']}\n")
             f.write(f"Rating: {plot.get('rating', 'N/A')}\n")
             f.write(f"Comment: {plot.get('comment', 'N/A')}\n")
             f.write(f"Time Taken: {plot.get('time_taken', 0):.2f} seconds\n\n")
