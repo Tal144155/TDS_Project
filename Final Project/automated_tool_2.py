@@ -2,15 +2,13 @@ import pandas as pd
 import numpy as np
 import pickle
 import os.path
-import matplotlib
 import matplotlib.pyplot as plt
 from sklearn.metrics.pairwise import pairwise_distances
-import heapq
 from relation_detection_algorithm import get_column_types
 from relation_detection_algorithm import find_relations
 
 # ratings_pd = pd.DataFrame({'bar_chart':[0,0],'line_chart':[0,0],'scatter_plot':[0,0]}, index=['0','1'])
-RATING_STRING = "Please rate this visualization between 1 (Least helpfull) and 5 (Most helpfull).\n"
+RATING_STRING = "Please rate this visualization between 1 (Least helpful) and 5 (Most helpful).\n"
 
 RELATION_TYPES = {
     "high_correlation": {
@@ -356,12 +354,12 @@ def recommend(data, analysis_goal=None):
     return recommendations
 
 
-# Save the user ratings to a pickle file for keeping the progress and assesing our model
+# Save the user ratings to a pickle file for keeping the progress and assessing our model
 def save_ratings(ratings, file_name):
     with open(file_name+'.pkl', 'wb') as f:
         pickle.dump(ratings, f)
 
-# Load user ratings for content filterring 
+# Load user ratings for content filtering 
 def load_ratings(file_name, rec_types):
     file = file_name+'.pkl'
     if os.path.isfile(file):
@@ -401,7 +399,7 @@ def CFCB(ratings_pd):
     pred.round(2)
     return pred
 
-# Waighted sum of two predictions
+# Weighted sum of two predictions
 def combine_pred(pred1, pred2, w1 = 0.5, w2 = 0.5):
     # Replace NaN values with 0
     pred1 = np.nan_to_num(pred1, nan=0.0)
@@ -409,8 +407,6 @@ def combine_pred(pred1, pred2, w1 = 0.5, w2 = 0.5):
 
     return w1 * pred1 + w2 * pred2
 
-
-import numpy as np
 
 def normalize_score(value, metric_type):
     """
@@ -561,13 +557,13 @@ if __name__ == "__main__":
     algo_rec = get_relation_scores(algo_rec)
     while True:
         if not algo_rec:
-            print("Those are all the meaningfull relations we've found.\n We hope you found this helpfull! (:)")
+            print("Those are all the meaningful relations we've found.\n We hope you found this helpful! (:)")
             break
         # Get the current user ratings
         # ratings = load_ratings('user_ratings_rel', RELATION_TYPES)
         combined_user_vis_pred = combine_pred(CFCB(ratings), CFUB(ratings), 0.5, 0.5)
 
-        # Make a df for the reccomendation system
+        # Make a df for the recommendation system
         algo_rec_df = get_top_relations(algo_rec)
 
 
