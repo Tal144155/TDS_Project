@@ -13,38 +13,38 @@ def save_plot(fig, plot_name):
     plt.close(fig)
     print(f"Saved plot: {file_path}")
 
-def plot_high_correlation(df, feature1, feature2, correlation_value):
+def plot_high_correlation(df, feature1, feature2, correlation_value, plot_name):
     fig, ax = plt.subplots()
     sns.regplot(x=df[feature1], y=df[feature2], scatter_kws={'alpha': 0.6, 's': 50}, line_kws={'color': 'red'})
     ax.set_title(f'High Correlation: {feature1} vs {feature2} (Corr: {correlation_value:.2f})')
     save_plot(fig, f'high_correlation_{feature1}_{feature2}')
 
-def plot_target_correlation(df, feature, target, correlation_value):
+def plot_target_correlation(df, feature, target, correlation_value, plot_name):
     fig, ax = plt.subplots()
     sns.scatterplot(x=df[feature], y=df[target], ax=ax)
     ax.set_title(f'Target Correlation: {feature} vs {target} (Corr: {correlation_value:.2f})')
-    save_plot(fig, f'target_correlation_{feature}_{target}')
+    save_plot(fig, plot_name)
 
-def plot_categorical_effect(df, categorical_feature, target, p_value):
+def plot_categorical_effect(df, categorical_feature, target, p_value, plot_name):
     fig, ax = plt.subplots()
     sns.boxplot(x=df[categorical_feature], y=df[target], ax=ax)
     ax.set_title(f'Categorical Effect: {categorical_feature} on {target} (p-value: {p_value:.4f})')
-    save_plot(fig, f'categorical_effect_{categorical_feature}_{target}')
+    save_plot(fig, plot_name)
 
-def plot_chi_squared(df, feature1, feature2, p_value):
+def plot_chi_squared(df, feature1, feature2, p_value, plot_name):
     contingency_table = pd.crosstab(df[feature1], df[feature2])
     fig, ax = plt.subplots()
     sns.heatmap(contingency_table, annot=True, cmap="coolwarm", ax=ax)
     ax.set_title(f'Chi-Squared Test: {feature1} vs {feature2} (p-value: {p_value:.4f})')
-    save_plot(fig, f'chi_squared_{feature1}_{feature2}')
+    save_plot(fig, plot_name)
 
-def plot_date_numerical_trend(df, date_col, num_feature, correlation_value):
+def plot_date_numerical_trend(df, date_col, num_feature, correlation_value, plot_name):
     fig, ax = plt.subplots()
     sns.lineplot(x=df[date_col], y=df[num_feature], ax=ax)
     ax.set_title(f'Date Numerical Trend: {date_col} vs {num_feature} (Corr: {correlation_value:.2f})')
-    save_plot(fig, f'date_numerical_trend_{date_col}_{num_feature}')
+    save_plot(fig, plot_name)
 
-def plot_date_categorical_distribution(df, date_col, cat_feature, p_value):
+def plot_date_categorical_distribution(df, date_col, cat_feature, p_value, plot_name):
     contingency_table = pd.crosstab(df[date_col].dt.to_period('M'), df[cat_feature])
     fig, ax = plt.subplots(figsize=(10, 6))
     contingency_table.plot(kind='bar', stacked=True, ax=ax, colormap='Set3')
@@ -53,9 +53,9 @@ def plot_date_categorical_distribution(df, date_col, cat_feature, p_value):
     ax.set_ylabel('Count')
     plt.xticks(rotation=45)
     plt.tight_layout()
-    save_plot(fig, f'date_categorical_distribution_{date_col}_{cat_feature}')
+    save_plot(fig, plot_name)
 
-def plot_non_linear(df, feature1, feature2, mutual_info):
+def plot_non_linear(df, feature1, feature2, mutual_info, plot_name):
     fig, axs = plt.subplots(1, 2, figsize=(12, 5))
     sns.scatterplot(x=df[feature1], y=df[feature2], ax=axs[0])
     axs[0].set_title('Scatter Plot')
@@ -68,9 +68,9 @@ def plot_non_linear(df, feature1, feature2, mutual_info):
     )
     axs[1].set_title(f'Density Plot (MI: {mutual_info:.2f})')
     plt.tight_layout()
-    save_plot(fig, f'non_linear_{feature1}_{feature2}')
+    save_plot(fig, plot_name)
 
-def plot_feature_importance(df, features, target_variable):
+def plot_feature_importance(df, features, target_variable, plot_name):
     importances = features  # Assuming this is already calculated
     
     fig, axs = plt.subplots(1, 2, figsize=(15, 6))
@@ -88,9 +88,9 @@ def plot_feature_importance(df, features, target_variable):
     axs[1].set_ylabel('Cumulative Importance')
     
     plt.tight_layout()
-    save_plot(fig, f'feature_importance_{target_variable}')
+    save_plot(fig, plot_name)
 
-def plot_outlier_pattern(df, feature1, feature2):
+def plot_outlier_pattern(df, feature1, feature2, plot_name):
     fig, axs = plt.subplots(1, 2, figsize=(15, 6))
     sns.scatterplot(x=feature1, y=feature2, data=df, ax=axs[0])
     axs[0].set_title('Full Data Scatter')
@@ -101,16 +101,16 @@ def plot_outlier_pattern(df, feature1, feature2):
     sns.scatterplot(x=feature1, y=feature2, data=outliers, color='red', ax=axs[1])
     axs[1].set_title('Outliers Highlighted')
     plt.tight_layout()
-    save_plot(fig, f'outlier_pattern_{feature1}_{feature2}')
+    save_plot(fig, plot_name)
 
-def plot_cluster_group(df, selected_features, cluster_id):
+def plot_cluster_group(df, selected_features, cluster_id, plot_name):
     fig, ax = plt.subplots()
     sns.pairplot(df[selected_features], hue=cluster_id)
     plt.suptitle(f'Cluster Group: {cluster_id}', y=1.02)
-    save_plot(fig, f'cluster_group_{cluster_id}')
+    save_plot(fig, plot_name)
 
-def plot_target_analysis(df, target_variable, outlier_ratio, distribution_type, distribution_p_value):
+def plot_target_analysis(df, target_variable, outlier_ratio, distribution_type, plot_name):
     fig, ax = plt.subplots()
     sns.histplot(df[target_variable], kde=True, ax=ax)
     ax.set_title(f'Target Analysis: {target_variable} (Outlier Ratio: {outlier_ratio:.2f}, Best Fit: {distribution_type})')
-    save_plot(fig, f'target_analysis_{target_variable}')
+    save_plot(fig, plot_name)

@@ -141,7 +141,7 @@ plot_function_mapping = {
 # Function to generate a new plot dynamically
 def generate_plot():
     global ratings, user_id, algo_rec, chosen_plot
-    is_system_plot = random.choice([True, False])
+    is_system_plot = random.choice([True, True])
     plot_name = f'plot{plot_index+1}'
     image_path = ""
     if is_system_plot and algo_rec:
@@ -152,15 +152,38 @@ def generate_plot():
         index = int(algo_rec_df.iloc[1,recommendations.argmax()])
         chosen_plot = algo_rec.pop(index)
         plot_name = f'system_{chosen_plot["relation_type"]}_{plot_index+1}'
+        plot_save_name = f'plot_{plot_index}'
         plot_info = {
             'name': plot_name,
             'is_system': True,
-            'relation_type': chosen_plot['relation_type']
+            'relation_type': chosen_plot['relation_type'],
+            'attributes': chosen_plot["attributes"],
+            'plot_save_name': plot_save_name
         }
-        plot_function = plot_function_mapping.get(chosen_plot['relation_type'])
-        if plot_function:
-            plot_function(df, **chosen_plot['details'])
-        image_path = os.path.join(PLOTS_DIR, f'{plot_name}.png')
+        if chosen_plot['relation_type'] == "high_correlation":
+            plot_high_correlation(df, chosen_plot["attributes"][0], chosen_plot["attributes"][1], chosen_plot["details"]["correlation_value"], plot_save_name)
+        elif chosen_plot['relation_type'] == "target_correlation":
+            plot_target_correlation(df, chosen_plot["attributes"][0], chosen_plot["attributes"][1], chosen_plot["details"]["correlation_value"], plot_save_name)
+        elif chosen_plot['relation_type'] == "categorical_effect":
+            plot_categorical_effect(df, chosen_plot["attributes"][0], chosen_plot["attributes"][1], chosen_plot["details"]["p_value"], plot_save_name)
+        elif chosen_plot['relation_type'] == "chi_squared":
+            plot_chi_squared(df, chosen_plot["attributes"][0], chosen_plot["attributes"][1], chosen_plot["details"]["p_value"], plot_save_name)
+        elif chosen_plot['relation_type'] == "date_numerical_trend":
+            plot_date_numerical_trend(df, chosen_plot["attributes"][0], chosen_plot["attributes"][1], chosen_plot["details"]["correlation_value"], plot_save_name)
+        elif chosen_plot['relation_type'] == "date_categorical_distribution":
+            plot_date_categorical_distribution(df, chosen_plot["attributes"][0], chosen_plot["attributes"][1], chosen_plot["details"]["p_value"], plot_save_name)
+        elif chosen_plot['relation_type'] == "non_linear":
+            plot_non_linear(df, chosen_plot["attributes"][0], chosen_plot["attributes"][1], chosen_plot["details"]["mutual_information"], plot_save_name)
+        elif chosen_plot['relation_type'] == "feature_importance":
+            plot_feature_importance()
+        elif chosen_plot['relation_type'] == "outlier_pattern":
+            plot_outlier_pattern(df, chosen_plot["attributes"][0], chosen_plot["attributes"][1], plot_save_name)
+        elif chosen_plot['relation_type'] == "cluster_group":
+            plot_cluster_group()
+        elif chosen_plot['relation_type'] == "target_analysis":
+            plot_target_analysis(df, chosen_plot["attributes"][0], chosen_plot["details"]["outlier_ratio"], chosen_plot["details"]["distribution_type"], plot_save_name)
+
+        image_path = os.path.abspath(os.path.join(PLOTS_DIR, f'{plot_save_name}.png'))
     else:
         features = random.sample(df.columns.tolist(), 2)
         plot_name = f'random_{features[0]}_{features[1]}_{plot_index+1}'
@@ -169,16 +192,26 @@ def generate_plot():
             'is_system': False
         }
         plot_high_correlation(df, features[0], features[1], random.uniform(0.5, 1.0))
-        image_path = os.path.join(PLOTS_DIR, f'{plot_name}.png')
+        image_path = os.path.join(PLOTS_DIR, f'{plot_save_name}.png')
     plot_data.append(plot_info)
     display_plot(image_path)
     return plot_info
 
+from PIL import Image, ImageTk
+
 # Function to generate and display the plot
 def display_plot(image_path):
-    image = PhotoImage(file=image_path)
-    plot_canvas.config(image=image)
-    plot_canvas.image = image
+    if not os.path.exists(image_path):
+        messagebox.showerror("Error", f"Image not found: {image_path}")
+        return
+    
+    image = Image.open(image_path)
+    image = image.resize((600, 400), Image.ANTIALIAS)  # Resize to fit the window
+    photo = ImageTk.PhotoImage(image)
+
+    plot_canvas.config(image=photo)
+    plot_canvas.image = photo  # Keep a reference to avoid garbage collection
+
 
 # Function to display the next plot
 def show_next_plot():

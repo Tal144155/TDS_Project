@@ -363,13 +363,13 @@ def find_relations(df, target_variable, dataset_types):
     non_linear_relationships(df, numerical_columns, relations)
 
     # Get attributes importance using random forest
-    feature_importance_relations(df, numerical_columns + categorical_int_columns, target_variable, relations)
+    #feature_importance_relations(df, numerical_columns + categorical_int_columns, target_variable, relations)
 
     # Get outliers relations
     outlier_relationships(df, numerical_columns, relations)
 
     # Get clusters relations
-    cluster_feature_relations(df, numerical_columns, relations)
+    #cluster_feature_relations(df, numerical_columns, relations)
     
     # Get the distribution of the target variable
     target_variable_analysis(df, target_variable, relations)
