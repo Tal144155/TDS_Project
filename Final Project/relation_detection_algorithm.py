@@ -86,6 +86,7 @@ def get_column_types(df):
 
 def correlation_relations(df, numerical_columns, target_variable, relations, correlation_threshold=0.5):
     # High Correlation Relations (Excluding Target Variable)
+    print("- Checking for correlation.")
     correlations = df[numerical_columns].drop(columns=[target_variable], errors='ignore').corr()
     for i, feature1 in enumerate(correlations.columns):
         for feature2 in correlations.columns[i + 1:]:
@@ -98,6 +99,7 @@ def correlation_relations(df, numerical_columns, target_variable, relations, cor
 
 def correlation_target_value(df, numerical_columns, target_variable, relations, correlation_threshold=0.5):
     # Relations with the Target Variable
+    print("- Checking for correlation with the target variable.")
     correlations = df[numerical_columns].corr()
     if target_variable in numerical_columns:
         for feature in numerical_columns:
@@ -111,6 +113,7 @@ def correlation_target_value(df, numerical_columns, target_variable, relations, 
                     })
 
 def categorical_effects(df, categorical_columns, numerical_columns, target_variable, relations, p_value_threshold=0.01):
+    print("- Checking for categorical effect.")
     temp_relations = []
     if target_variable in numerical_columns:
         for cat_feature in categorical_columns:
@@ -127,6 +130,7 @@ def categorical_effects(df, categorical_columns, numerical_columns, target_varia
 
 
 def chi_squared_relationship(df, categorical_columns, relations, p_value_threshold=0.01):
+    print("- Checking for chi square relation.")
     temp_relations = []
     for i, feature1 in enumerate(categorical_columns):
         for feature2 in categorical_columns[i + 1:]:
@@ -143,6 +147,7 @@ def chi_squared_relationship(df, categorical_columns, relations, p_value_thresho
 
 # Function to check for numerical feature trends over time
 def date_numerical_relationship(df, date_columns, numerical_columns, relations, correlation_threshold=0.5):
+    print("- Checking for date with numerical variables.")
     temp_relations = []
     for date_col in date_columns:
         # Safely convert to datetime and drop NaT values
@@ -167,6 +172,7 @@ def date_numerical_relationship(df, date_columns, numerical_columns, relations, 
 
 # Function to check for categorical feature distribution over date features
 def date_categorical_relationship(df, date_columns, categorical_columns, relations, p_value_threshold=0.01):
+    print("- Checking for date with categorical variable.")
     temp_relations = []
     for date_col in date_columns:
         df['date_period'] = pd.to_datetime(df[date_col]).dt.to_period('M')
@@ -183,6 +189,7 @@ def date_categorical_relationship(df, date_columns, categorical_columns, relatio
     relations.extend(temp_relations[:TOP_N_RELATIONS])
 
 def non_linear_relationships(df, numerical_columns, relations, threshold=0.5):    
+    print("- Checking for non linear relation.")
     for col1 in numerical_columns:
         for col2 in numerical_columns:
             if col1 != col2:
@@ -198,6 +205,7 @@ def non_linear_relationships(df, numerical_columns, relations, threshold=0.5):
                     })
 
 def feature_importance_relations(df, numerical_columns, target_variable, relations, top_n=5):
+    print("- Checking for feature importance.")
     if target_variable in numerical_columns:
         X = df[numerical_columns].drop(columns=[target_variable])
         y = df[target_variable]
@@ -222,6 +230,7 @@ def feature_importance_relations(df, numerical_columns, target_variable, relatio
             })
 
 def outlier_relationships(df, numerical_columns, relations, z_score_threshold=3.0, min_outlier_ratio=0.01, max_outlier_ratio=0.05, correlation_diff_threshold=0.3):
+    print("- Checking for outliers relation.")
     for col in numerical_columns:
         z_scores = np.abs((df[col] - df[col].mean()) / df[col].std())
         outliers = df[z_scores > z_score_threshold]
@@ -248,6 +257,7 @@ def outlier_relationships(df, numerical_columns, relations, z_score_threshold=3.
 
 
 def cluster_feature_relations(df, numerical_columns, relations, max_clusters=10, feature_importance_threshold=0.1):
+    print("- Checking for cluster relation.")
     if len(numerical_columns) < 3:
         return
     
@@ -292,6 +302,7 @@ def cluster_feature_relations(df, numerical_columns, relations, max_clusters=10,
 
 
 def target_variable_analysis(df, target_variable, relations, z_score_threshold=3.0):
+    print("- Checking for target variable.")
     target_data = df[target_variable]
     z_scores = np.abs((target_data - target_data.mean()) / target_data.std())
     outliers = target_data[z_scores > z_score_threshold]

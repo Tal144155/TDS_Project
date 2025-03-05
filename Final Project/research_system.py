@@ -7,6 +7,7 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import simpledialog
 from tkinter import scrolledtext
+from tkinter import PhotoImage
 from plot_generator import *
 from recommendation_tool import *
 from relation_detection_algorithm import *
@@ -54,6 +55,9 @@ rating_entry.pack()
 submit_button = tk.Button(main_frame, text="Submit Feedback", command=lambda: submit_feedback())
 submit_button.pack(pady=20)
 
+plot_canvas = tk.Label(main_frame)
+plot_canvas.pack(pady=10)
+
 # Function to switch from the opening screen to the main process
 def switch_to_main():
     opening_frame.pack_forget()
@@ -80,12 +84,12 @@ def submit_feedback():
         'time_taken': elapsed_time
     })
     user_rating = 0
-    if pd.notna(ratings.loc[user_id, rec['relation_type']]):
-        user_rating = ratings.loc[user_id, rec['relation_type']]
+    if pd.notna(ratings.loc[user_id, chosen_plot['relation_type']]):
+        user_rating = ratings.loc[user_id, chosen_plot['relation_type']]
     if user_rating:
-        ratings.loc[user_id, rec['relation_type']] = user_rating * 0.8 + rating * 0.2
+        ratings.loc[user_id, chosen_plot['relation_type']] = user_rating * 0.8 + rating * 0.2
     else:
-        ratings.loc[user_id, rec['relation_type']] = rating
+        ratings.loc[user_id, chosen_plot['relation_type']] = rating
 
     save_ratings(ratings, 'user_ratings_rel') 
     plot_index += 1
@@ -98,7 +102,7 @@ def submit_feedback():
 
 # Function to start the testing process
 def start_process():
-    global start_time, user_id, ratings, plot_index, algo_rec
+    global start_time, user_id, ratings, plot_index, algo_rec, df
     user_id = simpledialog.askstring("User ID", "Please enter your User ID:")
     if not user_id:
         messagebox.showerror("Invalid Input", "User ID is required to start.")
@@ -119,30 +123,62 @@ def start_process():
     algo_rec = get_relation_scores(algo_rec)
     show_next_plot()
 
+# Mapping of relation types to plot functions
+plot_function_mapping = {
+    'high_correlation': plot_high_correlation,
+    'target_correlation': plot_target_correlation,
+    'categorical_effect': plot_categorical_effect,
+    'chi_squared': plot_chi_squared,
+    'date_numerical_trend': plot_date_numerical_trend,
+    'date_categorical_distribution': plot_date_categorical_distribution,
+    'non_linear': plot_non_linear,
+    'feature_importance': plot_feature_importance,
+    'outlier_pattern': plot_outlier_pattern,
+    'cluster_group': plot_cluster_group,
+    'target_analysis': plot_target_analysis
+}
+
 # Function to generate a new plot dynamically
 def generate_plot():
-    global ratings, user_id, data
+    global ratings, user_id, algo_rec, chosen_plot
     is_system_plot = random.choice([True, False])
     plot_name = f'plot{plot_index+1}'
-    if is_system_plot:
+    image_path = ""
+    if is_system_plot and algo_rec:
         combined_user_vis_pred = combine_pred(CFCB(ratings), CFUB(ratings), 0.5, 0.5)
-        # Make a df for the recommendation system
         algo_rec_df = get_top_relations(algo_rec)
         user_index = ratings.index.get_loc(user_id)
         recommendations = combine_pred(combined_user_vis_pred[user_index], algo_rec_df.to_numpy()[0], 0.7, 0.3)
         index = int(algo_rec_df.iloc[1,recommendations.argmax()])
         chosen_plot = algo_rec.pop(index)
-        # need here to use methods from the plot_generator to plot the relation, and then return the info of the plot (probably name, location, so we can show it)
+        plot_name = f'system_{chosen_plot["relation_type"]}_{plot_index+1}'
+        plot_info = {
+            'name': plot_name,
+            'is_system': True,
+            'relation_type': chosen_plot['relation_type']
+        }
+        plot_function = plot_function_mapping.get(chosen_plot['relation_type'])
+        if plot_function:
+            plot_function(df, **chosen_plot['details'])
+        image_path = os.path.join(PLOTS_DIR, f'{plot_name}.png')
     else:
-        features = random.sample(data.columns.tolist(), 2)
+        features = random.sample(df.columns.tolist(), 2)
         plot_name = f'random_{features[0]}_{features[1]}_{plot_index+1}'
         plot_info = {
             'name': plot_name,
             'is_system': False
         }
-        plot_high_correlation(data, features[0], features[1], random.uniform(0.5, 1.0))
+        plot_high_correlation(df, features[0], features[1], random.uniform(0.5, 1.0))
+        image_path = os.path.join(PLOTS_DIR, f'{plot_name}.png')
     plot_data.append(plot_info)
+    display_plot(image_path)
     return plot_info
+
+# Function to generate and display the plot
+def display_plot(image_path):
+    image = PhotoImage(file=image_path)
+    plot_canvas.config(image=image)
+    plot_canvas.image = image
 
 # Function to display the next plot
 def show_next_plot():
