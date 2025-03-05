@@ -256,7 +256,7 @@ def outlier_relationships(df, numerical_columns, relations, z_score_threshold=3.
                             })
 
 
-def cluster_feature_relations(df, numerical_columns, relations, max_clusters=10, feature_importance_threshold=0.1):
+def cluster_feature_relations(df, numerical_columns, relations, max_clusters=4, feature_importance_threshold=0.1):
     print("- Checking for cluster relation.")
     if len(numerical_columns) < 3:
         return
