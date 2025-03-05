@@ -7,7 +7,7 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import simpledialog
 from tkinter import scrolledtext
-from tkinter import PhotoImage
+from PIL import Image, ImageTk
 from plot_generator import *
 from recommendation_tool import *
 from relation_detection_algorithm import *
@@ -93,7 +93,7 @@ def submit_feedback():
 
     save_ratings(ratings, 'user_ratings_rel') 
     plot_index += 1
-    if algo_rec:
+    if algo_rec and plot_index < 1:
         show_next_plot()
     else:
         save_results()
@@ -197,16 +197,14 @@ def generate_plot():
     display_plot(image_path)
     return plot_info
 
-from PIL import Image, ImageTk
 
-# Function to generate and display the plot
 def display_plot(image_path):
     if not os.path.exists(image_path):
         messagebox.showerror("Error", f"Image not found: {image_path}")
         return
     
     image = Image.open(image_path)
-    image = image.resize((600, 400), Image.ANTIALIAS)  # Resize to fit the window
+    image = image.resize((600, 400), Image.Resampling.LANCZOS)  # Use LANCZOS instead of ANTIALIAS
     photo = ImageTk.PhotoImage(image)
 
     plot_canvas.config(image=photo)
