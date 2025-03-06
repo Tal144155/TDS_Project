@@ -128,7 +128,7 @@ def save_ratings(ratings, file_name):
     with open(file_name+'.pkl', 'wb') as f:
         pickle.dump(ratings, f)
 
-# Load user ratings for content filtering 
+# Load user ratings for collaborative filtering 
 def load_ratings(file_name, rec_types):
     file = file_name+'.pkl'
     if os.path.isfile(file):
