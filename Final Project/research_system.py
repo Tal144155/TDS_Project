@@ -75,14 +75,6 @@ def submit_feedback():
     if not comment:
         messagebox.showerror("Invalid Input", "Please provide a comment.")
         return
-    end_time = time.time()
-    elapsed_time = end_time - start_time
-    plot_info = plot_data[plot_index]
-    plot_info.update({
-        'rating': rating,
-        'comment': comment,
-        'time_taken': elapsed_time
-    })
     user_rating = 0
     if pd.notna(ratings.loc[user_id, chosen_plot['relation_type']]):
         user_rating = ratings.loc[user_id, chosen_plot['relation_type']]
@@ -92,6 +84,15 @@ def submit_feedback():
         ratings.loc[user_id, chosen_plot['relation_type']] = rating
 
     save_ratings(ratings, 'user_ratings_rel') 
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    plot_info = plot_data[plot_index]
+    plot_info.update({
+        'rating': rating,
+        'comment': comment,
+        'time_taken': elapsed_time
+    })
+    ratings = load_ratings('user_ratings_rel', RELATION_TYPES)
     plot_index += 1
     if algo_rec:
         show_next_plot()
@@ -220,6 +221,7 @@ def show_next_plot():
     plot_label.config(text=f"Plot {plot_info['name']} ({'System' if plot_info['is_system'] else 'Random'})")
     comment_box.delete("1.0", tk.END)
     rating_var.set("")
+    time.sleep(0.1)
     start_time = time.time()
 
 # Function to save results to a text file
