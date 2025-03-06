@@ -84,7 +84,7 @@ def submit_feedback():
         else:
             ratings.loc[user_id, chosen_plot['relation_type']] = rating
 
-        save_ratings(ratings, 'user_ratings_rel') 
+        save_ratings(ratings, 'user_ratings_rel2') 
     end_time = time.time()
     elapsed_time = end_time - start_time
     plot_info = plot_data[plot_index]
@@ -93,7 +93,7 @@ def submit_feedback():
         'comment': comment,
         'time_taken': elapsed_time
     })
-    ratings = load_ratings('user_ratings_rel', RELATION_TYPES)
+    ratings = load_ratings('user_ratings_rel2', RELATION_TYPES)
     plot_index += 1
     if algo_rec and count_system < 10:
         show_next_plot()
@@ -109,10 +109,10 @@ def start_process():
     if not user_id:
         messagebox.showerror("Invalid Input", "User ID is required to start.")
         return
-    ratings = load_ratings('user_ratings_rel', RELATION_TYPES)
+    ratings = load_ratings('user_ratings_rel2', RELATION_TYPES)
     if user_id not in ratings.index:
         ratings.loc[user_id] = np.nan
-        save_ratings(ratings, 'user_ratings_rel')
+        save_ratings(ratings, 'user_ratings_rel2')
     plot_index = 0
     count_system = 0
     dataset_path = "Final Project/Datasets_Testing/AB_NYC_2019.csv"
@@ -132,7 +132,7 @@ def generate_plot():
     is_system_plot = random.choices([True, False], weights=[70, 30], k=1)[0]
     plot_name = f'plot{plot_index+1}'
     image_path = ""
-    ratings = load_ratings('user_ratings_rel', RELATION_TYPES)
+    ratings = load_ratings('user_ratings_rel2', RELATION_TYPES)
     if is_system_plot and algo_rec:
         count_system = count_system + 1
         combined_user_vis_pred = combine_pred(CFCB(ratings), CFUB(ratings), 0.5, 0.5)
@@ -141,7 +141,10 @@ def generate_plot():
         recommendations = combine_pred(combined_user_vis_pred[user_index], algo_rec_df.to_numpy()[0], 0.7, 0.3)
         index = int(algo_rec_df.iloc[1,recommendations.argmax()])
         chosen_plot = algo_rec.pop(index)
-        plot_name = f'{chosen_plot["relation_type"]} between {chosen_plot["attributes"]}'
+        if len(chosen_plot["attributes"]) == 1:
+            plot_name = f'{chosen_plot["relation_type"]} between {chosen_plot["attributes"][0]}'
+        else:
+            plot_name = f'{chosen_plot["relation_type"]} between {chosen_plot["attributes"][0]}, {chosen_plot["attributes"][1]}'
         plot_save_name = f'plot_{plot_index}'
         plot_info = {
             'name': plot_name,
@@ -187,7 +190,6 @@ def generate_plot():
         plot_name = f'{feature1} {feature2}'
         plot_save_name = f'plot_{plot_index}'
         plot_info = {
-            'name': plot_name,
             'is_system': False,
             'plot_save_name': plot_save_name,
             'attributes': [feature1, feature2]
@@ -235,7 +237,11 @@ def generate_plot():
             else:
                 plot_chi_squared(df, feature1, feature2, random.uniform(0, 0.01), plot_save_name)
                 plot_info["relation_type"] = "chi_squared"
-        
+        if len(chosen_plot["attributes"]) == 1:
+            plot_info["name"] = f'{plot_info["relation_type"]} between {chosen_plot["attributes"][0]}'
+        else:
+            plot_info["name"] = f'{plot_info["relation_type"]} between {chosen_plot["attributes"][0]}, {chosen_plot["attributes"][1]}'
+
         image_path = os.path.join(PLOTS_DIR, f'{plot_save_name}.png')
     plot_data.append(plot_info)
     display_plot(image_path)
