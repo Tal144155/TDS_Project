@@ -261,8 +261,6 @@ def get_relation_scores(relations):
             value = relation['details']['p_value']
         elif relation['relation_type'] == 'non_linear':
             value = relation['details']['mutual_information']
-        elif relation['relation_type'] == 'outlier_pattern':
-            value = relation['details']['mutual_information']
         # Add more specific conditions as needed
         else:
             value = 2 # Default fallback
