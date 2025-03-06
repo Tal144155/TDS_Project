@@ -75,15 +75,16 @@ def submit_feedback():
     if not comment:
         messagebox.showerror("Invalid Input", "Please provide a comment.")
         return
-    user_rating = 0
-    if pd.notna(ratings.loc[user_id, chosen_plot['relation_type']]):
-        user_rating = ratings.loc[user_id, chosen_plot['relation_type']]
-    if user_rating:
-        ratings.loc[user_id, chosen_plot['relation_type']] = user_rating * 0.8 + rating * 0.2
-    else:
-        ratings.loc[user_id, chosen_plot['relation_type']] = rating
+    if is_system_plot:
+        user_rating = 0
+        if pd.notna(ratings.loc[user_id, chosen_plot['relation_type']]):
+            user_rating = ratings.loc[user_id, chosen_plot['relation_type']]
+        if user_rating:
+            ratings.loc[user_id, chosen_plot['relation_type']] = user_rating * 0.8 + rating * 0.2
+        else:
+            ratings.loc[user_id, chosen_plot['relation_type']] = rating
 
-    save_ratings(ratings, 'user_ratings_rel') 
+        save_ratings(ratings, 'user_ratings_rel') 
     end_time = time.time()
     elapsed_time = end_time - start_time
     plot_info = plot_data[plot_index]
@@ -94,7 +95,7 @@ def submit_feedback():
     })
     ratings = load_ratings('user_ratings_rel', RELATION_TYPES)
     plot_index += 1
-    if algo_rec:
+    if algo_rec and count_system < 10:
         show_next_plot()
     else:
         save_results()
@@ -103,7 +104,7 @@ def submit_feedback():
 
 # Function to start the testing process
 def start_process():
-    global start_time, user_id, ratings, plot_index, algo_rec, df
+    global start_time, user_id, ratings, plot_index, algo_rec, df, dataset_types, count_system
     user_id = simpledialog.askstring("User ID", "Please enter your User ID:")
     if not user_id:
         messagebox.showerror("Invalid Input", "User ID is required to start.")
@@ -113,6 +114,7 @@ def start_process():
         ratings.loc[user_id] = np.nan
         save_ratings(ratings, 'user_ratings_rel')
     plot_index = 0
+    count_system = 0
     dataset_path = "Final Project/Datasets_Testing/AB_NYC_2019.csv"
     index_col = "id"
     target_value = "price"
@@ -126,12 +128,13 @@ def start_process():
 
 # Function to generate a new plot dynamically
 def generate_plot():
-    global user_id, algo_rec, chosen_plot
-    is_system_plot = random.choice([True, True])
+    global user_id, algo_rec, chosen_plot, is_system_plot
+    is_system_plot = random.choices([True, False], weights=[70, 30], k=1)[0]
     plot_name = f'plot{plot_index+1}'
     image_path = ""
     ratings = load_ratings('user_ratings_rel', RELATION_TYPES)
     if is_system_plot and algo_rec:
+        count_system = count_system + 1
         combined_user_vis_pred = combine_pred(CFCB(ratings), CFUB(ratings), 0.5, 0.5)
         algo_rec_df = get_top_relations(algo_rec)
         user_index = ratings.index.get_loc(user_id)
@@ -172,14 +175,66 @@ def generate_plot():
 
         image_path = os.path.abspath(os.path.join(PLOTS_DIR, f'{plot_save_name}.png'))
     else:
-        features = random.sample(df.columns.tolist(), 2)
-        plot_name = f'{features[0]}_{features[1]}_{plot_index+1}'
+        allowed_types = {"integer", "float", "datetime", "categorical_int", "categorical_string"}
+        while True:
+            selected_features = random.sample(list(dataset_types.keys()), 2)
+            feature1, feature2 = selected_features[0], selected_features[1]
+            feature1_type = dataset_types[feature1]
+            feature2_type = dataset_types[feature2]
+            
+            if feature1_type in allowed_types and feature2_type in allowed_types:
+                break
+        plot_name = f'{feature1}_{feature2}_{plot_index+1}'
         plot_save_name = f'plot_{plot_index}'
         plot_info = {
             'name': plot_name,
             'is_system': False,
-            'plot_save_name': plot_save_name
+            'plot_save_name': plot_save_name,
+            'attributes': [feature1, feature2]
         }
+        # Handling different feature type combinations
+        if (feature1_type == "integer" or feature1_type == "float") and (feature2_type == "integer" or feature2_type == "float"):
+            plot_type = random.choice(['high_correlation', 'non_linear'])
+            if plot_type == "high_correlation":
+                plot_high_correlation(df, feature1, feature2, random.uniform(0.5, 1.0), plot_save_name)
+                plot_info["relation_type"] = "high_correlation"
+            else:
+                plot_non_linear(df, feature1, feature2, random.uniform(0.5, 1.0), plot_save_name)
+                plot_info["relation_type"] = "non_linear"
+        
+        elif feature1_type == "datetime" and feature2_type == "integer" or feature2_type == "float":
+            plot_date_numerical_trend(df, feature1, feature2, random.uniform(0.5, 1.0), plot_save_name)
+            plot_info["relation_type"] = "date_numerical_trend"
+        
+        elif feature2_type == "datetime" and feature1_type == "integer" or feature1_type == "float":
+            plot_date_numerical_trend(df, feature2, feature1, random.uniform(0.5, 1.0), plot_save_name)
+            plot_info["relation_type"] = "date_numerical_trend"
+        
+        elif feature1_type == "datetime" and (feature2_type == "categorical_int" or feature2_type=="categorical_string"):
+            plot_date_categorical_distribution(df, feature1, feature2, random.uniform(0, 0.01), plot_save_name)
+            plot_info["relation_type"] = "date_categorical_distribution"
+        
+        elif feature2_type == "datetime" and (feature1_type == "categorical_int" or feature1_type=="categorical_string"):
+            plot_date_categorical_distribution(df, feature2, feature1, random.uniform(0, 0.01), plot_save_name)
+            plot_info["relation_type"] = "date_categorical_distribution"
+        
+        elif (feature1_type == "categorical_int" or feature1_type=="categorical_string") and (feature2_type == "integer" or feature2_type=="float"):
+            plot_categorical_effect(df, feature1, feature2, random.uniform(0, 0.01), plot_save_name)
+            plot_info["relation_type"] = "categorical_effect"
+        
+        elif (feature2_type == "categorical_int" or feature2_type=="categorical_string") and (feature1_type == "integer" or feature1_type=="float"):
+            plot_categorical_effect(df, feature2, feature1, random.uniform(0, 0.01), plot_save_name)
+            plot_info["relation_type"] = "categorical_effect"
+        
+        elif (feature1_type == "categorical_int" or feature1_type=="categorical_string") and (feature2_type == "categorical_int" or feature2_type=="categorical_string"):
+            numerical_features = [col for col, typ in dataset_types.items() if typ == "integer" or typ == "float"]
+            if numerical_features:
+                numeric_feature = random.choice(numerical_features)
+                plot_categorical_effect(df, feature1, numeric_feature, random.uniform(0, 0.01), plot_save_name)
+                plot_info["relation_type"] = "categorical_effect"
+            else:
+                plot_chi_squared(df, feature1, feature2, random.uniform(0, 0.01), plot_save_name)
+                plot_info["relation_type"] = "chi_squared"
         
         image_path = os.path.join(PLOTS_DIR, f'{plot_save_name}.png')
     plot_data.append(plot_info)
@@ -193,21 +248,12 @@ def display_plot(image_path):
         return
 
     try:
-        # Open the image
         image = Image.open(image_path)
-
-        # Define the maximum size
         max_width, max_height = 600, 400
-
-        # Maintain aspect ratio using thumbnail
         image.thumbnail((max_width, max_height), Image.Resampling.LANCZOS)
-
-        # Convert to PhotoImage for tkinter
         photo = ImageTk.PhotoImage(image)
-
-        # Update the plot_canvas
         plot_canvas.config(image=photo)
-        plot_canvas.image = photo  # Keep a reference to avoid garbage collection
+        plot_canvas.image = photo
 
         print(f"Displayed image: {image_path}")
 
