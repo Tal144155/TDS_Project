@@ -152,7 +152,6 @@ def CFUB(ratings_pd):
     ratings_diff[np.isnan(ratings_diff)]=4
     user_similarity = 1-pairwise_distances(ratings_diff, metric='cosine')
     pred = mean_user_rating + user_similarity.dot(ratings_diff) / np.array([np.abs(user_similarity).sum(axis=1)]).T
-    pred.round(2)
     return pred
 
 def CFCB(ratings_pd):
@@ -164,7 +163,6 @@ def CFCB(ratings_pd):
     ratings_diff[np.isnan(ratings_diff)]=4
     vis_similarity = 1-pairwise_distances(ratings_diff, metric='cosine')
     pred = mean_user_rating + vis_similarity.dot(ratings_diff) / np.array([np.abs(vis_similarity).sum(axis=1)]).T
-    pred.round(2)
     return pred
 
 # Weighted sum of two predictions
