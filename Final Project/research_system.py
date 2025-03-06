@@ -138,7 +138,7 @@ def generate_plot():
         recommendations = combine_pred(combined_user_vis_pred[user_index], algo_rec_df.to_numpy()[0], 0.7, 0.3)
         index = int(algo_rec_df.iloc[1,recommendations.argmax()])
         chosen_plot = algo_rec.pop(index)
-        plot_name = f'system_{chosen_plot["relation_type"]}_{plot_index+1}'
+        plot_name = f'{chosen_plot["relation_type"]}_{plot_index+1}'
         plot_save_name = f'plot_{plot_index}'
         plot_info = {
             'name': plot_name,
@@ -173,12 +173,14 @@ def generate_plot():
         image_path = os.path.abspath(os.path.join(PLOTS_DIR, f'{plot_save_name}.png'))
     else:
         features = random.sample(df.columns.tolist(), 2)
-        plot_name = f'random_{features[0]}_{features[1]}_{plot_index+1}'
+        plot_name = f'{features[0]}_{features[1]}_{plot_index+1}'
+        plot_save_name = f'plot_{plot_index}'
         plot_info = {
             'name': plot_name,
-            'is_system': False
+            'is_system': False,
+            'plot_save_name': plot_save_name
         }
-        plot_high_correlation(df, features[0], features[1], random.uniform(0.5, 1.0))
+        
         image_path = os.path.join(PLOTS_DIR, f'{plot_save_name}.png')
     plot_data.append(plot_info)
     display_plot(image_path)
@@ -218,7 +220,7 @@ def display_plot(image_path):
 def show_next_plot():
     global start_time
     plot_info = generate_plot()
-    plot_label.config(text=f"Plot {plot_info['name']} ({'System' if plot_info['is_system'] else 'Random'})")
+    plot_label.config(text=f"Plot {plot_info['name']}")
     comment_box.delete("1.0", tk.END)
     rating_var.set("")
     time.sleep(0.1)
