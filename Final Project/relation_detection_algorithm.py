@@ -206,10 +206,10 @@ def non_linear_relationships(df, numerical_columns, relations, threshold=0.5):
 
 def feature_importance_relations(df, numerical_columns, target_variable, relations, top_n=5):
     print("- Checking for feature importance.")
+    
     if target_variable in numerical_columns:
         X = df[numerical_columns].drop(columns=[target_variable])
         y = df[target_variable]
-        
         model = RandomForestRegressor(random_state=42)
         model.fit(X, y)
         importances = model.feature_importances_
@@ -218,16 +218,25 @@ def feature_importance_relations(df, numerical_columns, target_variable, relatio
             zip(X.columns, importances), 
             key=lambda x: x[1], 
             reverse=True
-        )
-        for feature, importance in feature_importances[:top_n]:
-            relations.append({
-                'attributes': [feature, target_variable],
-                'relation_type': 'feature_importance',
-                'details': {
-                    'importance_value': importance,
-                    'relative_rank': feature_importances.index((feature, importance)) + 1
-                }
-            })
+        )[:top_n]
+        
+        importance_details = {
+            feature: {
+                'importance_value': importance,
+                'relative_rank': rank + 1
+            }
+            for rank, (feature, importance) in enumerate(feature_importances)
+        }
+        
+        relations.append({
+            'attributes': [f[0] for f in feature_importances],
+            'relation_type': 'feature_importance',
+            'details': {
+                'importances': importance_details,
+                'target_variable': target_variable
+            }
+        })
+
 
 def outlier_relationships(df, numerical_columns, relations, z_score_threshold=3.0, min_outlier_ratio=0.01, max_outlier_ratio=0.05, correlation_diff_threshold=0.3):
     print("- Checking for outliers relation.")
@@ -317,13 +326,10 @@ def find_relations(df, target_variable, dataset_types):
     non_linear_relationships(df, numerical_columns, relations)
 
     # Get attributes importance using random forest
-    #feature_importance_relations(df, numerical_columns + categorical_int_columns, target_variable, relations)
+    feature_importance_relations(df, numerical_columns + categorical_int_columns, target_variable, relations)
 
     # Get outliers relations
     outlier_relationships(df, numerical_columns, relations)
-
-    # Get clusters relations
-    #cluster_feature_relations(df, numerical_columns, relations)
     
     # Get the distribution of the target variable
     target_variable_analysis(df, target_variable, relations)

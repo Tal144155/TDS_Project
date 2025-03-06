@@ -70,17 +70,15 @@ def plot_non_linear(df, feature1, feature2, mutual_info, plot_name):
     plt.tight_layout()
     save_plot(fig, plot_name)
 
-def plot_feature_importance(df, features, target_variable, plot_name):
-    importances = features  # Assuming this is already calculated
+def plot_feature_importance(df, feature_details, target_variable, plot_name):
+    importances = {feature: info['importance_value'] for feature, info in feature_details.items()}
     
     fig, axs = plt.subplots(1, 2, figsize=(15, 6))
     
-    # Bar plot of importances
     sns.barplot(x=list(importances.keys()), y=list(importances.values()), ax=axs[0])
     axs[0].set_title(f'Feature Importances for {target_variable}')
     axs[0].set_xticklabels(axs[0].get_xticklabels(), rotation=45)
     
-    # Cumulative importance
     cumulative_importance = np.cumsum(sorted(importances.values(), reverse=True))
     axs[1].plot(range(1, len(cumulative_importance) + 1), cumulative_importance)
     axs[1].set_title('Cumulative Feature Importance')
@@ -89,6 +87,7 @@ def plot_feature_importance(df, features, target_variable, plot_name):
     
     plt.tight_layout()
     save_plot(fig, plot_name)
+
 
 def plot_outlier_pattern(df, feature1, feature2, plot_name):
     fig, axs = plt.subplots(1, 2, figsize=(15, 6))
@@ -101,12 +100,6 @@ def plot_outlier_pattern(df, feature1, feature2, plot_name):
     sns.scatterplot(x=feature1, y=feature2, data=outliers, color='red', ax=axs[1])
     axs[1].set_title('Outliers Highlighted')
     plt.tight_layout()
-    save_plot(fig, plot_name)
-
-def plot_cluster_group(df, selected_features, cluster_id, plot_name):
-    fig, ax = plt.subplots()
-    sns.pairplot(df[selected_features], hue=cluster_id)
-    plt.suptitle(f'Cluster Group: {cluster_id}', y=1.02)
     save_plot(fig, plot_name)
 
 def plot_target_analysis(df, target_variable, outlier_ratio, distribution_type, plot_name):

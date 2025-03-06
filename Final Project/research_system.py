@@ -168,11 +168,9 @@ def generate_plot():
         elif chosen_plot['relation_type'] == "non_linear":
             plot_non_linear(df, chosen_plot["attributes"][0], chosen_plot["attributes"][1], chosen_plot["details"]["mutual_information"], plot_save_name)
         elif chosen_plot['relation_type'] == "feature_importance":
-            plot_feature_importance()
+            plot_feature_importance(df, chosen_plot["details"]["importances"], chosen_plot["details"]["target_variable"], plot_save_name)
         elif chosen_plot['relation_type'] == "outlier_pattern":
             plot_outlier_pattern(df, chosen_plot["attributes"][0], chosen_plot["attributes"][1], plot_save_name)
-        elif chosen_plot['relation_type'] == "cluster_group":
-            plot_cluster_group()
         elif chosen_plot['relation_type'] == "target_analysis":
             plot_target_analysis(df, chosen_plot["attributes"][0], chosen_plot["details"]["outlier_ratio"], chosen_plot["details"]["distribution_type"], plot_save_name)
 
