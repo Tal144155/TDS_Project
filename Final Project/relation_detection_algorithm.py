@@ -255,52 +255,6 @@ def outlier_relationships(df, numerical_columns, relations, z_score_threshold=3.
                                 }
                             })
 
-
-def cluster_feature_relations(df, numerical_columns, relations, max_clusters=4, feature_importance_threshold=0.1):
-    print("- Checking for cluster relation.")
-    if len(numerical_columns) < 3:
-        return
-    
-    scaler = StandardScaler()
-    scaled_data = scaler.fit_transform(df[numerical_columns])
-    
-    best_n_clusters = 2
-    best_score = -1
-    
-    for n_clusters in range(2, max_clusters + 1):
-        kmeans = KMeans(n_clusters=n_clusters, random_state=42)
-        labels = kmeans.fit_predict(scaled_data)
-        score = silhouette_score(scaled_data, labels)
-        
-        if score > best_score:
-            best_score = score
-            best_n_clusters = n_clusters
-    
-    kmeans = KMeans(n_clusters=best_n_clusters, random_state=42)
-    kmeans.fit(scaled_data)
-    
-    cluster_centers = kmeans.cluster_centers_
-    
-    for cluster_idx in range(best_n_clusters):
-        center = cluster_centers[cluster_idx]
-        feature_importance = np.abs(center)
-        
-        selected_indices = np.where(feature_importance > feature_importance_threshold)[0]
-        selected_features = [numerical_columns[i] for i in selected_indices]
-        
-        if len(selected_features) >= 2:
-            relations.append({
-                'attributes': selected_features,
-                'relation_type': 'cluster_group',
-                'details': {
-                    'cluster_id': cluster_idx,
-                    'importance_scores': {
-                        numerical_columns[i]: feature_importance[i] for i in selected_indices
-                    }
-                }
-            })
-
-
 def target_variable_analysis(df, target_variable, relations, z_score_threshold=3.0):
     print("- Checking for target variable.")
     target_data = df[target_variable]
