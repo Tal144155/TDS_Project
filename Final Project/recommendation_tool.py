@@ -128,7 +128,7 @@ def save_ratings(ratings, file_name):
     with open(file_name+'.pkl', 'wb') as f:
         pickle.dump(ratings, f)
 
-# Load user ratings for content filtering 
+# Load user ratings for collaborative filtering 
 def load_ratings(file_name, rec_types):
     file = file_name+'.pkl'
     if os.path.isfile(file):
@@ -260,6 +260,8 @@ def get_relation_scores(relations):
         elif relation['relation_type'] in {'categorical_effect', 'date_categorical_distribution', 'chi_squared',  }:
             value = relation['details']['p_value']
         elif relation['relation_type'] == 'non_linear':
+            value = relation['details']['mutual_information']
+        elif relation['relation_type'] == 'outlier_pattern':
             value = relation['details']['mutual_information']
         # Add more specific conditions as needed
         else:
