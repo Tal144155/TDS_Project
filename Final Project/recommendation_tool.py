@@ -149,7 +149,7 @@ def CFUB(ratings_pd):
     mean_user_rating = ratings_pd.mean(axis=1).to_numpy().reshape(-1, 1)
     # calculate the similarity between users
     ratings_diff = (ratings - mean_user_rating)
-    ratings_diff[np.isnan(ratings_diff)]=0
+    ratings_diff[np.isnan(ratings_diff)]=4
     user_similarity = 1-pairwise_distances(ratings_diff, metric='cosine')
     pred = mean_user_rating + user_similarity.dot(ratings_diff) / np.array([np.abs(user_similarity).sum(axis=1)]).T
     pred.round(2)
@@ -161,7 +161,7 @@ def CFCB(ratings_pd):
     mean_user_rating = ratings_pd.mean(axis=1).to_numpy().reshape(-1, 1)
     # calculate the similarity between visualizations
     ratings_diff = (ratings - mean_user_rating)
-    ratings_diff[np.isnan(ratings_diff)]=0
+    ratings_diff[np.isnan(ratings_diff)]=4
     vis_similarity = 1-pairwise_distances(ratings_diff, metric='cosine')
     pred = mean_user_rating + vis_similarity.dot(ratings_diff) / np.array([np.abs(vis_similarity).sum(axis=1)]).T
     pred.round(2)
@@ -170,8 +170,8 @@ def CFCB(ratings_pd):
 # Weighted sum of two predictions
 def combine_pred(pred1, pred2, w1 = 0.5, w2 = 0.5):
     # Replace NaN values with 0
-    pred1 = np.nan_to_num(pred1, nan=0.0)
-    pred2 = np.nan_to_num(pred2, nan=0.0)
+    pred1 = np.nan_to_num(pred1, nan=4.0)
+    pred2 = np.nan_to_num(pred2, nan=4.0)
 
     return w1 * pred1 + w2 * pred2
 

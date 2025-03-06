@@ -66,7 +66,7 @@ def switch_to_main():
 
 # Button to submit feedback
 def submit_feedback():
-    global plot_index, plot_data, start_time
+    global plot_index, plot_data, start_time, ratings
     rating = int(rating_var.get()) if rating_var.get().isdigit() else None
     comment = comment_box.get("1.0", tk.END).strip()
     if not rating or rating < 1 or rating > 5:
@@ -125,10 +125,11 @@ def start_process():
 
 # Function to generate a new plot dynamically
 def generate_plot():
-    global ratings, user_id, algo_rec, chosen_plot
+    global user_id, algo_rec, chosen_plot
     is_system_plot = random.choice([True, True])
     plot_name = f'plot{plot_index+1}'
     image_path = ""
+    ratings = load_ratings('user_ratings_rel', RELATION_TYPES)
     if is_system_plot and algo_rec:
         combined_user_vis_pred = combine_pred(CFCB(ratings), CFUB(ratings), 0.5, 0.5)
         algo_rec_df = get_top_relations(algo_rec)
