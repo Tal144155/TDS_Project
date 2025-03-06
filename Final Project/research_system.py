@@ -128,7 +128,7 @@ def start_process():
 
 # Function to generate a new plot dynamically
 def generate_plot():
-    global user_id, algo_rec, chosen_plot, is_system_plot
+    global user_id, algo_rec, chosen_plot, is_system_plot, count_system
     is_system_plot = random.choices([True, False], weights=[70, 30], k=1)[0]
     plot_name = f'plot{plot_index+1}'
     image_path = ""
@@ -141,7 +141,7 @@ def generate_plot():
         recommendations = combine_pred(combined_user_vis_pred[user_index], algo_rec_df.to_numpy()[0], 0.7, 0.3)
         index = int(algo_rec_df.iloc[1,recommendations.argmax()])
         chosen_plot = algo_rec.pop(index)
-        plot_name = f'{chosen_plot["relation_type"]}_{plot_index+1}'
+        plot_name = f'{chosen_plot["relation_type"]} between {chosen_plot["attributes"]}'
         plot_save_name = f'plot_{plot_index}'
         plot_info = {
             'name': plot_name,
@@ -184,7 +184,7 @@ def generate_plot():
             
             if feature1_type in allowed_types and feature2_type in allowed_types:
                 break
-        plot_name = f'{feature1}_{feature2}_{plot_index+1}'
+        plot_name = f'{feature1} {feature2}'
         plot_save_name = f'plot_{plot_index}'
         plot_info = {
             'name': plot_name,
@@ -266,10 +266,10 @@ def display_plot(image_path):
 def show_next_plot():
     global start_time
     plot_info = generate_plot()
-    plot_label.config(text=f"Plot {plot_info['name']}")
+    plot_label.config(text=f"Plot: {plot_info['name']}")
     comment_box.delete("1.0", tk.END)
     rating_var.set("")
-    time.sleep(0.1)
+    time.sleep(1)
     start_time = time.time()
 
 # Function to save results to a text file
