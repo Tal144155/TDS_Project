@@ -189,20 +189,20 @@ def normalize_score(value, metric_type):
             'percentile_thresholds': [0.5, 0.6, 0.7, 0.9]
         },
         'categorical_effect': {
-            'abs_range': (0, 0.01),  # P-values, lower is stronger
-            'percentile_thresholds': [0.01, 0.007, 0.005, 0.001]
+            'abs_range': (0, 0.05),  # P-values, lower is stronger
+            'percentile_thresholds': [0.05, 0.02, 0.01, 0.009]
         },
         'chi_squared': {
-            'abs_range': (0, 0.01),  # P-values, lower is stronger
-            'percentile_thresholds': [0.01, 0.007, 0.005, 0.001]
+            'abs_range': (0, 0.05),  # P-values, lower is stronger
+            'percentile_thresholds': [0.05, 0.02, 0.01, 0.009]
         },
         'date_numerical_trend': {
             'abs_range': (0.5, 1.0),  # Correlation values
             'percentile_thresholds': [0.5, 0.7, 0.8, 0.9]
         },
         'date_categorical_distribution':{
-            'abs_range': (0, 0.01),  # P-values, lower is stronger
-            'percentile_thresholds': [0.01, 0.007, 0.005, 0.001]
+            'abs_range': (0, 0.05),  # P-values, lower is stronger
+            'percentile_thresholds': [0.05, 0.02, 0.01, 0.009]
         },
         'non_linear': {
             'abs_range': (0.5, 1.0),  # Mutual information score

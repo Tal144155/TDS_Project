@@ -112,7 +112,7 @@ def correlation_target_value(df, numerical_columns, target_variable, relations, 
                         'details': {'correlation_value': corr_value}
                     })
 
-def categorical_effects(df, categorical_columns, numerical_columns, target_variable, relations, p_value_threshold=0.01):
+def categorical_effects(df, categorical_columns, numerical_columns, target_variable, relations, p_value_threshold=0.05):
     print("- Checking for categorical effect.")
     temp_relations = []
     if target_variable in numerical_columns:
@@ -129,7 +129,7 @@ def categorical_effects(df, categorical_columns, numerical_columns, target_varia
     relations.extend(temp_relations[:TOP_N_RELATIONS])
 
 
-def chi_squared_relationship(df, categorical_columns, relations, p_value_threshold=0.01):
+def chi_squared_relationship(df, categorical_columns, relations, p_value_threshold=0.05):
     print("- Checking for chi square relation.")
     temp_relations = []
     for i, feature1 in enumerate(categorical_columns):
@@ -171,7 +171,7 @@ def date_numerical_relationship(df, date_columns, numerical_columns, relations, 
 
 
 # Function to check for categorical feature distribution over date features
-def date_categorical_relationship(df, date_columns, categorical_columns, relations, p_value_threshold=0.01):
+def date_categorical_relationship(df, date_columns, categorical_columns, relations, p_value_threshold=0.05):
     print("- Checking for date with categorical variable.")
     temp_relations = []
     for date_col in date_columns:
