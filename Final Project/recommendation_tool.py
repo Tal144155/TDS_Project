@@ -213,8 +213,8 @@ def normalize_score(value, metric_type):
             'percentile_thresholds': [0.2, 0.4, 0.6, 0.8]
         },
         'outlier_pattern': {
-            'abs_range': (0.3, 1.0),  # Correlation differences
-            'percentile_thresholds': [0.3, 0.5, 0.7, 0.9]
+            'abs_range': (0.5, 1.0),  # Correlation differences
+            'percentile_thresholds': [0.5, 0.7, 0.8, 0.9]
         }
     }
     
@@ -261,9 +261,11 @@ def get_relation_scores(relations):
             value = relation['details']['p_value']
         elif relation['relation_type'] == 'non_linear':
             value = relation['details']['mutual_information']
+        elif relation['relation_type'] == 'outlier_pattern':
+            value = relation['details']['outlier_correlation']
         # Add more specific conditions as needed
         else:
-            value = 2 # Default fallback
+            value = 1 # Default fallback
         
         # 
         relation['score'] = normalize_score(
