@@ -21,7 +21,7 @@ def plot_high_correlation(df, feature1, feature2, correlation_value, plot_name):
 
 def plot_target_correlation(df, feature, target, correlation_value, plot_name):
     fig, ax = plt.subplots()
-    sns.scatterplot(x=df[feature], y=df[target], ax=ax)
+    sns.regplot(x=df[feature], y=df[target], scatter_kws={'alpha': 0.6, 's': 50}, line_kws={'color': 'red'})
     ax.set_title(f'Target Correlation: {feature} vs {target} (Corr: {correlation_value:.2f})')
     save_plot(fig, plot_name)
 

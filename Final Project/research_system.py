@@ -58,6 +58,8 @@ submit_button.pack(pady=20)
 plot_canvas = tk.Label(main_frame)
 plot_canvas.pack(pady=10)
 
+plot_order = []
+
 # Function to switch from the opening screen to the main process
 def switch_to_main():
     opening_frame.pack_forget()
@@ -95,7 +97,7 @@ def submit_feedback():
     })
     ratings = load_ratings('user_ratings_rel2', RELATION_TYPES)
     plot_index += 1
-    if algo_rec and count_system < 10:
+    if algo_rec and plot_index < min(len(algo_rec), 10) + 5:
         show_next_plot()
     else:
         save_results()
@@ -104,7 +106,7 @@ def submit_feedback():
 
 # Function to start the testing process
 def start_process():
-    global start_time, user_id, ratings, plot_index, algo_rec, df, dataset_types, count_system
+    global start_time, user_id, ratings, plot_index, algo_rec, df, dataset_types, count_system, dataset_path, plot_order
     user_id = simpledialog.askstring("User ID", "Please enter your User ID:")
     if not user_id:
         messagebox.showerror("Invalid Input", "User ID is required to start.")
@@ -115,21 +117,31 @@ def start_process():
         save_ratings(ratings, 'user_ratings_rel2')
     plot_index = 0
     count_system = 0
-    dataset_path = "Final Project/Datasets_Testing/AB_NYC_2019.csv"
+    dataset_path = "Final Project/Datasets_Testing/dataset_movies.csv"
     index_col = "id"
-    target_value = "price"
-    df = read_data(dataset_path, index_col)
+    target_value = "revenue"
+    df = read_data(dataset_path)
     if df is None:
         return
     dataset_types = get_column_types(df)
     algo_rec = find_relations(df, target_value, dataset_types)
     algo_rec = get_relation_scores(algo_rec)
+
+    num_system_plots = min(10, len(algo_rec))
+    num_random_plots = 5
+
+    plot_order = [True] * num_system_plots + [False] * num_random_plots
+    random.shuffle(plot_order)
+
     show_next_plot()
 
 # Function to generate a new plot dynamically
 def generate_plot():
     global user_id, algo_rec, chosen_plot, is_system_plot, count_system
-    is_system_plot = random.choices([True, False], weights=[70, 30], k=1)[0]
+    if plot_index < len(plot_order):
+        is_system_plot = plot_order[plot_index]
+    else:
+        is_system_plot = False  # Fallback to random if the array is exhausted
     plot_name = f'plot{plot_index+1}'
     image_path = ""
     ratings = load_ratings('user_ratings_rel2', RELATION_TYPES)
@@ -280,6 +292,7 @@ def show_next_plot():
 def save_results():
     results_file = "user_feedback.txt"
     with open(results_file, 'w') as f:
+        f.write(f"Results on test from dataset: {dataset_path}\n")
         for plot in plot_data:
             f.write(f"Plot Name: {plot['name']}\n")
             f.write(f"Type: {'System' if plot['is_system'] else 'Random'}\n")

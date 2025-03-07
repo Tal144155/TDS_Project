@@ -3,10 +3,6 @@ import numpy as np
 import pickle
 import os.path
 from sklearn.metrics.pairwise import pairwise_distances
-from relation_detection_algorithm import get_column_types
-from relation_detection_algorithm import find_relations
-
-RATING_STRING = "Please rate this visualization between 1 (Least helpful) and 5 (Most helpful).\n"
 
 RELATION_TYPES = {
     "high_correlation": {
