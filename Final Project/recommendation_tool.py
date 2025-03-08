@@ -150,7 +150,7 @@ def CFUB(ratings_pd):
     pred = mean_user_rating + user_similarity.dot(ratings_diff) / np.array([np.abs(user_similarity).sum(axis=1)]).T
     return pred
 
-def CFCB(ratings_pd):
+def CFIB(ratings_pd):
     # Get the mean rating for each user
     ratings = ratings_pd.to_numpy()
     mean_user_rating = ratings_pd.mean(axis=1).to_numpy().reshape(-1, 1)
@@ -244,7 +244,6 @@ def normalize_score(value, metric_type):
         normalized = 1 + 4 * (abs_value - min_val) / (max_val - min_val)
         return int(min(max(normalized, 1), 5))
 
-# Example usage
 def get_relation_scores(relations):
     """
     Apply strength normalization to all relations.
@@ -259,11 +258,11 @@ def get_relation_scores(relations):
             value = relation['details']['mutual_information']
         elif relation['relation_type'] == 'outlier_pattern':
             value = relation['details']['outlier_correlation']
-        # Add more specific conditions as needed
+        # Default value
         else:
-            value = 1 # Default fallback
+            value = 1 
         
-        # 
+        
         relation['score'] = normalize_score(
             value, 
             relation['relation_type']
