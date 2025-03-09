@@ -247,7 +247,7 @@ def generate_plot():
             else:
                 plot_chi_squared(df, feature1, feature2, random.uniform(0, 0.01), plot_save_name)
                 plot_info["relation_type"] = "chi_squared"
-        if len(chosen_plot["attributes"]) == 1:
+        if len(plot_info["attributes"]) == 1:
             plot_info["name"] = f'{plot_info["relation_type"]} between {feature1}'
         else:
             plot_info["name"] = f'{plot_info["relation_type"]} between {feature1}, {feature2}'
