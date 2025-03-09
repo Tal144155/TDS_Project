@@ -104,9 +104,8 @@ def submit_feedback():
         messagebox.showinfo("Process Complete", "Thank you! The process is complete.")
         app.quit()
 
-# Function to start the testing process
 def start_process():
-    global start_time, user_id, ratings, plot_index, algo_rec, df, dataset_types, count_system, dataset_path, plot_order
+    global start_time,num_chose_outliers, user_id, ratings, plot_index, algo_rec, df, dataset_types, count_system, dataset_path, plot_order
     user_id = simpledialog.askstring("User ID", "Please enter your User ID:")
     if not user_id:
         messagebox.showerror("Invalid Input", "User ID is required to start.")
@@ -117,6 +116,7 @@ def start_process():
         save_ratings(ratings, 'user_ratings_rel2')
     plot_index = 0
     count_system = 0
+    num_chose_outliers = 0
     dataset_path = "Final Project/Datasets_Testing/movie_new.csv"
     index_col = "id"
     target_value = "revenue"
@@ -135,13 +135,12 @@ def start_process():
 
     show_next_plot()
 
-# Function to generate a new plot dynamically
 def generate_plot():
-    global user_id, algo_rec, chosen_plot, is_system_plot, count_system
+    global user_id, algo_rec, chosen_plot, is_system_plot, count_system, num_chose_outliers
     if plot_index < len(plot_order):
         is_system_plot = plot_order[plot_index]
     else:
-        is_system_plot = False  # Fallback to random if the array is exhausted
+        is_system_plot = False
     plot_name = f'plot{plot_index+1}'
     image_path = ""
     ratings = load_ratings('user_ratings_rel2', RELATION_TYPES)
@@ -153,6 +152,16 @@ def generate_plot():
         recommendations = combine_pred(combined_user_vis_pred[user_index], algo_rec_df.to_numpy()[0], 0.7, 0.3)
         index = int(algo_rec_df.iloc[1,recommendations.argmax()])
         chosen_plot = algo_rec.pop(index)
+        if chosen_plot['relation_type'] == "outlier_pattern" and num_chose_outliers >= 2:
+            while chosen_plot['relation_type'] == "outlier_pattern" and algo_rec:
+                combined_user_vis_pred = combine_pred(CFIB(ratings), CFUB(ratings), 0.5, 0.5)
+                algo_rec_df = get_top_relations(algo_rec)
+                user_index = ratings.index.get_loc(user_id)
+                recommendations = combine_pred(combined_user_vis_pred[user_index], algo_rec_df.to_numpy()[0], 0.7, 0.3)
+                index = int(algo_rec_df.iloc[1,recommendations.argmax()])
+                chosen_plot = algo_rec.pop(index)
+        elif chosen_plot['relation_type'] == "outlier_pattern":
+            num_chose_outliers += 1
         if len(chosen_plot["attributes"]) == 1:
             plot_name = f'{chosen_plot["relation_type"]} between {chosen_plot["attributes"][0]}'
         else:
