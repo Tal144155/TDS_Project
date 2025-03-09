@@ -1,0 +1,106 @@
+Results on test from dataset: movie_new.csv
+Plot Name: feature_importance between vote_count, budget
+Type: System
+Name in Dir: plot_0
+Rating: 5
+Comment: i understand whats going on, i like the left graph more
+Time Taken: 127.34 seconds
+
+Plot Name: categorical_effect between crew, Foreign
+Type: Random
+Name in Dir: plot_1
+Rating: 1
+Comment: not sure this is the right graph for this
+Time Taken: 129.42 seconds
+
+Plot Name: target_analysis between revenue
+Type: System
+Name in Dir: plot_2
+Rating: 4
+Comment: the graph is good, most movies dont have revenue that is above 100m revenue
+Time Taken: 120.60 seconds
+
+Plot Name: target_correlation between budget, revenue
+Type: System
+Name in Dir: plot_3
+Rating: 5
+Comment: there is a high correlation between the features
+Time Taken: 56.75 seconds
+
+Plot Name: target_correlation between vote_count, revenue
+Type: System
+Name in Dir: plot_4
+Rating: 5
+Comment: i see that movies with high votecount has better revenue
+Time Taken: 63.00 seconds
+
+Plot Name: chi_squared between Family, Animation
+Type: System
+Name in Dir: plot_5
+Rating: 4
+Comment: most movies that are not animated are not for family. most movies for families are animated
+Time Taken: 85.01 seconds
+
+Plot Name: categorical_effect between Fantasy, belongs_to_collection
+Type: Random
+Name in Dir: plot_6
+Rating: 1
+Comment: this connection is not worth looking for. the graph is ok, but the features dont match
+Time Taken: 112.60 seconds
+
+Plot Name: date_numerical_trend between Thriller, runtime
+Type: Random
+Name in Dir: plot_7
+Rating: 2
+Comment: i can understand some info from the graph, but this is not the correct plot for this.
+Time Taken: 67.07 seconds
+
+Plot Name: categorical_effect between Family, Western
+Type: Random
+Name in Dir: plot_8
+Rating: 1
+Comment: there is no significant differnce
+Time Taken: 25.92 seconds
+
+Plot Name: outlier_pattern between cast, crew
+Type: System
+Name in Dir: plot_9
+Rating: 3
+Comment: i see that there is a correletion between the cast and the crew. the outliers helped.
+Time Taken: 78.79 seconds
+
+Plot Name: categorical_effect between Science Fiction, Action
+Type: Random
+Name in Dir: plot_10
+Rating: 1
+Comment: cannot understand anything fro this plot
+Time Taken: 24.98 seconds
+
+Plot Name: outlier_pattern between cast, revenue
+Type: System
+Name in Dir: plot_11
+Rating: 3
+Comment: this graph is fine. if the cast is lower than 75 people then the revenue will be low.
+Time Taken: 64.23 seconds
+
+Plot Name: outlier_pattern between cast, vote_count
+Type: System
+Name in Dir: plot_12
+Rating: 3
+Comment: like the revenue
+Time Taken: 26.78 seconds
+
+Plot Name: outlier_pattern between crew, revenue
+Type: System
+Name in Dir: plot_13
+Rating: 3
+Comment: as before
+Time Taken: 5.74 seconds
+
+Plot Name: outlier_pattern between crew, vote_count
+Type: System
+Name in Dir: plot_14
+Rating: 3
+Comment: as before
+Time Taken: 4.82 seconds
+

@@ -1,0 +1,106 @@
+Results on test from dataset: movie_new.csv
+Plot Name: feature_importance between vote_count, budget
+Type: System
+Name in Dir: plot_0
+Rating: 4
+Comment: you can clearly see that vote count and budget are really important and the others less. the right graph is not clear.
+Time Taken: 112.92 seconds
+
+Plot Name: categorical_effect between crew, Family
+Type: Random
+Name in Dir: plot_1
+Rating: 2
+Comment: i don't understand much from this graph
+Time Taken: 94.61 seconds
+
+Plot Name: target_analysis between revenue
+Type: System
+Name in Dir: plot_2
+Rating: 3
+Comment: The graph is clear though you could augment the data to fit the screen better.
+Time Taken: 83.43 seconds
+
+Plot Name: outlier_pattern between cast, crew
+Type: System
+Name in Dir: plot_3
+Rating: 4
+Comment: I can undersanf where the outlires of the features begin
+Time Taken: 112.87 seconds
+
+Plot Name: target_correlation between budget, revenue
+Type: System
+Name in Dir: plot_4
+Rating: 4
+Comment: This graph is pretty clear, I can understand the correlation
+Time Taken: 87.90 seconds
+
+Plot Name: target_correlation between vote_count, revenue
+Type: System
+Name in Dir: plot_5
+Rating: 5
+Comment: Same, this is interesting and informative
+Time Taken: 42.04 seconds
+
+Plot Name: chi_squared between Family, Animation
+Type: System
+Name in Dir: plot_6
+Rating: 5
+Comment: extremely clear, i understand the relation between animation and family films
+Time Taken: 116.36 seconds
+
+Plot Name: date_numerical_trend between Comedy, popularity
+Type: Random
+Name in Dir: plot_7
+Rating: 2
+Comment: there is nothing related to date and i cant understand anything here
+Time Taken: 59.15 seconds
+
+Plot Name: categorical_effect between spoken_languages, Action
+Type: Random
+Name in Dir: plot_8
+Rating: 2
+Comment: not informative
+Time Taken: 55.23 seconds
+
+Plot Name: chi_squared between Thriller, Comedy
+Type: System
+Name in Dir: plot_9
+Rating: 5
+Comment: this is clear and informative
+Time Taken: 32.88 seconds
+
+Plot Name: chi_squared between Action, Adventure
+Type: System
+Name in Dir: plot_10
+Rating: 5
+Comment: same
+Time Taken: 28.26 seconds
+
+Plot Name: date_numerical_trend between budget, History
+Type: Random
+Name in Dir: plot_11
+Rating: 1
+Comment: what am i seeing here
+Time Taken: 39.28 seconds
+
+Plot Name: chi_squared between War, History
+Type: System
+Name in Dir: plot_12
+Rating: 4
+Comment: same
+Time Taken: 9.55 seconds
+
+Plot Name: categorical_effect between production_companies_count, Western
+Type: Random
+Name in Dir: plot_13
+Rating: 2
+Comment: i dont understand how they relate to eachother
+Time Taken: 73.82 seconds
+
+Plot Name: chi_squared between production_countries, spoken_languages
+Type: System
+Name in Dir: plot_14
+Rating: 1
+Comment: this is the same everywhere
+Time Taken: 31.27 seconds
+

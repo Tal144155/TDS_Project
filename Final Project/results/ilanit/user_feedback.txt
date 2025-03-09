@@ -1,0 +1,106 @@
+Results on test from dataset: movie_new.csv
+Plot Name: feature_importance between vote_count, budget
+Type: System
+Name in Dir: plot_0
+Rating: 3
+Comment: i understand that the vote count is the most important feature, budget is quite important and then the other are less important. also, when you have 2 features, we can very precise, and when we add more we dont get a lot more info.
+Time Taken: 204.77 seconds
+
+Plot Name: target_analysis between revenue
+Type: System
+Name in Dir: plot_1
+Rating: 4
+Comment: we have very little movies with high revenue, lots of movies have low revenue.
+Time Taken: 73.17 seconds
+
+Plot Name: outlier_pattern between budget, vote_count
+Type: System
+Name in Dir: plot_2
+Rating: 1
+Comment: there is a relation between the budget and vote count, and the ones that are above it are the outliers.
+Time Taken: 97.37 seconds
+
+Plot Name: date_numerical_trend between popularity, Drama
+Type: Random
+Name in Dir: plot_3
+Rating: 1
+Comment: that is not a good graph, i cant undeerstand whats going on.
+Time Taken: 78.79 seconds
+
+Plot Name: date_numerical_trend between runtime, History
+Type: Random
+Name in Dir: plot_4
+Rating: 1
+Comment: as before.
+Time Taken: 9.50 seconds
+
+Plot Name: target_correlation between budget, revenue
+Type: System
+Name in Dir: plot_5
+Rating: 5
+Comment: when a movie has a higher budget, the revenue is higher.
+Time Taken: 81.48 seconds
+
+Plot Name: target_correlation between vote_count, revenue
+Type: System
+Name in Dir: plot_6
+Rating: 5
+Comment: when more people rate the movie, the revenue is higher. the trend line dosent really help. therer is a big mass of data that makes it harder to see the connections.
+Time Taken: 67.97 seconds
+
+Plot Name: outlier_pattern between cast, crew
+Type: System
+Name in Dir: plot_7
+Rating: 1
+Comment: i can understand the boundries of the outliers.
+Time Taken: 67.73 seconds
+
+Plot Name: outlier_pattern between cast, revenue
+Type: System
+Name in Dir: plot_8
+Rating: 1
+Comment: as before, you can deduce the boundries, and you can see that there is a lot of mass at the begining of the plot.
+Time Taken: 49.36 seconds
+
+Plot Name: outlier_pattern between cast, vote_count
+Type: System
+Name in Dir: plot_9
+Rating: 1
+Comment: same as before
+Time Taken: 13.27 seconds
+
+Plot Name: date_numerical_trend between popularity, Adventure
+Type: Random
+Name in Dir: plot_10
+Rating: 1
+Comment: this dosent give a lot of information, not good enough
+Time Taken: 30.74 seconds
+
+Plot Name: categorical_effect between Horror, Adventure
+Type: Random
+Name in Dir: plot_11
+Rating: 3
+Comment: i can see the median. this connection is wuite good, movies that are not horror will probably have higher budget
+Time Taken: 108.65 seconds
+
+Plot Name: outlier_pattern between crew, revenue
+Type: System
+Name in Dir: plot_12
+Rating: 1
+Comment: same as before
+Time Taken: 5.76 seconds
+
+Plot Name: categorical_effect between Romance, original_language
+Type: Random
+Name in Dir: plot_13
+Rating: 1
+Comment: same asa before, the boxes are almost the same
+Time Taken: 32.52 seconds
+
+Plot Name: outlier_pattern between crew, vote_count
+Type: System
+Name in Dir: plot_14
+Rating: 1
+Comment: same as before
+Time Taken: 6.46 seconds
+

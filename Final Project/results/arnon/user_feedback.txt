@@ -1,0 +1,106 @@
+Results on test from dataset: movie_new.csv
+Plot Name: feature_importance between vote_count, budget
+Type: System
+Name in Dir: plot_0
+Rating: 5
+Comment: So informative, I now understand what features are most important for predicting my target value
+Time Taken: 43.15 seconds
+
+Plot Name: target_analysis between revenue
+Type: System
+Name in Dir: plot_1
+Rating: 5
+Comment: This is an amazing graph that explains the distibution of my target variable. This is a crutial step in understanding the dataset!
+Time Taken: 43.34 seconds
+
+Plot Name: target_correlation between budget, revenue
+Type: System
+Name in Dir: plot_2
+Rating: 5
+Comment: This is the correlation between one of the two most important features for predicting the revenue. this is so informative!
+Time Taken: 36.71 seconds
+
+Plot Name: target_correlation between vote_count, revenue
+Type: System
+Name in Dir: plot_3
+Rating: 5
+Comment: This graph shows the corelation between revenue feature and the no. 1 most effective feature in predicting it. Awesome!
+Time Taken: 46.43 seconds
+
+Plot Name: high_correlation between budget, vote_count
+Type: System
+Name in Dir: plot_4
+Rating: 3
+Comment: This graph is less informative becuase those are not relations i'm interested in
+Time Taken: 38.33 seconds
+
+Plot Name: categorical_effect between Crime, Music
+Type: Random
+Name in Dir: plot_5
+Rating: 2
+Comment: I guess this is informative about a specific genre with relation to the revenue the graph isnt good though
+Time Taken: 71.43 seconds
+
+Plot Name: outlier_pattern between cast, crew
+Type: System
+Name in Dir: plot_6
+Rating: 4
+Comment: interesting display of the outlires!
+Time Taken: 16.83 seconds
+
+Plot Name: outlier_pattern between cast, revenue
+Type: System
+Name in Dir: plot_7
+Rating: 4
+Comment: same as before
+Time Taken: 7.47 seconds
+
+Plot Name: outlier_pattern between cast, vote_count
+Type: System
+Name in Dir: plot_8
+Rating: 3
+Comment: same, but i saw 3 of these already
+Time Taken: 12.87 seconds
+
+Plot Name: outlier_pattern between crew, revenue
+Type: System
+Name in Dir: plot_9
+Rating: 3
+Comment: same
+Time Taken: 5.56 seconds
+
+Plot Name: date_numerical_trend between Drama, vote_count
+Type: Random
+Name in Dir: plot_10
+Rating: 1
+Comment: what is this?!
+Time Taken: 6.85 seconds
+
+Plot Name: categorical_effect between Mystery, Crime
+Type: Random
+Name in Dir: plot_11
+Rating: 1
+Comment: not informative at all
+Time Taken: 14.83 seconds
+
+Plot Name: high_correlation between vote_average, cast
+Type: Random
+Name in Dir: plot_12
+Rating: 3
+Comment: This is not really informative but i do like this type of graphs
+Time Taken: 38.16 seconds
+
+Plot Name: outlier_pattern between crew, vote_count
+Type: System
+Name in Dir: plot_13
+Rating: 3
+Comment: i dont want to see more outlires but it's interesting
+Time Taken: 16.63 seconds
+
+Plot Name: categorical_effect between Horror, Fantasy
+Type: Random
+Name in Dir: plot_14
+Rating: 4
+Comment: kind of interesting.
+Time Taken: 12.05 seconds
+

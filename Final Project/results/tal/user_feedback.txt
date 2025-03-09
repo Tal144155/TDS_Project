@@ -1,0 +1,106 @@
+Results on test from dataset: movie_new.csv
+Plot Name: feature_importance between vote_count, budget
+Type: System
+Name in Dir: plot_0
+Rating: 5
+Comment: looking good. i can understand that with only 2 features we can get a very good revenue.
+Time Taken: 24.58 seconds
+
+Plot Name: target_analysis between revenue
+Type: System
+Name in Dir: plot_1
+Rating: 5
+Comment: also very nice. i can see that the data ditribution is not normal, and that there are a lot of movies with lower revenue.
+Time Taken: 27.64 seconds
+
+Plot Name: date_numerical_trend between popularity, Drama
+Type: Random
+Name in Dir: plot_2
+Rating: 1
+Comment: the plot dosent match the features, i cant really understand whats going on.
+Time Taken: 20.15 seconds
+
+Plot Name: target_correlation between budget, revenue
+Type: System
+Name in Dir: plot_3
+Rating: 5
+Comment: that a really good one, i can see that th correlation between budget and revenue is very high, the higher the budget the higher the revenue.
+Time Taken: 33.95 seconds
+
+Plot Name: non_linear between revenue, runtime
+Type: Random
+Name in Dir: plot_4
+Rating: 5
+Comment: that is interesting, it may show that we have a non linear connection between them
+Time Taken: 28.79 seconds
+
+Plot Name: target_correlation between vote_count, revenue
+Type: System
+Name in Dir: plot_5
+Rating: 5
+Comment: that is also very good, you can see that there is a high correlation between the revenue and the vote count.
+Time Taken: 30.30 seconds
+
+Plot Name: categorical_effect between Drama, Romance
+Type: Random
+Name in Dir: plot_6
+Rating: 2
+Comment: there is no significant differnce between them, it dosent give me specail information.
+Time Taken: 21.04 seconds
+
+Plot Name: high_correlation between budget, vote_count
+Type: System
+Name in Dir: plot_7
+Rating: 5
+Comment: that is also good, the correlation between vote count and budget is very high, might think to put them together.
+Time Taken: 27.05 seconds
+
+Plot Name: categorical_effect between belongs_to_collection, revenue
+Type: System
+Name in Dir: plot_8
+Rating: 5
+Comment: we can see that the median, and the max is much higher wheh a movie is belong to some collection, very interestings.
+Time Taken: 32.77 seconds
+
+Plot Name: categorical_effect between Adventure, revenue
+Type: System
+Name in Dir: plot_9
+Rating: 5
+Comment: also same here
+Time Taken: 7.90 seconds
+
+Plot Name: categorical_effect between Fantasy, revenue
+Type: System
+Name in Dir: plot_10
+Rating: 3
+Comment: also here but this one is less informative.
+Time Taken: 17.75 seconds
+
+Plot Name: date_categorical_distribution between release_date, Western
+Type: System
+Name in Dir: plot_11
+Rating: 5
+Comment: this is very interesting. i can see that there is a differnce in mocies that are not western, as time grows we have much less movies that are western.
+Time Taken: 39.27 seconds
+
+Plot Name: categorical_effect between Foreign, War
+Type: Random
+Name in Dir: plot_12
+Rating: 4
+Comment: this is nice, we can see that movies that are not forieng have much more cast members.
+Time Taken: 28.13 seconds
+
+Plot Name: date_categorical_distribution between release_date, War
+Type: System
+Name in Dir: plot_13
+Rating: 5
+Comment: this is also nice. the number of movies in war is growing.
+Time Taken: 17.77 seconds
+
+Plot Name: non_linear between revenue, crew
+Type: Random
+Name in Dir: plot_14
+Rating: 5
+Comment: this is also nice, you can see the distribution of the connection.
+Time Taken: 14.81 seconds
+

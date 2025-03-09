@@ -1,0 +1,106 @@
+Results on test from dataset: movie_new.csv
+Plot Name: feature_importance between vote_count, budget
+Type: System
+Name in Dir: plot_0
+Rating: 4
+Comment: i can understand that the vote count has the biggest impact on the revenue.
+Time Taken: 133.49 seconds
+
+Plot Name: target_analysis between revenue
+Type: System
+Name in Dir: plot_1
+Rating: 5
+Comment: it helped me understand the ditribution of the data.
+Time Taken: 135.73 seconds
+
+Plot Name: outlier_pattern between budget, vote_count
+Type: System
+Name in Dir: plot_2
+Rating: 1
+Comment: i understand there a lot of red dots.
+Time Taken: 59.80 seconds
+
+Plot Name: target_correlation between budget, revenue
+Type: System
+Name in Dir: plot_3
+Rating: 4
+Comment: when we have a higher buget, the revenueu is higher.
+Time Taken: 45.29 seconds
+
+Plot Name: categorical_effect between Documentary, Family
+Type: Random
+Name in Dir: plot_4
+Rating: 1
+Comment: this dosent bring me information, i dont like it.
+Time Taken: 101.60 seconds
+
+Plot Name: target_correlation between vote_count, revenue
+Type: System
+Name in Dir: plot_5
+Rating: 5
+Comment: when there is a higher vote count, the revenue is higher.
+Time Taken: 35.74 seconds
+
+Plot Name: outlier_pattern between cast, crew
+Type: System
+Name in Dir: plot_6
+Rating: 2
+Comment: when therer is 75 in the case and 125 in the crew we have outliers
+Time Taken: 70.27 seconds
+
+Plot Name: outlier_pattern between cast, revenue
+Type: System
+Name in Dir: plot_7
+Rating: 4
+Comment: this is nive, i understand we may not need a very large crew
+Time Taken: 77.92 seconds
+
+Plot Name: categorical_effect between War, Action
+Type: Random
+Name in Dir: plot_8
+Rating: 1
+Comment: this is the smae and garbage
+Time Taken: 50.29 seconds
+
+Plot Name: outlier_pattern between cast, vote_count
+Type: System
+Name in Dir: plot_9
+Rating: 5
+Comment: less cast is better votes . interesting
+Time Taken: 50.43 seconds
+
+Plot Name: date_numerical_trend between budget, release_date
+Type: Random
+Name in Dir: plot_10
+Rating: 3
+Comment: most new movies have higher budget
+Time Taken: 51.36 seconds
+
+Plot Name: outlier_pattern between crew, revenue
+Type: System
+Name in Dir: plot_11
+Rating: 4
+Comment: there is no need to take a lot of crew members
+Time Taken: 56.25 seconds
+
+Plot Name: categorical_effect between Crime, Adventure
+Type: Random
+Name in Dir: plot_12
+Rating: 1
+Comment: dosent say anything
+Time Taken: 20.21 seconds
+
+Plot Name: outlier_pattern between crew, vote_count
+Type: System
+Name in Dir: plot_13
+Rating: 5
+Comment: when i have less crew i get more votes
+Time Taken: 34.75 seconds
+
+Plot Name: categorical_effect between Science Fiction, Action
+Type: Random
+Name in Dir: plot_14
+Rating: 1
+Comment: again as before
+Time Taken: 7.12 seconds
+

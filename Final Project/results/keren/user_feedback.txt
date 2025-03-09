@@ -1,0 +1,106 @@
+Results on test from dataset: Final Project/Datasets_Testing/movie_new.csv
+Plot Name: feature_importance between vote_count, budget
+Type: System
+Name in Dir: plot_0
+Rating: 4
+Comment: i thought that the information in the graph is not accurate, but if it is true than the graph reflects the corolation clearly.
+Time Taken: 202.99 seconds
+
+Plot Name: target_analysis between revenue
+Type: System
+Name in Dir: plot_1
+Rating: 5
+Comment: i understand that most movies crate a low revenue.
+Time Taken: 84.56 seconds
+
+Plot Name: date_numerical_trend between vote_average, production_countries
+Type: Random
+Name in Dir: plot_2
+Rating: 2
+Comment: the information seemes not realistic, in addition the graph does not show a natural relationship between the features.
+Time Taken: 135.26 seconds
+
+Plot Name: target_correlation between budget, revenue
+Type: System
+Name in Dir: plot_3
+Rating: 5
+Comment: there is a positive correlation between the budget and revenue, there are some outliers that are logical.
+Time Taken: 64.99 seconds
+
+Plot Name: target_correlation between vote_count, revenue
+Type: System
+Name in Dir: plot_4
+Rating: 5
+Comment: i see there is a positive corrolation between revenue and vote count. it is logical because more revenue = more watchers = more votes.
+Time Taken: 64.68 seconds
+
+Plot Name: high_correlation between budget, vote_count
+Type: System
+Name in Dir: plot_5
+Rating: 5
+Comment: same
+Time Taken: 32.30 seconds
+
+Plot Name: date_numerical_trend between spoken_languages, revenue
+Type: Random
+Name in Dir: plot_6
+Rating: 1
+Comment: there's nothing about dates, also the no. of languages does not seem to be related to the revenue.
+Time Taken: 74.47 seconds
+
+Plot Name: categorical_effect between cast, Western
+Type: Random
+Name in Dir: plot_7
+Rating: 1
+Comment: i didnt understand the graph.
+Time Taken: 150.00 seconds
+
+Plot Name: categorical_effect between belongs_to_collection, revenue
+Type: System
+Name in Dir: plot_8
+Rating: 3
+Comment: didnt like the graph type but i understand that collections recieve more revenue.
+Time Taken: 61.63 seconds
+
+Plot Name: outlier_pattern between cast, crew
+Type: System
+Name in Dir: plot_9
+Rating: 4
+Comment: i dont see a linear relation, but i understand that most movies dont hire a lot of cast and crew.
+Time Taken: 97.06 seconds
+
+Plot Name: outlier_pattern between cast, revenue
+Type: System
+Name in Dir: plot_10
+Rating: 5
+Comment: good graph
+Time Taken: 63.66 seconds
+
+Plot Name: categorical_effect between Thriller, Horror
+Type: Random
+Name in Dir: plot_11
+Rating: 3
+Comment: i'm not sure there is a strong correlation like in the graph.
+Time Taken: 54.14 seconds
+
+Plot Name: outlier_pattern between cast, vote_count
+Type: System
+Name in Dir: plot_12
+Rating: 3
+Comment: ive seen this grph alredy. interesting corrolation.
+Time Taken: 57.94 seconds
+
+Plot Name: outlier_pattern between crew, revenue
+Type: System
+Name in Dir: plot_13
+Rating: 4
+Comment: the more crue the less revenue from more income.
+Time Taken: 28.71 seconds
+
+Plot Name: high_correlation between production_companies_count, budget
+Type: Random
+Name in Dir: plot_14
+Rating: 1
+Comment: dont understand.
+Time Taken: 22.96 seconds
+

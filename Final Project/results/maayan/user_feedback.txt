@@ -1,0 +1,106 @@
+Results on test from dataset: movie_new.csv
+Plot Name: feature_importance between vote_count, budget
+Type: System
+Name in Dir: plot_0
+Rating: 5
+Comment: the most important features are vote count and budget, the other ones are less important. in the right graph, 2 features might be enough
+Time Taken: 149.47 seconds
+
+Plot Name: date_numerical_trend between popularity, Drama
+Type: Random
+Name in Dir: plot_1
+Rating: 1
+Comment: not a good grpah. i dont understand whats going on here. there is no date, dont understand the numers in the drama.
+Time Taken: 87.69 seconds
+
+Plot Name: categorical_effect between History, original_language
+Type: Random
+Name in Dir: plot_2
+Rating: 2
+Comment: there is no significant differnce between 0 and 1.
+Time Taken: 112.48 seconds
+
+Plot Name: target_analysis between revenue
+Type: System
+Name in Dir: plot_3
+Rating: 2
+Comment: very little movies has big revenue, most movies are at about 0.2 revenue.
+Time Taken: 162.00 seconds
+
+Plot Name: date_numerical_trend between popularity, Animation
+Type: Random
+Name in Dir: plot_4
+Rating: 1
+Comment: wrong plot for this categories. there is no relation to the title of the graph.
+Time Taken: 104.54 seconds
+
+Plot Name: outlier_pattern between cast, crew
+Type: System
+Name in Dir: plot_5
+Rating: 1
+Comment: dosent give a lot of information.
+Time Taken: 82.41 seconds
+
+Plot Name: date_categorical_distribution between release_date, Drama
+Type: Random
+Name in Dir: plot_6
+Rating: 4
+Comment: as time goes, we have more movies that are not drama.
+Time Taken: 135.00 seconds
+
+Plot Name: outlier_pattern between cast, revenue
+Type: System
+Name in Dir: plot_7
+Rating: 3
+Comment: i dont like thi sgraph. cant take a lot of information from it. dont know how to read it. the revenue is proprtional to the cast size. the outliers dont give me a lot of info.
+Time Taken: 74.99 seconds
+
+Plot Name: outlier_pattern between cast, vote_count
+Type: System
+Name in Dir: plot_8
+Rating: 2
+Comment: very similar to the last grpah. when there is more cast members, we have more votes.
+Time Taken: 88.37 seconds
+
+Plot Name: outlier_pattern between crew, revenue
+Type: System
+Name in Dir: plot_9
+Rating: 3
+Comment: same as the last plot. the revenue is not that dependenet on the revenue value. dont like the outliers
+Time Taken: 66.40 seconds
+
+Plot Name: outlier_pattern between crew, vote_count
+Type: System
+Name in Dir: plot_10
+Rating: 1
+Comment: same as before
+Time Taken: 14.29 seconds
+
+Plot Name: outlier_pattern between crew, budget
+Type: System
+Name in Dir: plot_11
+Rating: 1
+Comment: same as before
+Time Taken: 5.71 seconds
+
+Plot Name: outlier_pattern between production_companies_count, crew
+Type: System
+Name in Dir: plot_12
+Rating: 1
+Comment: same as before
+Time Taken: 21.03 seconds
+
+Plot Name: outlier_pattern between production_companies_count, revenue
+Type: System
+Name in Dir: plot_13
+Rating: 1
+Comment: worse
+Time Taken: 5.90 seconds
+
+Plot Name: categorical_effect between Science Fiction, Fantasy
+Type: Random
+Name in Dir: plot_14
+Rating: 4
+Comment: the median is very close, however the science fiction movies has better budget.
+Time Taken: 65.82 seconds
+

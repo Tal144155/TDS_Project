@@ -1,0 +1,106 @@
+Results on test from dataset: movie_new.csv
+Plot Name: date_numerical_trend between Thriller, popularity
+Type: Random
+Name in Dir: plot_0
+Rating: 1
+Comment: there is no connection. its unclear how it is related to date
+Time Taken: 79.43 seconds
+
+Plot Name: feature_importance between vote_count, budget
+Type: System
+Name in Dir: plot_1
+Rating: 5
+Comment: we can understand what are the most important features an dhow many features we need.
+Time Taken: 81.07 seconds
+
+Plot Name: target_analysis between revenue
+Type: System
+Name in Dir: plot_2
+Rating: 5
+Comment: i undestand the distribution of the target variable.
+Time Taken: 92.41 seconds
+
+Plot Name: categorical_effect between Western, Music
+Type: Random
+Name in Dir: plot_3
+Rating: 2
+Comment: its not that interesting to know this, and i can understand a lot from it.
+Time Taken: 61.42 seconds
+
+Plot Name: target_correlation between budget, revenue
+Type: System
+Name in Dir: plot_4
+Rating: 5
+Comment: very important. there are a lot of outliers.
+Time Taken: 37.43 seconds
+
+Plot Name: target_correlation between vote_count, revenue
+Type: System
+Name in Dir: plot_5
+Rating: 5
+Comment: here the correlation is even better. it also makes sense, if the movie was good there is a lot of voters, then the revenue is higher.
+Time Taken: 44.84 seconds
+
+Plot Name: high_correlation between budget, vote_count
+Type: System
+Name in Dir: plot_6
+Rating: 2
+Comment: less interesting. the trend line is less understandable.
+Time Taken: 58.30 seconds
+
+Plot Name: outlier_pattern between cast, crew
+Type: System
+Name in Dir: plot_7
+Rating: 2
+Comment: the 2 features are not so releveant, but the graph is cool.
+Time Taken: 60.96 seconds
+
+Plot Name: outlier_pattern between cast, revenue
+Type: System
+Name in Dir: plot_8
+Rating: 3
+Comment: this is more interesting because this is related to the revenue. when we have higher cast we are probably in an outlier.
+Time Taken: 57.80 seconds
+
+Plot Name: outlier_pattern between cast, vote_count
+Type: System
+Name in Dir: plot_9
+Rating: 1
+Comment: not interesting.
+Time Taken: 15.68 seconds
+
+Plot Name: date_numerical_trend between Thriller, popularity
+Type: Random
+Name in Dir: plot_10
+Rating: 1
+Comment: the wrong grpah, it has no connection
+Time Taken: 46.15 seconds
+
+Plot Name: outlier_pattern between crew, revenue
+Type: System
+Name in Dir: plot_11
+Rating: 3
+Comment: as the last one, its nice
+Time Taken: 21.76 seconds
+
+Plot Name: outlier_pattern between crew, vote_count
+Type: System
+Name in Dir: plot_12
+Rating: 1
+Comment: this is not relevant.
+Time Taken: 29.70 seconds
+
+Plot Name: categorical_effect between Drama, Crime
+Type: Random
+Name in Dir: plot_13
+Rating: 3
+Comment: this is not really interesting. it has potential to be good.
+Time Taken: 34.07 seconds
+
+Plot Name: categorical_effect between Fantasy, belongs_to_collection
+Type: Random
+Name in Dir: plot_14
+Rating: 2
+Comment: same as before. even worse
+Time Taken: 27.60 seconds
+

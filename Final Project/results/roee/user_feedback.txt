@@ -1,0 +1,106 @@
+Results on test from dataset: movie_new.csv
+Plot Name: feature_importance between vote_count, budget
+Type: System
+Name in Dir: plot_0
+Rating: 4
+Comment: the plot is ok, i can understand the importance of each feature and the commulative help understanding.
+Time Taken: 175.11 seconds
+
+Plot Name: target_analysis between revenue
+Type: System
+Name in Dir: plot_1
+Rating: 4
+Comment: i can understand where most movies are, helps a lot. not in the prediction.
+Time Taken: 124.58 seconds
+
+Plot Name: target_correlation between budget, revenue
+Type: System
+Name in Dir: plot_2
+Rating: 5
+Comment: i see a linear connection, when the budget is higher the revenue is also, helps a lot. how the data looks.
+Time Taken: 49.42 seconds
+
+Plot Name: categorical_effect between Family, Music
+Type: Random
+Name in Dir: plot_3
+Rating: 1
+Comment: there is no differnce in the boxplots, the connection is not interestings.
+Time Taken: 100.54 seconds
+
+Plot Name: target_correlation between vote_count, revenue
+Type: System
+Name in Dir: plot_4
+Rating: 5
+Comment: best one so far. the feature is very relevent, and the correlation is high and interesting. what the crowd likes more there is probably a higher revenue, liked the corr value.
+Time Taken: 51.89 seconds
+
+Plot Name: categorical_effect between Music, Comedy
+Type: Random
+Name in Dir: plot_5
+Rating: 1
+Comment: more relevent then crew size, but still dosent give me more information still.
+Time Taken: 55.84 seconds
+
+Plot Name: chi_squared between Family, Animation
+Type: System
+Name in Dir: plot_6
+Rating: 3
+Comment: it gives me information of the data, shows correlation. animation and family i can see the connection.
+Time Taken: 80.04 seconds
+
+Plot Name: outlier_pattern between cast, crew
+Type: System
+Name in Dir: plot_7
+Rating: 3
+Comment: the left graph alone is not good, but with the right one its nice. might have been enough to show only the right one.
+Time Taken: 119.76 seconds
+
+Plot Name: outlier_pattern between cast, revenue
+Type: System
+Name in Dir: plot_8
+Rating: 4
+Comment: cast with size of 25-50 has smaller revenue. when i have higher cast, i get higher rvenue but this is an outlier.
+Time Taken: 77.16 seconds
+
+Plot Name: categorical_effect between Crime, Foreign
+Type: Random
+Name in Dir: plot_9
+Rating: 1
+Comment: dosent see no connection. irrelvent connection.
+Time Taken: 29.96 seconds
+
+Plot Name: outlier_pattern between cast, vote_count
+Type: System
+Name in Dir: plot_10
+Rating: 2
+Comment: the connection is not intersting.
+Time Taken: 28.73 seconds
+
+Plot Name: categorical_effect between Mystery, Fantasy
+Type: Random
+Name in Dir: plot_11
+Rating: 1
+Comment: as before
+Time Taken: 17.82 seconds
+
+Plot Name: categorical_effect between Horror, spoken_languages
+Type: Random
+Name in Dir: plot_12
+Rating: 3
+Comment: it is a connection worth looking for, but the graph is not informative.
+Time Taken: 40.93 seconds
+
+Plot Name: outlier_pattern between crew, revenue
+Type: System
+Name in Dir: plot_13
+Rating: 3
+Comment: same as cast
+Time Taken: 27.78 seconds
+
+Plot Name: outlier_pattern between crew, vote_count
+Type: System
+Name in Dir: plot_14
+Rating: 1
+Comment: there is not intersting connection here.
+Time Taken: 22.11 seconds
+

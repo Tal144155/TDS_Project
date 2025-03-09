@@ -1,0 +1,106 @@
+Results on test from dataset: movie_new.csv
+Plot Name: date_numerical_trend between revenue, Mystery
+Type: Random
+Name in Dir: plot_0
+Rating: 1
+Comment: the plot does not fit the type of the data :(
+Time Taken: 228.05 seconds
+
+Plot Name: categorical_effect between Romance, Thriller
+Type: Random
+Name in Dir: plot_1
+Rating: 1
+Comment: this is not informative by any means
+Time Taken: 207.67 seconds
+
+Plot Name: feature_importance between vote_count, budget
+Type: System
+Name in Dir: plot_2
+Rating: 5
+Comment: really informative i could understand everything i wanted to
+Time Taken: 154.96 seconds
+
+Plot Name: target_analysis between revenue
+Type: System
+Name in Dir: plot_3
+Rating: 5
+Comment: this helps me to understand how the data is actually is
+Time Taken: 185.25 seconds
+
+Plot Name: target_correlation between budget, revenue
+Type: System
+Name in Dir: plot_4
+Rating: 4
+Comment: this helps me to predict the revenue as func of the amount of budget
+Time Taken: 84.17 seconds
+
+Plot Name: target_correlation between vote_count, revenue
+Type: System
+Name in Dir: plot_5
+Rating: 5
+Comment: also here. super good!
+Time Taken: 64.52 seconds
+
+Plot Name: date_numerical_trend between revenue, Thriller
+Type: Random
+Name in Dir: plot_6
+Rating: 1
+Comment: bullshit!
+Time Taken: 16.36 seconds
+
+Plot Name: high_correlation between budget, vote_count
+Type: System
+Name in Dir: plot_7
+Rating: 5
+Comment: same here. really good.
+Time Taken: 15.85 seconds
+
+Plot Name: categorical_effect between Music, War
+Type: Random
+Name in Dir: plot_8
+Rating: 2
+Comment: bad bad bad
+Time Taken: 18.22 seconds
+
+Plot Name: date_numerical_trend between Documentary, budget
+Type: Random
+Name in Dir: plot_9
+Rating: 1
+Comment: also bad.
+Time Taken: 11.80 seconds
+
+Plot Name: categorical_effect between belongs_to_collection, revenue
+Type: System
+Name in Dir: plot_10
+Rating: 5
+Comment: the Hezion is so different that I am so amazed about it
+Time Taken: 113.96 seconds
+
+Plot Name: categorical_effect between Adventure, revenue
+Type: System
+Name in Dir: plot_11
+Rating: 5
+Comment: same here! amazing how the p value is low and the Hezion is diif
+Time Taken: 24.98 seconds
+
+Plot Name: categorical_effect between Fantasy, revenue
+Type: System
+Name in Dir: plot_12
+Rating: 4
+Comment: also
+Time Taken: 18.08 seconds
+
+Plot Name: categorical_effect between Family, revenue
+Type: System
+Name in Dir: plot_13
+Rating: 3
+Comment: i am so sick of it !!!
+Time Taken: 12.22 seconds
+
+Plot Name: chi_squared between Family, Animation
+Type: System
+Name in Dir: plot_14
+Rating: 4
+Comment: X^2 is so interesting :)
+Time Taken: 32.38 seconds
+
