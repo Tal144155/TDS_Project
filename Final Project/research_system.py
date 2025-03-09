@@ -117,7 +117,7 @@ def start_process():
         save_ratings(ratings, 'user_ratings_rel2')
     plot_index = 0
     count_system = 0
-    dataset_path = "Final Project/Datasets_Testing/dataset_movies.csv"
+    dataset_path = "Final Project/Datasets_Testing/movie_new.csv"
     index_col = "id"
     target_value = "revenue"
     df = read_data(dataset_path)
@@ -248,9 +248,9 @@ def generate_plot():
                 plot_chi_squared(df, feature1, feature2, random.uniform(0, 0.01), plot_save_name)
                 plot_info["relation_type"] = "chi_squared"
         if len(chosen_plot["attributes"]) == 1:
-            plot_info["name"] = f'{plot_info["relation_type"]} between {chosen_plot["attributes"][0]}'
+            plot_info["name"] = f'{plot_info["relation_type"]} between {feature1}'
         else:
-            plot_info["name"] = f'{plot_info["relation_type"]} between {chosen_plot["attributes"][0]}, {chosen_plot["attributes"][1]}'
+            plot_info["name"] = f'{plot_info["relation_type"]} between {feature1}, {feature2}'
 
         image_path = os.path.join(PLOTS_DIR, f'{plot_save_name}.png')
     plot_data.append(plot_info)
