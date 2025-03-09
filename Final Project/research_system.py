@@ -82,7 +82,7 @@ def submit_feedback():
         if pd.notna(ratings.loc[user_id, chosen_plot['relation_type']]):
             user_rating = ratings.loc[user_id, chosen_plot['relation_type']]
         if user_rating:
-            ratings.loc[user_id, chosen_plot['relation_type']] = user_rating * 0.8 + rating * 0.2
+            ratings.loc[user_id, chosen_plot['relation_type']] = user_rating * 0.5 + rating * 0.5
         else:
             ratings.loc[user_id, chosen_plot['relation_type']] = rating
 
