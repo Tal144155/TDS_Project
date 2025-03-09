@@ -186,7 +186,7 @@ def normalize_score(value, metric_type):
         },
         'categorical_effect': {
             'abs_range': (0, 0.05),  # P-values, lower is stronger
-            'percentile_thresholds': [0.05, 0.02, 0.01, 0.009]
+            'percentile_thresholds': [0.05, 0.03, 0.02, 0.01]
         },
         'chi_squared': {
             'abs_range': (0, 0.05),  # P-values, lower is stronger
