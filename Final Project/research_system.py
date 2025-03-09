@@ -147,7 +147,7 @@ def generate_plot():
     ratings = load_ratings('user_ratings_rel2', RELATION_TYPES)
     if is_system_plot and algo_rec:
         count_system = count_system + 1
-        combined_user_vis_pred = combine_pred(CFCB(ratings), CFUB(ratings), 0.5, 0.5)
+        combined_user_vis_pred = combine_pred(CFIB(ratings), CFUB(ratings), 0.5, 0.5)
         algo_rec_df = get_top_relations(algo_rec)
         user_index = ratings.index.get_loc(user_id)
         recommendations = combine_pred(combined_user_vis_pred[user_index], algo_rec_df.to_numpy()[0], 0.7, 0.3)
