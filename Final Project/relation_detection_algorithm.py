@@ -146,7 +146,7 @@ def chi_squared_relationship(df, categorical_columns, relations, p_value_thresho
 
 
 # Function to check for numerical feature trends over time
-def date_numerical_relationship(df, date_columns, numerical_columns, relations, correlation_threshold=0.5):
+def date_numerical_relationship(df, date_columns, numerical_columns, relations, correlation_threshold=0.35):
     print("- Checking for date with numerical variables.")
     temp_relations = []
     for date_col in date_columns:

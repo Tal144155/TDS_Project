@@ -46,12 +46,14 @@ def plot_date_numerical_trend(df, date_col, num_feature, correlation_value, plot
 
 def plot_date_categorical_distribution(df, date_col, cat_feature, p_value, plot_name):
     contingency_table = pd.crosstab(df[date_col].dt.to_period('M'), df[cat_feature])
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(12, 6))
     contingency_table.plot(kind='bar', stacked=True, ax=ax, colormap='Set3')
     ax.set_title(f'Date Categorical Distribution (Stacked Bar): {date_col} vs {cat_feature}\n(p-value: {p_value:.4f})')
     ax.set_xlabel('Date (Monthly)')
     ax.set_ylabel('Count')
-    plt.xticks(rotation=45)
+    ax.set_xticks(range(0, len(contingency_table), max(1, len(contingency_table) // 10)))
+    ax.set_xticklabels([str(t) for t in contingency_table.index[::max(1, len(contingency_table) // 10)]], rotation=45, ha='right')
+    
     plt.tight_layout()
     save_plot(fig, plot_name)
 
