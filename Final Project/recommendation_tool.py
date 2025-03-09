@@ -186,7 +186,7 @@ def normalize_score(value, metric_type):
         },
         'categorical_effect': {
             'abs_range': (0, 0.05),  # P-values, lower is stronger
-            'percentile_thresholds': [0.05, 0.02, 0.01, 0.009]
+            'percentile_thresholds': [0.05, 0.03, 0.02, 0.01]
         },
         'chi_squared': {
             'abs_range': (0, 0.05),  # P-values, lower is stronger
@@ -227,22 +227,22 @@ def normalize_score(value, metric_type):
         return 3  
     
     strategy = normalization_strategies[metric_type]
-    
+    precentiles = strategy['percentile_thresholds']
+
     # Absolute value for signed metrics
     abs_value = abs(value)
-    
-    
-    # Value-based normalization
-    min_val, max_val = strategy['abs_range']
-    
-    # Normalize to 1-5 range
-    if abs_value <= min_val:
-        return 1
-    elif abs_value >= max_val:
-        return 5
+
+    if metric_type in {'high_correlation', 'target_correlation', 'date_numerical_trend', 'non_linear', 'feature_importance', 'outlier_pattern'}:
+        for i, threshold in enumerate(precentiles):
+            if abs_value < threshold:
+                return i + 1
+        return len(precentiles) + 1
     else:
-        normalized = 1 + 4 * (abs_value - min_val) / (max_val - min_val)
-        return int(min(max(normalized, 1), 5))
+        for i, threshold in enumerate(precentiles):
+            if abs_value > threshold:
+                return i + 1
+        return len(precentiles) + 1
+    
 
 def get_relation_scores(relations):
     """
