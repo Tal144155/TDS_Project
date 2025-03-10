@@ -51,8 +51,33 @@ def create_feedback_dataframe(base_path):
     df = pd.DataFrame(data)
     return df
 
-# Example usage
+def calculate_averages(df: pd.DataFrame):
+    # Calculate the average rating for System and Random plots
+    avg_rating_by_type = df.groupby('Type')['Rating'].mean().reset_index()
+    avg_rating_by_type.columns = ['Plot Type', 'Average Rating']
+    
+    # Calculate the average rating per relation type
+    avg_rating_by_relation_type = df.groupby('Relation Type')['Rating'].mean().reset_index()
+    avg_rating_by_relation_type.columns = ['Relation Type', 'Average Rating']
+    
+    # Calculate the average time taken to rate each plot type
+    avg_time_by_type = df.groupby('Type')['Time Taken'].mean().reset_index()
+    avg_time_by_type.columns = ['Plot Type', 'Average Time Taken (seconds)']
+    
+    # Display the results
+    print("Average Rating by Plot Type:")
+    print(avg_rating_by_type, "\n")
+    
+    print("Average Rating by Relation Type:")
+    print(avg_rating_by_relation_type, "\n")
+    
+    print("Average Time Taken by Plot Type:")
+    print(avg_time_by_type, "\n")
+    
+    return avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type
+
 base_path = r'C:\year3\TDS_Project\Final Project\results'
 df = create_feedback_dataframe(base_path)
-df.to_csv('feedback_data.csv', sep='\t', index=False)
-print(df.head())
+
+avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type = calculate_averages(df)
+
