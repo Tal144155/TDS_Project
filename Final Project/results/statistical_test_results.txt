@@ -1,0 +1,19 @@
+T-Test Results:
+t-statistic: 9.0941, p-value: 0.0000
+
+ANOVA Results:
+F-statistic: 18.6867, p-value: 0.0000
+
+Rating Summary by Relation Type:
+                               count      mean       std  min   25%  50%  75%  max
+Relation Type
+categorical_effect              40.0  2.275000  1.358497  1.0  1.00  2.0  3.0  5.0
+chi_squared                      8.0  3.875000  1.356203  1.0  3.75  4.0  5.0  5.0
+date_categorical_distribution    3.0  4.666667  0.577350  4.0  4.50  5.0  5.0  5.0
+date_numerical_trend            18.0  1.277778  0.574513  1.0  1.00  1.0  1.0  3.0
+feature_importance              11.0  4.454545  0.687552  3.0  4.00  5.0  5.0  5.0
+high_correlation                 7.0  3.428571  1.618347  1.0  2.50  3.0  5.0  5.0
+non_linear                       2.0  5.000000  0.000000  5.0  5.00  5.0  5.0  5.0
+outlier_pattern                 45.0  2.555556  1.306549  1.0  1.00  3.0  3.0  5.0
+target_analysis                 11.0  4.272727  1.009050  2.0  4.00  5.0  5.0  5.0
+target_correlation              20.0  4.850000  0.366348  4.0  5.00  5.0  5.0  5.0

@@ -1,8 +1,8 @@
 import os
 import pandas as pd
-import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from scipy import stats
 
 def create_feedback_dataframe(base_path):
     data = []
@@ -175,6 +175,28 @@ def create_visualizations(df, avg_rating_by_relation_combined, output_path):
     plt.grid(True)
     plt.savefig(f'{output_path}/Average_Time_Taken_vs_Plot_Number.png')
 
+def analyze_statistical_significance(df):
+    # Separate ratings by System and Random types
+    system_ratings = df[df['Type'] == 'System']['Rating']
+    random_ratings = df[df['Type'] == 'Random']['Rating']
+    
+    # Conduct an independent t-test
+    t_stat, p_value = stats.ttest_ind(system_ratings, random_ratings, equal_var=False)
+    
+    print(f"T-Test Results:")
+    print(f"t-statistic: {t_stat:.4f}, p-value: {p_value:.4f}")
+    
+    # Perform ANOVA on ratings by Relation Type
+    relation_groups = [df[df['Relation Type'] == rt]['Rating'] for rt in df['Relation Type'].unique()]
+    f_stat, p_anova = stats.f_oneway(*relation_groups)
+    
+    print(f"\nANOVA Results:")
+    print(f"F-statistic: {f_stat:.4f}, p-value: {p_anova:.4f}")
+    
+    # Check if certain relation types consistently received higher or lower ratings
+    relation_rating_summary = df.groupby('Relation Type')['Rating'].describe()
+    print("\nRating Summary by Relation Type:")
+    print(relation_rating_summary)
 
 base_path = r'C:\year3\TDS_Project\Final Project\results'
 output = r'C:\year3\TDS_Project\Final Project\results\stats'
@@ -182,5 +204,6 @@ os.makedirs(output, exist_ok=True)
 df = create_feedback_dataframe(base_path)
 avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type, avg_rating_by_relation_combined = calculate_and_save_averages(df, output)
 create_visualizations(df, avg_rating_by_relation_combined, output)
+analyze_statistical_significance(df)
 
 
