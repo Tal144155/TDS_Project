@@ -28,7 +28,7 @@ def create_feedback_dataframe(base_path):
 
                     plot_name = plot_name_line.replace('Plot Name: ', '')
                     plot_type = type_line.replace('Type: ', '')
-                    name_in_dir = name_in_dir_line.replace('Name in Dir:  plot_', '')
+                    name_in_dir = name_in_dir_line.replace('Name in Dir: plot_', '')
                     rating = int(rating_line.replace('Rating: ', ''))
                     comment = comment_line.replace('Comment: ', '')
                     time_taken = float(time_taken_line.replace('Time Taken: ', '').replace(' seconds', ''))
@@ -149,8 +149,55 @@ def create_visualizations(df, avg_rating_by_relation_combined, output_path):
     plt.savefig(f'{output_path}/filtered_avg_rating_by_relation_type_bar_chart.png')
 
 
-base_path = r'C:\year3\TDS_Project\Final Project\results'
-output = r'C:\year3\TDS_Project\Final Project\results\stats'
+    # Plot histogram: Histogram of Ratings Count for System and Random
+    plt.figure(figsize=(8, 5))
+    sns.histplot(data=df, x="Rating", hue="Type", multiple="stack", bins=5, edgecolor="white" ,palette=selected)
+
+    # Labels and title
+    plt.xlabel("Rating")
+    plt.ylabel("Count of Items")
+    plt.title("Histogram of Ratings Count (System vs. Random)")
+
+    # Save the plot
+    plt.savefig(f'{base_path}/Histogram_of_Ratings_by_Type.png')
+
+    # Average Time Taken vs. Plot Number for System and Random
+
+    df_selected = df[["Plot Number", "Time Taken", "Type"]]
+
+    df_avg = df_selected.groupby(["Plot Number", "Type"]).mean().reset_index()
+
+    # Separate data based on "Type"
+    df_system = df_avg[df_avg["Type"] == "System"]
+    df_random = df_avg[df_avg["Type"] == "Random"]
+
+    # Adjust plot numbers to visually separate System (left) and Random (right)
+    df_system["Plot Number"] = range(len(df_system))  # Start from 0 for System
+    df_random["Plot Number"] = range(len(df_random))  # Continue for Random
+
+    # Create the line plots
+    plt.figure(figsize=(12, 6))
+
+    # Plot System on the left
+    plt.plot(df_system["Plot Number"], df_system["Time Taken"], marker='o', linestyle='-', label="System", color=custom_palette[0])
+
+    # Plot Random on the right
+    plt.plot(df_random["Plot Number"], df_random["Time Taken"], marker='s', linestyle='-', label="Random", color=custom_palette[4])
+
+    # Labels and title
+    plt.xlabel("Plot Number")
+    plt.ylabel("Average Time Taken")
+    plt.title("Average Time Taken vs. Plot Number (System vs. Random)")
+    plt.legend()
+    plt.grid(True)
+
+    # Save the plot
+    plt.savefig(f'{base_path}/Average_Time_Taken_vs_Plot_Number.png')
+
+
+base_path =  './Final Project/results'
+
+output =  './Final Project/results'
 os.makedirs(output, exist_ok=True)
 df = create_feedback_dataframe(base_path)
 avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type, avg_rating_by_relation_combined = calculate_and_save_averages(df, output)
