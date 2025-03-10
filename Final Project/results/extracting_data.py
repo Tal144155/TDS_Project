@@ -57,7 +57,10 @@ def calculate_and_save_averages(df: pd.DataFrame, output_path: str):
     avg_rating_by_type.columns = ['Plot Type', 'Average Rating']
     
     # Calculate the average rating per relation type
-    avg_rating_by_relation_type = df.groupby('Relation Type')['Rating'].mean().reset_index()
+    system_df = df[df['Type'] == 'System']
+    
+    # Calculate the average rating per relation type only for "System" plots
+    avg_rating_by_relation_type = system_df.groupby('Relation Type')['Rating'].mean().reset_index()
     avg_rating_by_relation_type.columns = ['Relation Type', 'Average Rating']
     
     # Calculate the average time taken to rate each plot type
