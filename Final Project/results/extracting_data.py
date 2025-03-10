@@ -51,7 +51,7 @@ def create_feedback_dataframe(base_path):
     df = pd.DataFrame(data)
     return df
 
-def calculate_and_save_averages(df: pd.DataFrame, output_path: str):
+def calculate_and_save_averages(df, output_path):
     # Calculate the average rating for System and Random plots
     avg_rating_by_type = df.groupby('Type')['Rating'].mean().reset_index()
     avg_rating_by_type.columns = ['Plot Type', 'Average Rating']
@@ -84,5 +84,54 @@ df = create_feedback_dataframe(base_path)
 
 output_path = r'C:\year3\TDS_Project\Final Project\results'
 avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type = calculate_and_save_averages(df, output_path)
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from wordcloud import WordCloud
+
+def create_visualizations(df, output_path):
+    # Bar Chart: Average ratings for System vs. Random plots
+    plt.figure(figsize=(8, 6))
+    avg_rating_by_type = df.groupby('Type')['Rating'].mean().reset_index()
+    sns.barplot(x='Type', y='Rating', data=avg_rating_by_type, palette='viridis')
+    plt.title('Average Ratings for System vs. Random Plots')
+    plt.xlabel('Plot Type')
+    plt.ylabel('Average Rating')
+    plt.savefig(f'{output_path}/avg_rating_bar_chart.png')
+
+    # Box Plot: Distribution of ratings across different relation types
+    plt.figure(figsize=(10, 6))
+    sns.boxplot(x='Relation Type', y='Rating', data=df, palette='muted')
+    plt.xticks(rotation=45, ha='right')
+    plt.title('Distribution of Ratings by Relation Type')
+    plt.xlabel('Relation Type')
+    plt.ylabel('Rating')
+    plt.tight_layout()
+    plt.savefig(f'{output_path}/rating_distribution_box_plot.png')
+
+    # Word Cloud: Comments visualization
+    comments_text = ' '.join(df['Comment'].dropna())
+    wordcloud = WordCloud(width=800, height=400, background_color='white', colormap='viridis').generate(comments_text)
+    plt.figure(figsize=(10, 6))
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis('off')
+    plt.title('Word Cloud of Comments')
+    plt.savefig(f'{output_path}/comments_word_cloud.png')
+
+    # Heatmap: Ratings per user and relation type
+    plt.figure(figsize=(12, 8))
+    pivot_table = df.pivot_table(values='Rating', index='User Name', columns='Relation Type', aggfunc='mean')
+    sns.heatmap(pivot_table, cmap='viridis', annot=True)
+    plt.title('Heatmap of Ratings by User and Relation Type')
+    plt.xlabel('Relation Type')
+    plt.ylabel('User Name')
+    plt.tight_layout()
+    plt.savefig(f'{output_path}/ratings_heatmap.png')
+
+# Example usage with the existing DataFrame and output path
+output_path = r'C:\year3\TDS_Project\Final Project\results'
+create_visualizations(df, output_path)
 
 
