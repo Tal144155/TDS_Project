@@ -62,7 +62,7 @@ def calculate_and_save_averages(df, output_path):
     # Calculate the average rating per relation type only for "System" plots
     system_df = df[df['Type'] == 'System']
     avg_rating_by_relation_type = system_df.groupby('Relation Type')['Rating'].mean().reset_index()
-    avg_rating_by_relation_type.columns = ['Relation Type', 'Average Rating']
+    avg_rating_by_relation_type.columns = ['Relation Type', 'System Average Rating']
     
     # Calculate the average rating per relation type only for "Random" plots
     random_df = df[df['Type'] == 'Random']
@@ -92,13 +92,13 @@ def calculate_and_save_averages(df, output_path):
     print(f"{output_path}/avg_rating_by_relation_type.csv")
     print(f"{output_path}/avg_time_by_type.csv")
     
-    return avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type
+    return avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type, avg_rating_by_relation_combined
 
-def create_visualizations(df, output_path):
+def create_visualizations(df, avg_rating_by_relation_combined, output_path):
     # Bar Chart: Average ratings for System vs. Random plots
     plt.figure(figsize=(8, 6))
     avg_rating_by_type = df.groupby('Type')['Rating'].mean().reset_index()
-    sns.barplot(x='Type', y='Rating', data=avg_rating_by_type, palette='viridis')
+    sns.barplot(x='Type', y='Rating', hue='Type', data=avg_rating_by_type, palette='viridis', legend=False)
     plt.title('Average Ratings for System vs. Random Plots')
     plt.xlabel('Plot Type')
     plt.ylabel('Average Rating')
@@ -106,7 +106,7 @@ def create_visualizations(df, output_path):
 
     # Box Plot: Distribution of ratings across different relation types
     plt.figure(figsize=(10, 6))
-    sns.boxplot(x='Relation Type', y='Rating', data=df, palette='muted')
+    sns.boxplot(x='Relation Type', y='Rating', hue='Relation Type', data=df, palette='muted', legend=False)
     plt.xticks(rotation=45, ha='right')
     plt.title('Distribution of Ratings by Relation Type')
     plt.xlabel('Relation Type')
@@ -114,22 +114,43 @@ def create_visualizations(df, output_path):
     plt.tight_layout()
     plt.savefig(f'{output_path}/rating_distribution_box_plot.png')
 
-    # Heatmap: Ratings per user and relation type
-    plt.figure(figsize=(12, 8))
-    pivot_table = df.pivot_table(values='Rating', index='User Name', columns='Relation Type', aggfunc='mean')
-    sns.heatmap(pivot_table, cmap='viridis', annot=True)
-    plt.title('Heatmap of Ratings by User and Relation Type')
-    plt.xlabel('Relation Type')
-    plt.ylabel('User Name')
-    plt.tight_layout()
-    plt.savefig(f'{output_path}/ratings_heatmap.png')
-
+    # Filter out relation types where either System or Random average is 0
+    filtered_avg_rating = avg_rating_by_relation_combined[
+        (avg_rating_by_relation_combined['System Average Rating'] > 0) &
+        (avg_rating_by_relation_combined['Random Average Rating'] > 0)
+    ]
     
+    # Melt the filtered DataFrame for visualization
+    melted_df = filtered_avg_rating.melt(
+        id_vars='Relation Type',
+        value_vars=['System Average Rating', 'Random Average Rating'],
+        var_name='Plot Type',
+        value_name='Average Rating'
+    )
+    
+    # Bar Graph: Average Ratings by Relation Type for System and Random Plots
+    plt.figure(figsize=(12, 6))
+    sns.barplot(
+        x='Relation Type',
+        y='Average Rating',
+        hue='Plot Type',
+        data=melted_df,
+        palette='viridis'
+    )
+    
+    plt.xticks(rotation=45, ha='right')
+    plt.title('Average Ratings by Relation Type (System vs. Random) - Filtered')
+    plt.xlabel('Relation Type')
+    plt.ylabel('Average Rating')
+    plt.tight_layout()
+    plt.savefig(f'{output_path}/filtered_avg_rating_by_relation_type_bar_chart.png')
 
 
 base_path = r'C:\year3\TDS_Project\Final Project\results'
+output = r'C:\year3\TDS_Project\Final Project\results\stats'
+
 df = create_feedback_dataframe(base_path)
-avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type = calculate_and_save_averages(df, base_path)
-create_visualizations(df, base_path)
+avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type, avg_rating_by_relation_combined = calculate_and_save_averages(df, base_path)
+create_visualizations(df, avg_rating_by_relation_combined, base_path)
 
 
