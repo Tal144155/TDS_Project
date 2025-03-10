@@ -198,6 +198,23 @@ def analyze_statistical_significance(df):
     print("\nRating Summary by Relation Type:")
     print(relation_rating_summary)
 
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
+
+def post_hoc_analysis(df, output_path):
+    # Perform Tukey's HSD test
+    tukey_results = pairwise_tukeyhsd(endog=df['Rating'], groups=df['Relation Type'], alpha=0.05)
+    print("\nPost Hoc Analysis (Tukey's HSD):")
+    print(tukey_results)
+    
+    # Plot the Tukey HSD results
+    plt.figure(figsize=(10, 6))
+    tukey_results.plot_simultaneous()
+    plt.title('Tukey HSD Test: Comparison of Ratings by Relation Type')
+    plt.xlabel('Mean Rating Difference')
+    plt.ylabel('Relation Type')
+    plt.tight_layout()
+    plt.savefig(f'{output_path}/tukey_hsd_relation_type_comparison.png')
+
 base_path = r'C:\year3\TDS_Project\Final Project\results'
 output = r'C:\year3\TDS_Project\Final Project\results\stats'
 os.makedirs(output, exist_ok=True)
@@ -205,5 +222,6 @@ df = create_feedback_dataframe(base_path)
 avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type, avg_rating_by_relation_combined = calculate_and_save_averages(df, output)
 create_visualizations(df, avg_rating_by_relation_combined, output)
 analyze_statistical_significance(df)
+post_hoc_analysis(df, output)
 
 

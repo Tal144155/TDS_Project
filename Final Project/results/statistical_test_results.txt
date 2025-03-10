@@ -17,3 +17,106 @@ non_linear                       2.0  5.000000  0.000000  5.0  5.00  5.0  5.0  5
 outlier_pattern                 45.0  2.555556  1.306549  1.0  1.00  3.0  3.0  5.0
 target_analysis                 11.0  4.272727  1.009050  2.0  4.00  5.0  5.0  5.0
 target_correlation              20.0  4.850000  0.366348  4.0  5.00  5.0  5.0  5.0
+
+Post Hoc Analysis (Tukey's HSD):
+                       Multiple Comparison of Means - Tukey HSD, FWER=0.05
+==================================================================================================
+            group1                        group2            meandiff p-adj   lower   upper  reject
+--------------------------------------------------------------------------------------------------
+           categorical_effect                   chi_squared      1.6 0.0132  0.1897  3.0103   True
+           categorical_effect date_categorical_distribution   2.3917 0.0194  0.2119  4.5714   True
+           categorical_effect          date_numerical_trend  -0.9972 0.0685 -2.0307  0.0363  False
+           categorical_effect            feature_importance   2.1795    0.0  0.9398  3.4193   True
+           categorical_effect              high_correlation   1.1536 0.2863 -0.3383  2.6455  False
+           categorical_effect                    non_linear    2.725 0.0368  0.0866  5.3634   True
+           categorical_effect               outlier_pattern   0.2806 0.9799 -0.5107  1.0718  False
+           categorical_effect               target_analysis   1.9977    0.0   0.758  3.2374   True
+           categorical_effect            target_correlation    2.575    0.0  1.5778  3.5722   True
+                  chi_squared date_categorical_distribution   0.7917 0.9899 -1.6735  3.2569  False
+                  chi_squared          date_numerical_trend  -2.5972    0.0 -4.1445 -1.0499   True
+                  chi_squared            feature_importance   0.5795 0.9841 -1.1124  2.2715  False
+                  chi_squared              high_correlation  -0.4464  0.999  -2.331  1.4382  False
+                  chi_squared                    non_linear    1.125 0.9619 -1.7537  4.0037  False
+                  chi_squared               outlier_pattern  -1.3194 0.0817 -2.7166  0.0777  False
+                  chi_squared               target_analysis   0.3977 0.9991 -1.2943  2.0897  False
+                  chi_squared            target_correlation    0.975  0.562 -0.5483  2.4983  False
+date_categorical_distribution          date_numerical_trend  -3.3889 0.0002 -5.6597 -1.1181   True
+date_categorical_distribution            feature_importance  -0.2121    1.0 -2.5839  2.1596  False
+date_categorical_distribution              high_correlation  -1.2381  0.855 -3.7509  1.2747  False
+date_categorical_distribution                    non_linear   0.3333    1.0 -2.9908  3.6574  False
+date_categorical_distribution               outlier_pattern  -2.1111 0.0642 -4.2824  0.0602  False
+date_categorical_distribution               target_analysis  -0.3939 0.9999 -2.7657  1.9778  False
+date_categorical_distribution            target_correlation   0.1833    1.0 -2.0712  2.4378  False
+         date_numerical_trend            feature_importance   3.1768    0.0  1.7832  4.5703   True
+         date_numerical_trend              high_correlation   2.1508 0.0014  0.5288  3.7728   True
+         date_numerical_trend                    non_linear   3.7222 0.0008  1.0081  6.4363   True
+         date_numerical_trend               outlier_pattern   1.2778 0.0033  0.2623  2.2933   True
+         date_numerical_trend               target_analysis   2.9949    0.0  1.6014  4.3885   True
+         date_numerical_trend            target_correlation   3.5722    0.0  2.3892  4.7553   True
+           feature_importance              high_correlation   -1.026 0.6885 -2.7865  0.7346  False
+           feature_importance                    non_linear   0.5455 0.9998 -2.2537  3.3446  False
+           feature_importance               outlier_pattern   -1.899 0.0001 -3.1238 -0.6742   True
+           feature_importance               target_analysis  -0.1818    1.0 -1.7345  1.3709  False
+           feature_importance            target_correlation   0.3955 0.9953 -0.9714  1.7623  False
+             high_correlation                    non_linear   1.5714 0.7779 -1.3482   4.491  False
+             high_correlation               outlier_pattern   -0.873 0.6728 -2.3525  0.6065  False
+             high_correlation               target_analysis   0.8442 0.8741 -0.9164  2.6047  False
+             high_correlation            target_correlation   1.4214 0.1282 -0.1777  3.0205  False
+                   non_linear               outlier_pattern  -2.4444  0.093 -5.0759   0.187  False
+                   non_linear               target_analysis  -0.7273 0.9979 -3.5264  2.0719  False
+         date_numerical_trend              high_correlation   2.1508 0.0014  0.5288  3.7728   True
+         date_numerical_trend                    non_linear   3.7222 0.0008  1.0081  6.4363   True
+         date_numerical_trend               outlier_pattern   1.2778 0.0033  0.2623  2.2933   True
+         date_numerical_trend               target_analysis   2.9949    0.0  1.6014  4.3885   True
+         date_numerical_trend            target_correlation   3.5722    0.0  2.3892  4.7553   True
+           feature_importance              high_correlation   -1.026 0.6885 -2.7865  0.7346  False
+           feature_importance                    non_linear   0.5455 0.9998 -2.2537  3.3446  False
+           feature_importance               outlier_pattern   -1.899 0.0001 -3.1238 -0.6742   True
+           feature_importance               target_analysis  -0.1818    1.0 -1.7345  1.3709  False
+           feature_importance            target_correlation   0.3955 0.9953 -0.9714  1.7623  False
+             high_correlation                    non_linear   1.5714 0.7779 -1.3482   4.491  False
+             high_correlation               outlier_pattern   -0.873 0.6728 -2.3525  0.6065  False
+             high_correlation               target_analysis   0.8442 0.8741 -0.9164  2.6047  False
+             high_correlation            target_correlation   1.4214 0.1282 -0.1777  3.0205  False
+                   non_linear               outlier_pattern  -2.4444  0.093 -5.0759   0.187  False
+                   non_linear               target_analysis  -0.7273 0.9979 -3.5264  2.0719  False
+         date_numerical_trend            target_correlation   3.5722    0.0  2.3892  4.7553   True
+           feature_importance              high_correlation   -1.026 0.6885 -2.7865  0.7346  False
+           feature_importance                    non_linear   0.5455 0.9998 -2.2537  3.3446  False
+           feature_importance               outlier_pattern   -1.899 0.0001 -3.1238 -0.6742   True
+           feature_importance               target_analysis  -0.1818    1.0 -1.7345  1.3709  False
+           feature_importance            target_correlation   0.3955 0.9953 -0.9714  1.7623  False
+             high_correlation                    non_linear   1.5714 0.7779 -1.3482   4.491  False
+             high_correlation               outlier_pattern   -0.873 0.6728 -2.3525  0.6065  False
+             high_correlation               target_analysis   0.8442 0.8741 -0.9164  2.6047  False
+             high_correlation            target_correlation   1.4214 0.1282 -0.1777  3.0205  False
+                   non_linear               outlier_pattern  -2.4444  0.093 -5.0759   0.187  False
+                   non_linear               target_analysis  -0.7273 0.9979 -3.5264  2.0719  False
+           feature_importance               outlier_pattern   -1.899 0.0001 -3.1238 -0.6742   True
+           feature_importance               target_analysis  -0.1818    1.0 -1.7345  1.3709  False
+           feature_importance            target_correlation   0.3955 0.9953 -0.9714  1.7623  False
+             high_correlation                    non_linear   1.5714 0.7779 -1.3482   4.491  False
+             high_correlation               outlier_pattern   -0.873 0.6728 -2.3525  0.6065  False
+             high_correlation               target_analysis   0.8442 0.8741 -0.9164  2.6047  False
+             high_correlation            target_correlation   1.4214 0.1282 -0.1777  3.0205  False
+                   non_linear               outlier_pattern  -2.4444  0.093 -5.0759   0.187  False
+                   non_linear               target_analysis  -0.7273 0.9979 -3.5264  2.0719  False
+             high_correlation                    non_linear   1.5714 0.7779 -1.3482   4.491  False
+             high_correlation               outlier_pattern   -0.873 0.6728 -2.3525  0.6065  False
+             high_correlation               target_analysis   0.8442 0.8741 -0.9164  2.6047  False
+             high_correlation            target_correlation   1.4214 0.1282 -0.1777  3.0205  False
+                   non_linear               outlier_pattern  -2.4444  0.093 -5.0759   0.187  False
+                   non_linear               target_analysis  -0.7273 0.9979 -3.5264  2.0719  False
+             high_correlation            target_correlation   1.4214 0.1282 -0.1777  3.0205  False
+                   non_linear               outlier_pattern  -2.4444  0.093 -5.0759   0.187  False
+                   non_linear               target_analysis  -0.7273 0.9979 -3.5264  2.0719  False
+                   non_linear               outlier_pattern  -2.4444  0.093 -5.0759   0.187  False
+                   non_linear               target_analysis  -0.7273 0.9979 -3.5264  2.0719  False
+                   non_linear            target_correlation    -0.15    1.0 -2.8505  2.5505  False
+                   non_linear               target_analysis  -0.7273 0.9979 -3.5264  2.0719  False
+                   non_linear            target_correlation    -0.15    1.0 -2.8505  2.5505  False
+                   non_linear            target_correlation    -0.15    1.0 -2.8505  2.5505  False
+              outlier_pattern               target_analysis   1.7172 0.0005  0.4924  2.9419   True
+              outlier_pattern            target_correlation   2.2944    0.0  1.3159   3.273   True
+              target_analysis            target_correlation   0.5773 0.9384 -0.7896  1.9442  False
+--------------------------------------------------------------------------------------------------
