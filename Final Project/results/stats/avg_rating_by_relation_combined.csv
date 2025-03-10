@@ -1,0 +1,11 @@
+Relation Type	System Average Rating	Random Average Rating
+categorical_effect	4.125	1.8125
+chi_squared	3.875	0.0
+date_categorical_distribution	5.0	4.0
+date_numerical_trend	0.0	1.2777777777777777
+feature_importance	4.454545454545454	0.0
+high_correlation	4.0	2.0
+non_linear	0.0	5.0
+outlier_pattern	2.5555555555555554	0.0
+target_analysis	4.2727272727272725	0.0
+target_correlation	4.85	0.0
