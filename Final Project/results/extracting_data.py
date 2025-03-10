@@ -4,6 +4,7 @@ import pandas as pd
 def create_feedback_dataframe(base_path):
     data = []
     user_number = 1
+    
     # Iterate through each folder (representing a user)
     for user_folder in os.listdir(base_path):
         user_folder_path = os.path.join(base_path, user_folder)
@@ -12,6 +13,7 @@ def create_feedback_dataframe(base_path):
             if os.path.exists(feedback_file):
                 with open(feedback_file, 'r', encoding='utf-8') as f:
                     feedback_lines = f.readlines()
+                
                 # Parse the feedback lines
                 for i in range(1, len(feedback_lines), 7):
                     plot_name_line = feedback_lines[i].strip()
@@ -27,6 +29,9 @@ def create_feedback_dataframe(base_path):
                     rating = int(rating_line.replace('Rating: ', ''))
                     comment = comment_line.replace('Comment: ', '')
                     time_taken = float(time_taken_line.replace('Time Taken: ', '').replace(' seconds', ''))
+                    
+                    # Extracting the relation type (first part of the plot name)
+                    relation_type = plot_name.split(' ')[0] if ' ' in plot_name else plot_name
                     relation = plot_name.split('between')[1].strip() if 'between' in plot_name else ''
 
                     data.append({
@@ -35,6 +40,7 @@ def create_feedback_dataframe(base_path):
                         'Plot Number': name_in_dir,
                         'Type': plot_type,
                         'Plot Name': plot_name,
+                        'Relation Type': relation_type,
                         'Relation': relation,
                         'Rating': rating,
                         'Comment': comment,
