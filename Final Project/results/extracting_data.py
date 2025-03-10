@@ -25,7 +25,7 @@ def create_feedback_dataframe(base_path):
 
                     plot_name = plot_name_line.replace('Plot Name: ', '')
                     plot_type = type_line.replace('Type: ', '')
-                    name_in_dir = name_in_dir_line.replace('Name in Dir: ', '')
+                    name_in_dir = name_in_dir_line.replace('Name in Dir:  plot_', '')
                     rating = int(rating_line.replace('Rating: ', ''))
                     comment = comment_line.replace('Comment: ', '')
                     time_taken = float(time_taken_line.replace('Time Taken: ', '').replace(' seconds', ''))
