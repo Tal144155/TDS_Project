@@ -1,5 +1,8 @@
 import os
 import pandas as pd
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 def create_feedback_dataframe(base_path):
     data = []
@@ -56,13 +59,24 @@ def calculate_and_save_averages(df, output_path):
     avg_rating_by_type = df.groupby('Type')['Rating'].mean().reset_index()
     avg_rating_by_type.columns = ['Plot Type', 'Average Rating']
     
-    # Calculate the average rating per relation type
-    system_df = df[df['Type'] == 'System']
-    
     # Calculate the average rating per relation type only for "System" plots
+    system_df = df[df['Type'] == 'System']
     avg_rating_by_relation_type = system_df.groupby('Relation Type')['Rating'].mean().reset_index()
     avg_rating_by_relation_type.columns = ['Relation Type', 'Average Rating']
     
+    # Calculate the average rating per relation type only for "Random" plots
+    random_df = df[df['Type'] == 'Random']
+    avg_rating_by_relation_random = random_df.groupby('Relation Type')['Rating'].mean().reset_index()
+    avg_rating_by_relation_random.columns = ['Relation Type', 'Random Average Rating']
+    
+    # Merge the two results to compare system and random averages per relation type
+    avg_rating_by_relation_combined = pd.merge(
+        avg_rating_by_relation_type, 
+        avg_rating_by_relation_random, 
+        on='Relation Type', 
+        how='outer'
+    ).fillna(0)
+
     # Calculate the average time taken to rate each plot type
     avg_time_by_type = df.groupby('Type')['Time Taken'].mean().reset_index()
     avg_time_by_type.columns = ['Plot Type', 'Average Time Taken (seconds)']
@@ -70,6 +84,7 @@ def calculate_and_save_averages(df, output_path):
     # Save the results as CSV files
     avg_rating_by_type.to_csv(f'{output_path}/avg_rating_by_type.csv', index=False, sep='\t')
     avg_rating_by_relation_type.to_csv(f'{output_path}/avg_rating_by_relation_type.csv', index=False, sep='\t')
+    avg_rating_by_relation_combined.to_csv(f'{output_path}/avg_rating_by_relation_combined.csv', index=False, sep='\t')
     avg_time_by_type.to_csv(f'{output_path}/avg_time_by_type.csv', index=False, sep='\t')
     
     print("Results saved to:")
@@ -78,18 +93,6 @@ def calculate_and_save_averages(df, output_path):
     print(f"{output_path}/avg_time_by_type.csv")
     
     return avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type
-
-base_path = r'C:\year3\TDS_Project\Final Project\results'
-df = create_feedback_dataframe(base_path)
-
-output_path = r'C:\year3\TDS_Project\Final Project\results'
-avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type = calculate_and_save_averages(df, output_path)
-
-
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from wordcloud import WordCloud
 
 def create_visualizations(df, output_path):
     # Bar Chart: Average ratings for System vs. Random plots
@@ -111,15 +114,6 @@ def create_visualizations(df, output_path):
     plt.tight_layout()
     plt.savefig(f'{output_path}/rating_distribution_box_plot.png')
 
-    # Word Cloud: Comments visualization
-    comments_text = ' '.join(df['Comment'].dropna())
-    wordcloud = WordCloud(width=800, height=400, background_color='white', colormap='viridis').generate(comments_text)
-    plt.figure(figsize=(10, 6))
-    plt.imshow(wordcloud, interpolation='bilinear')
-    plt.axis('off')
-    plt.title('Word Cloud of Comments')
-    plt.savefig(f'{output_path}/comments_word_cloud.png')
-
     # Heatmap: Ratings per user and relation type
     plt.figure(figsize=(12, 8))
     pivot_table = df.pivot_table(values='Rating', index='User Name', columns='Relation Type', aggfunc='mean')
@@ -130,8 +124,12 @@ def create_visualizations(df, output_path):
     plt.tight_layout()
     plt.savefig(f'{output_path}/ratings_heatmap.png')
 
-# Example usage with the existing DataFrame and output path
-output_path = r'C:\year3\TDS_Project\Final Project\results'
-create_visualizations(df, output_path)
+    
+
+
+base_path = r'C:\year3\TDS_Project\Final Project\results'
+df = create_feedback_dataframe(base_path)
+avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type = calculate_and_save_averages(df, base_path)
+create_visualizations(df, base_path)
 
 
