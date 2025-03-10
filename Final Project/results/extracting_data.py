@@ -98,7 +98,7 @@ def create_visualizations(df, avg_rating_by_relation_combined, output_path):
     # Bar Chart: Average ratings for System vs. Random plots
     plt.figure(figsize=(8, 6))
     avg_rating_by_type = df.groupby('Type')['Rating'].mean().reset_index()
-    sns.barplot(x='Type', y='Rating', hue='Type', data=avg_rating_by_type, palette='viridis', legend=False)
+    sns.barplot(x='Type', y='Rating', hue='Type', data=avg_rating_by_type, palette='coolwarm', legend=False)
     plt.title('Average Ratings for System vs. Random Plots')
     plt.xlabel('Plot Type')
     plt.ylabel('Average Rating')
@@ -106,7 +106,7 @@ def create_visualizations(df, avg_rating_by_relation_combined, output_path):
 
     # Box Plot: Distribution of ratings across different relation types
     plt.figure(figsize=(10, 6))
-    sns.boxplot(x='Relation Type', y='Rating', hue='Relation Type', data=df, palette='muted', legend=False)
+    sns.boxplot(x='Relation Type', y='Rating', hue='Relation Type', data=df, palette='Set2', legend=False)
     plt.xticks(rotation=45, ha='right')
     plt.title('Distribution of Ratings by Relation Type')
     plt.xlabel('Relation Type')
@@ -129,13 +129,14 @@ def create_visualizations(df, avg_rating_by_relation_combined, output_path):
     )
     
     # Bar Graph: Average Ratings by Relation Type for System and Random Plots
-    plt.figure(figsize=(12, 6))
+    plt.figure(figsize=(8, 6))
     sns.barplot(
         x='Relation Type',
         y='Average Rating',
         hue='Plot Type',
         data=melted_df,
-        palette='viridis'
+        palette='Set1',
+        width=0.4
     )
     
     plt.xticks(rotation=45, ha='right')
