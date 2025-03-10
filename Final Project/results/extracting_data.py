@@ -95,10 +95,13 @@ def calculate_and_save_averages(df, output_path):
     return avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type, avg_rating_by_relation_combined
 
 def create_visualizations(df, avg_rating_by_relation_combined, output_path):
+    custom_palette = sns.color_palette("Blues_d", as_cmap=False)
+    selected = [custom_palette[0], custom_palette[4]]
+
     # Bar Chart: Average ratings for System vs. Random plots
     plt.figure(figsize=(8, 6))
     avg_rating_by_type = df.groupby('Type')['Rating'].mean().reset_index()
-    sns.barplot(x='Type', y='Rating', hue='Type', data=avg_rating_by_type, palette='coolwarm', legend=False)
+    sns.barplot(x='Type', y='Rating', hue='Type', data=avg_rating_by_type, palette=selected, legend=False)
     plt.title('Average Ratings for System vs. Random Plots')
     plt.xlabel('Plot Type')
     plt.ylabel('Average Rating')
@@ -106,9 +109,9 @@ def create_visualizations(df, avg_rating_by_relation_combined, output_path):
 
     # Box Plot: Distribution of ratings across different relation types
     plt.figure(figsize=(10, 6))
-    sns.boxplot(x='Relation Type', y='Rating', hue='Relation Type', data=df, palette='Set2', legend=False)
+    sns.boxplot(x='Relation Type', y='Rating', hue='Relation Type', data=df, palette=custom_palette, legend=False)
     plt.xticks(rotation=45, ha='right')
-    plt.title('Distribution of Ratings by Relation Type')
+    plt.title('Distribution of Ratings by Relation Type for System Plots')
     plt.xlabel('Relation Type')
     plt.ylabel('Rating')
     plt.tight_layout()
@@ -135,12 +138,11 @@ def create_visualizations(df, avg_rating_by_relation_combined, output_path):
         y='Average Rating',
         hue='Plot Type',
         data=melted_df,
-        palette='Set1',
-        width=0.4
+        palette=selected,
     )
     
     plt.xticks(rotation=45, ha='right')
-    plt.title('Average Ratings by Relation Type (System vs. Random) - Filtered')
+    plt.title('Average Ratings by Relation Type (System vs. Random)')
     plt.xlabel('Relation Type')
     plt.ylabel('Average Rating')
     plt.tight_layout()
@@ -149,9 +151,9 @@ def create_visualizations(df, avg_rating_by_relation_combined, output_path):
 
 base_path = r'C:\year3\TDS_Project\Final Project\results'
 output = r'C:\year3\TDS_Project\Final Project\results\stats'
-
+os.makedirs(output, exist_ok=True)
 df = create_feedback_dataframe(base_path)
-avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type, avg_rating_by_relation_combined = calculate_and_save_averages(df, base_path)
-create_visualizations(df, avg_rating_by_relation_combined, base_path)
+avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type, avg_rating_by_relation_combined = calculate_and_save_averages(df, output)
+create_visualizations(df, avg_rating_by_relation_combined, output)
 
 
