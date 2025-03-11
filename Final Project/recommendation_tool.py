@@ -223,8 +223,8 @@ def normalize_score(value, metric_type):
     if metric_type not in {'high_correlation', 'target_correlation', 'date_numerical_trend', 'non_linear', 'feature_importance', 'outlier_pattern'}:
         for i, threshold in enumerate(precentiles):
             if abs_value > threshold:
-                return 2
-        return 2
+                return 3
+        return 3
     
     # Value-based normalization
     min_val, max_val = strategy['abs_range']
