@@ -4,6 +4,7 @@ import pickle
 import os.path
 from sklearn.metrics.pairwise import pairwise_distances
 
+# Dictionary defining different relation types and their properties
 RELATION_TYPES = {
     "high_correlation": {
         "description": "Identifies pairs of numerical features that have a strong linear relationship, indicating potential multicollinearity or redundancy in the dataset.",
@@ -95,16 +96,6 @@ RELATION_TYPES = {
         "data_types": ["numerical"],
         "dimensions": [2],
     },
-    'cluster_group': {
-        "description": "Identifies groups of features that exhibit similar clustering characteristics based on their importance within specific clusters.",
-        "use_cases": [
-            "Feature grouping",
-            "Dimensionality reduction",
-            "Structural data understanding"
-        ],
-        "data_types": ["numerical"],
-        "dimensions": [1],
-    },
     'target_analysis': {
         "description": "Provides a comprehensive analysis of the target variable, including outlier characteristics and distribution properties.",
         "use_cases": [
@@ -124,7 +115,7 @@ def save_ratings(ratings, file_name):
     with open(file_name+'.pkl', 'wb') as f:
         pickle.dump(ratings, f)
 
-# Load user ratings for collaborative filtering 
+# Load user ratings for collaborative filtering. If no file exists, create an empty DataFrame.
 def load_ratings(file_name, rec_types):
     file = file_name+'.pkl'
     if os.path.isfile(file):
@@ -138,7 +129,7 @@ def load_ratings(file_name, rec_types):
 
     return ratings
 
-
+# User-Based Collaborative Filtering (CFUB) - Computes similarity between users
 def CFUB(ratings_pd):
     # Get the mean rating for each user
     ratings = ratings_pd.to_numpy()
@@ -150,6 +141,7 @@ def CFUB(ratings_pd):
     pred = mean_user_rating + user_similarity.dot(ratings_diff) / np.array([np.abs(user_similarity).sum(axis=1)]).T
     return pred
 
+# Item-Based Collaborative Filtering (CFIB) - Computes similarity between items
 def CFIB(ratings_pd):
     # Get the mean rating for each user
     ratings = ratings_pd.to_numpy()
@@ -161,7 +153,7 @@ def CFIB(ratings_pd):
     pred = mean_user_rating + vis_similarity.dot(ratings_diff) / np.array([np.abs(vis_similarity).sum(axis=1)]).T
     return pred
 
-# Weighted sum of two predictions
+# Combine predictions from CFUB and CFIB using a weighted sum
 def combine_pred(pred1, pred2, w1 = 0.5, w2 = 0.5):
     # Replace NaN values with 0
     pred1 = np.nan_to_num(pred1, nan=0.0)
@@ -169,7 +161,7 @@ def combine_pred(pred1, pred2, w1 = 0.5, w2 = 0.5):
 
     return w1 * pred1 + w2 * pred2
 
-
+# Normalize statistical measures to a 1-5 scale for ranking relations
 def normalize_score(value, metric_type):
     """
     Normalize different types of statistical measures to a 1-5 scale.
@@ -214,11 +206,7 @@ def normalize_score(value, metric_type):
         }
     }
     
-
-    if metric_type == 'cluster_group':
-        # Normalize based on number of features in cluster or importance
-        return min(max(1, int(value * 5)), 5)
-    elif metric_type == 'target_analysis':
+    if metric_type == 'target_analysis':
         # Normalize outlier ratio or distribution significance
         return min(max(1, int(value * 5)), 5)
     
@@ -291,4 +279,5 @@ def get_top_relations(relations):
         algo_rec_df.loc[0, type] = score
         algo_rec_df.loc[1, type] = indx
 
+    # return the recommendations with their scores
     return algo_rec_df
