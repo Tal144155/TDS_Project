@@ -101,16 +101,6 @@ RELATION_TYPES = {
         "data_types": ["numerical"],
         "dimensions": [2],
     },
-    'cluster_group': {
-        "description": "Identifies groups of features that exhibit similar clustering characteristics based on their importance within specific clusters.",
-        "use_cases": [
-            "Feature grouping",
-            "Dimensionality reduction",
-            "Structural data understanding"
-        ],
-        "data_types": ["numerical"],
-        "dimensions": [1],
-    },
     'target_analysis': {
         "description": "Provides a comprehensive analysis of the target variable, including outlier characteristics and distribution properties.",
         "use_cases": [
