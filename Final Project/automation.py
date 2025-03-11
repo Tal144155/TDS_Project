@@ -199,4 +199,4 @@ def create_visualizations(dataset_path, rating_location, target_variable, index 
     print("process finished")
 
 
-create_visualizations("Final Project/Datasets_Testing/laptop.csv", "user_ratings", "Price")
+create_visualizations("Final Project/Datasets_Testing/movie_new.csv", "user_ratings", "revenue")
