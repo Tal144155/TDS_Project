@@ -1,0 +1,115 @@
+Plot Number: 0
+--------------------------------------------------
+the plot does not fit the type of the data :(
+there is no connection. its unclear how it is related to date
+
+
+Plot Number: 1
+--------------------------------------------------
+i don't understand much from this graph
+not a good grpah. i dont understand whats going on here. there is no date, dont understand the numers in the drama.
+this is not informative by any means
+not sure this is the right graph for this
+
+
+Plot Number: 10
+--------------------------------------------------
+what is this?!
+this dosent give a lot of information, not good enough
+cannot understand anything fro this plot
+the wrong grpah, it has no connection
+most new movies have higher budget
+
+
+Plot Number: 11
+--------------------------------------------------
+not informative at all
+what am i seeing here
+i can see the median. this connection is wuite good, movies that are not horror will probably have higher budget
+i'm not sure there is a strong correlation like in the graph.
+as before
+
+
+Plot Number: 12
+--------------------------------------------------
+This is not really informative but i do like this type of graphs
+it is a connection worth looking for, but the graph is not informative.
+this is nice, we can see that movies that are not forieng have much more cast members.
+dosent say anything
+
+
+Plot Number: 13
+--------------------------------------------------
+i dont understand how they relate to eachother
+same asa before, the boxes are almost the same
+this is not really interesting. it has potential to be good.
+
+
+Plot Number: 14
+--------------------------------------------------
+kind of interesting.
+dont understand.
+the median is very close, however the science fiction movies has better budget.
+this is also nice, you can see the distribution of the connection.
+same as before. even worse
+again as before
+
+
+Plot Number: 2
+--------------------------------------------------
+the information seemes not realistic, in addition the graph does not show a natural relationship between the features.
+there is no significant differnce between 0 and 1.
+the plot dosent match the features, i cant really understand whats going on.
+
+
+Plot Number: 3
+--------------------------------------------------
+that is not a good graph, i cant undeerstand whats going on.
+there is no differnce in the boxplots, the connection is not interestings.
+its not that interesting to know this, and i can understand a lot from it.
+
+
+Plot Number: 4
+--------------------------------------------------
+as before.
+wrong plot for this categories. there is no relation to the title of the graph.
+that is interesting, it may show that we have a non linear connection between them
+this dosent bring me information, i dont like it.
+
+
+Plot Number: 5
+--------------------------------------------------
+I guess this is informative about a specific genre with relation to the revenue the graph isnt good though
+more relevent then crew size, but still dosent give me more information still.
+
+
+Plot Number: 6
+--------------------------------------------------
+there's nothing about dates, also the no. of languages does not seem to be related to the revenue.
+as time goes, we have more movies that are not drama.
+bullshit!
+this connection is not worth looking for. the graph is ok, but the features dont match
+there is no significant differnce between them, it dosent give me specail information.
+
+
+Plot Number: 7
+--------------------------------------------------
+there is nothing related to date and i cant understand anything here
+i didnt understand the graph.
+i can understand some info from the graph, but this is not the correct plot for this.
+
+
+Plot Number: 8
+--------------------------------------------------
+not informative
+bad bad bad
+there is no significant differnce
+this is the smae and garbage
+
+
+Plot Number: 9
+--------------------------------------------------
+also bad.
+dosent see no connection. irrelvent connection.
+
+

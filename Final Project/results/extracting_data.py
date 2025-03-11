@@ -148,14 +148,23 @@ def create_visualizations(df, avg_rating_by_relation_combined, output_path):
     plt.tight_layout()
     plt.savefig(f'{output_path}/filtered_avg_rating_by_relation_type_bar_chart.png')
 
-
-    # Plot histogram: Histogram of Ratings Count for System and Random
+    # Bar histogram: Percentage Distribution of Ratings for System and Random
     plt.figure(figsize=(8, 5))
-    sns.histplot(data=df, x="Rating", hue="Type", multiple="stack", bins=5, edgecolor="white" ,palette=selected)
+
+    # Calculate percentages manually
+    rating_counts = df.groupby(['Type', 'Rating']).size().reset_index(name='count')
+    # Convert to percentages within each type
+    rating_percentages = rating_counts.groupby('Type').apply(
+        lambda x: x.assign(percentage=x['count'] / x['count'].sum() * 100)
+    ).reset_index(drop=True)
+
+    # Create the plot
+    sns.barplot(data=rating_percentages, x="Rating", y="percentage", hue="Type", edgecolor="white", palette=selected)
     plt.xlabel("Rating")
-    plt.ylabel("Count of Items")
-    plt.title("Histogram of Ratings Count (System vs. Random)")
-    plt.savefig(f'{output_path}/Histogram_of_Ratings_by_Type.png')
+    plt.ylabel("Percent within Type (%)")
+    plt.title("Percentage Distribution of Ratings (System vs. Random)")
+    plt.savefig(f'{output_path}/Histogram_of_Ratings_by_Type_Percent.png')
+
 
     # Average Time Taken vs. Plot Number for System and Random
     df_selected = df[["Plot Number", "Time Taken", "Type"]]
@@ -215,13 +224,42 @@ def post_hoc_analysis(df, output_path):
     plt.tight_layout()
     plt.savefig(f'{output_path}/tukey_hsd_relation_type_comparison.png')
 
-base_path = r'C:\year3\TDS_Project\Final Project\results'
-output = r'C:\year3\TDS_Project\Final Project\results\stats'
+def get_comments_by_plt_index(df, output_path):
+    system_df = df[df['Type'] == 'System']
+    random_df = df[df['Type'] == 'Random']
+
+
+    # Group the comments by Plot Number for both types
+    system_grouped = system_df.groupby('Plot Number')['Comment'].apply(list)
+    random_grouped = random_df.groupby('Plot Number')['Comment'].apply(list)
+    
+    # Create the output files
+    with open(f"{output_path}/system_comments.txt", "w") as sys_file:
+        for plot_num, comments in system_grouped.items():
+            sys_file.write(f"Plot Number: {plot_num}\n")
+            sys_file.write("-" * 50 + "\n")
+            for comment in comments:
+                sys_file.write(f"{comment}\n")
+            sys_file.write("\n\n")
+    
+    with open(f"{output_path}/random_comments.txt", "w") as rand_file:
+        for plot_num, comments in random_grouped.items():
+            rand_file.write(f"Plot Number: {plot_num}\n")
+            rand_file.write("-" * 50 + "\n")
+            for comment in comments:
+                rand_file.write(f"{comment}\n")
+            rand_file.write("\n\n")
+
+
+base_path =  './Final Project/results'
+output =  './Final Project/results'
 os.makedirs(output, exist_ok=True)
 df = create_feedback_dataframe(base_path)
-avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type, avg_rating_by_relation_combined = calculate_and_save_averages(df, output)
-create_visualizations(df, avg_rating_by_relation_combined, output)
-analyze_statistical_significance(df)
-post_hoc_analysis(df, output)
+# avg_rating_by_type, avg_rating_by_relation_type, avg_time_by_type, avg_rating_by_relation_combined = calculate_and_save_averages(df, output)
+get_comments_by_plt_index(df, output)
+
+# create_visualizations(df, avg_rating_by_relation_combined, output)
+# analyze_statistical_significance(df)
+# post_hoc_analysis(df, output)
 
 

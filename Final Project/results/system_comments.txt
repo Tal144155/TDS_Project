@@ -1,0 +1,170 @@
+Plot Number: 0
+--------------------------------------------------
+So informative, I now understand what features are most important for predicting my target value
+you can clearly see that vote count and budget are really important and the others less. the right graph is not clear.
+i understand that the vote count is the most important feature, budget is quite important and then the other are less important. also, when you have 2 features, we can very precise, and when we add more we dont get a lot more info.
+i thought that the information in the graph is not accurate, but if it is true than the graph reflects the corolation clearly.
+the most important features are vote count and budget, the other ones are less important. in the right graph, 2 features might be enough
+i understand whats going on, i like the left graph more
+the plot is ok, i can understand the importance of each feature and the commulative help understanding.
+looking good. i can understand that with only 2 features we can get a very good revenue.
+i can understand that the vote count has the biggest impact on the revenue.
+
+
+Plot Number: 1
+--------------------------------------------------
+This is an amazing graph that explains the distibution of my target variable. This is a crutial step in understanding the dataset!
+we have very little movies with high revenue, lots of movies have low revenue.
+i understand that most movies crate a low revenue.
+i can understand where most movies are, helps a lot. not in the prediction.
+also very nice. i can see that the data ditribution is not normal, and that there are a lot of movies with lower revenue.
+we can understand what are the most important features an dhow many features we need.
+it helped me understand the ditribution of the data.
+
+
+Plot Number: 10
+--------------------------------------------------
+same
+good graph
+same as before
+the Hezion is so different that I am so amazed about it
+the connection is not intersting.
+also here but this one is less informative.
+
+
+Plot Number: 11
+--------------------------------------------------
+same as before
+same here! amazing how the p value is low and the Hezion is diif
+this graph is fine. if the cast is lower than 75 people then the revenue will be low.
+this is very interesting. i can see that there is a differnce in mocies that are not western, as time grows we have much less movies that are western.
+as the last one, its nice
+there is no need to take a lot of crew members
+
+
+Plot Number: 12
+--------------------------------------------------
+same
+same as before
+ive seen this grph alredy. interesting corrolation.
+same as before
+also
+like the revenue
+this is not relevant.
+
+
+Plot Number: 13
+--------------------------------------------------
+i dont want to see more outlires but it's interesting
+the more crue the less revenue from more income.
+worse
+i am so sick of it !!!
+as before
+same as cast
+this is also nice. the number of movies in war is growing.
+when i have less crew i get more votes
+
+
+Plot Number: 14
+--------------------------------------------------
+this is the same everywhere
+same as before
+X^2 is so interesting :)
+as before
+there is not intersting connection here.
+
+
+Plot Number: 2
+--------------------------------------------------
+This is the correlation between one of the two most important features for predicting the revenue. this is so informative!
+The graph is clear though you could augment the data to fit the screen better.
+there is a relation between the budget and vote count, and the ones that are above it are the outliers.
+really informative i could understand everything i wanted to
+the graph is good, most movies dont have revenue that is above 100m revenue
+i see a linear connection, when the budget is higher the revenue is also, helps a lot. how the data looks.
+i undestand the distribution of the target variable.
+i understand there a lot of red dots.
+
+
+Plot Number: 3
+--------------------------------------------------
+This graph shows the corelation between revenue feature and the no. 1 most effective feature in predicting it. Awesome!
+I can undersanf where the outlires of the features begin
+there is a positive correlation between the budget and revenue, there are some outliers that are logical.
+very little movies has big revenue, most movies are at about 0.2 revenue.
+this helps me to understand how the data is actually is
+there is a high correlation between the features
+that a really good one, i can see that th correlation between budget and revenue is very high, the higher the budget the higher the revenue.
+when we have a higher buget, the revenueu is higher.
+
+
+Plot Number: 4
+--------------------------------------------------
+This graph is less informative becuase those are not relations i'm interested in
+This graph is pretty clear, I can understand the correlation
+i see there is a positive corrolation between revenue and vote count. it is logical because more revenue = more watchers = more votes.
+this helps me to predict the revenue as func of the amount of budget
+i see that movies with high votecount has better revenue
+best one so far. the feature is very relevent, and the correlation is high and interesting. what the crowd likes more there is probably a higher revenue, liked the corr value.
+very important. there are a lot of outliers.
+
+
+Plot Number: 5
+--------------------------------------------------
+Same, this is interesting and informative
+when a movie has a higher budget, the revenue is higher.
+same
+dosent give a lot of information.
+also here. super good!
+most movies that are not animated are not for family. most movies for families are animated
+that is also very good, you can see that there is a high correlation between the revenue and the vote count.
+here the correlation is even better. it also makes sense, if the movie was good there is a lot of voters, then the revenue is higher.
+when there is a higher vote count, the revenue is higher.
+
+
+Plot Number: 6
+--------------------------------------------------
+interesting display of the outlires!
+extremely clear, i understand the relation between animation and family films
+when more people rate the movie, the revenue is higher. the trend line dosent really help. therer is a big mass of data that makes it harder to see the connections.
+it gives me information of the data, shows correlation. animation and family i can see the connection.
+less interesting. the trend line is less understandable.
+when therer is 75 in the case and 125 in the crew we have outliers
+
+
+Plot Number: 7
+--------------------------------------------------
+same as before
+i can understand the boundries of the outliers.
+i dont like thi sgraph. cant take a lot of information from it. dont know how to read it. the revenue is proprtional to the cast size. the outliers dont give me a lot of info.
+same here. really good.
+the left graph alone is not good, but with the right one its nice. might have been enough to show only the right one.
+that is also good, the correlation between vote count and budget is very high, might think to put them together.
+the 2 features are not so releveant, but the graph is cool.
+this is nive, i understand we may not need a very large crew
+
+
+Plot Number: 8
+--------------------------------------------------
+same, but i saw 3 of these already
+as before, you can deduce the boundries, and you can see that there is a lot of mass at the begining of the plot.
+didnt like the graph type but i understand that collections recieve more revenue.
+very similar to the last grpah. when there is more cast members, we have more votes.
+cast with size of 25-50 has smaller revenue. when i have higher cast, i get higher rvenue but this is an outlier.
+we can see that the median, and the max is much higher wheh a movie is belong to some collection, very interestings.
+this is more interesting because this is related to the revenue. when we have higher cast we are probably in an outlier.
+
+
+Plot Number: 9
+--------------------------------------------------
+same
+this is clear and informative
+same as before
+i dont see a linear relation, but i understand that most movies dont hire a lot of cast and crew.
+same as the last plot. the revenue is not that dependenet on the revenue value. dont like the outliers
+i see that there is a correletion between the cast and the crew. the outliers helped.
+also same here
+not interesting.
+less cast is better votes . interesting
+
+
