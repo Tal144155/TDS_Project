@@ -191,7 +191,7 @@ def date_categorical_relationship(df, date_columns, categorical_columns, relatio
     print("- Checking for date with categorical variable.")
     temp_relations = []
     for date_col in date_columns:
-        # transfer date to time ordinal
+        # transfer date to period of months
         df['date_period'] = pd.to_datetime(df[date_col]).dt.to_period('M')
         for cat_feature in categorical_columns:
             contingency_table = pd.crosstab(df['date_period'], df[cat_feature])
