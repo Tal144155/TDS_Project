@@ -113,7 +113,7 @@ RELATION_TYPES = {
     }
 }
 
-def create_visualizations(dataset_path, rating_location, target_variable = None):
+def create_visualizations(dataset_path, rating_location, target_variable, index = None):
     df = read_data(dataset_path)
     ratings = load_ratings(rating_location, RELATION_TYPES)
     user_id = input("Please enter a user id:\n")
@@ -129,6 +129,7 @@ def create_visualizations(dataset_path, rating_location, target_variable = None)
 
     algo_rec = get_relation_scores(algo_rec)
     plot_index = 0
+    num_chose_outliers=0
 
     while (plot_index < 6):
         if algo_rec:
@@ -139,6 +140,18 @@ def create_visualizations(dataset_path, rating_location, target_variable = None)
                 recommendations = combine_pred(combined_user_vis_pred[user_index], algo_rec_df.to_numpy()[0], 0.7, 0.3)
                 index = int(algo_rec_df.iloc[1,recommendations.argmax()])
                 chosen_plot = algo_rec.pop(index)
+                if chosen_plot['relation_type'] == "outlier_pattern" and num_chose_outliers >= 2:
+                    # get other relations instead until we get the relation that is not outlier
+                    while chosen_plot['relation_type'] == "outlier_pattern" and algo_rec:
+                        combined_user_vis_pred = combine_pred(CFIB(ratings), CFUB(ratings), 0.5, 0.5)
+                        algo_rec_df = get_top_relations(algo_rec)
+                        user_index = ratings.index.get_loc(user_id)
+                        recommendations = combine_pred(combined_user_vis_pred[user_index], algo_rec_df.to_numpy()[0], 0.7, 0.3)
+                        index = int(algo_rec_df.iloc[1,recommendations.argmax()])
+                        chosen_plot = algo_rec.pop(index)
+                # otherwise present this visualization
+                elif chosen_plot['relation_type'] == "outlier_pattern":
+                    num_chose_outliers += 1
                 plot_save_name = f'plot_{plot_index}'
                 # Based on the relation, call the correct method from the Plot Generator
                 if chosen_plot['relation_type'] == "high_correlation":
@@ -163,7 +176,10 @@ def create_visualizations(dataset_path, rating_location, target_variable = None)
                     plot_target_analysis(df, chosen_plot["attributes"][0], chosen_plot["details"]["outlier_ratio"], chosen_plot["details"]["distribution_type"], plot_save_name)
 
                 image_path = os.path.abspath(os.path.join(PLOTS_DIR, f'{plot_save_name}.png'))
-
+        img = mpimg.imread(image_path)
+        plt.imshow(img)
+        plt.axis("off")
+        plt.show()
         new_rating = 0
         # receiving rating from the user and updating accordingly
         while new_rating > 5 or new_rating < 1:
@@ -176,11 +192,12 @@ def create_visualizations(dataset_path, rating_location, target_variable = None)
         else:
             ratings.loc[user_id, chosen_plot['relation_type']] = new_rating
 
-        save_ratings(ratings, 'user_ratings_rel2')   
+        save_ratings(ratings, rating_location)   
         plot_index+=1 
-        ratings = load_ratings('user_ratings_rel2', RELATION_TYPES)
+        ratings = load_ratings(rating_location, RELATION_TYPES)
 
     print("process finished")
 
 
-    
+create_visualizations("Final Project/Datasets_Testing/movie_new.csv", "user_ratings", "revenue")
+
