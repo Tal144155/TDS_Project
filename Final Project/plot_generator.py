@@ -10,6 +10,7 @@ os.makedirs(PLOTS_DIR, exist_ok=True)
 def save_plot(fig, plot_name):
     # Saving the plot in the destination directory, with the name chosen
     file_path = os.path.join(PLOTS_DIR, f"{plot_name}.png")
+    os.makedirs(PLOTS_DIR, exist_ok=True)
     fig.savefig(file_path)
     plt.close(fig)
     print(f"Saved plot: {file_path}")
