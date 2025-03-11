@@ -220,16 +220,25 @@ def normalize_score(value, metric_type):
     # Absolute value for signed metrics
     abs_value = abs(value)
 
-    if metric_type in {'high_correlation', 'target_correlation', 'date_numerical_trend', 'non_linear', 'feature_importance', 'outlier_pattern'}:
-        for i, threshold in enumerate(precentiles):
-            if abs_value < threshold:
-                return i + 1
-        return len(precentiles) + 1
-    else:
+    if metric_type not in {'high_correlation', 'target_correlation', 'date_numerical_trend', 'non_linear', 'feature_importance', 'outlier_pattern'}:
         for i, threshold in enumerate(precentiles):
             if abs_value > threshold:
                 return i + 1
         return len(precentiles) + 1
+    
+    # Value-based normalization
+    min_val, max_val = strategy['abs_range']
+    
+    # Normalize to 1-5 range
+    if abs_value <= min_val:
+        return 1
+    elif abs_value >= max_val:
+        return 5
+    else:
+        normalized = 1 + 4 * (abs_value - min_val) / (max_val - min_val)
+        return int(min(max(normalized, 1), 5))
+
+
     
 
 def get_relation_scores(relations):
